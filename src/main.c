@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:49:09 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/15 16:29:29 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/15 16:31:32 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,7 @@ int main(int argc, char** argv, char** env)
         return (0);
     t_env* env_node;
     env_node = NULL;
-    // t_env_node* tmp = NULL;
     init_env(&env_node, env);
-    init_env(&env_node, env);
-    init_env(&env_node, env);
-    init_env(&env_node, env);
-    init_env(&env_node, env);
-    // size_t i = 0;
-    // while (i < 5)
-    // {
-    //     tmp = env_node->buffer_env[i];
-    //     while (tmp)
-    //     {
-    //         printf("%s=%s\n", tmp->key, tmp->value);
-    //         tmp = tmp->next;
-    //     }
-    //     printf("\n\n\n\n");
-    //     ++i;
-    // }
-    free_env(env_node);
 
+    free_env(env_node);
 }
