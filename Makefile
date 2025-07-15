@@ -1,5 +1,5 @@
 NAME    := minishell
-CC      := cc
+CC      := clang
 CFLAGS  := -Wall -Wextra -Werror
 
 SRCDIR  := src
@@ -9,20 +9,18 @@ LIBFT   := libft
 
 SRC     := \
 	$(SRCDIR)/main.c \
+	$(SRCDIR)/parsing/parsing.c \
 	$(SRCDIR)/parsing/init_env.c \
-	$(SRCDIR)/parsing/init_token \
-	$(SRCDIR)/free/free_init_env.c \
+	$(SRCDIR)/free/env_node_free.c \
 	$(LIBFT)/split.c \
 	$(LIBFT)/substr.c \
 	$(LIBFT)/strdup.c \
 	$(LIBFT)/strlen.c \
-	$(LIBFT)/strtrim.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)
 
-HEADERS := $(INCDIR)/minishell.h \
-		   $(INCDIR)/libft.h \
-		   $(INCDIR)/parser.h
+HEADERS := $(INCDIR)/libft.h \
+		   $(INCDIR)/parser.h \
 
 $(OBJDIR)/%.o: %.c $(HEADERS)
 	@mkdir -p $(dir $@)
