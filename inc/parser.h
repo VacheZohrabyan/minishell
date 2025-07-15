@@ -6,18 +6,43 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/15 15:40:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:22:33 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
-#define PARSER_H
+# define PARSER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include "libft.h"
 
-#define MALLOC_ERROR(str) printf("malloc faild %s\n", str);
+# define MALLOC_ERROR "malloc faild \n"
+# define MAX_SIZE_ENV 128
+
+typedef struct s_env_node
+{
+	int					is_equal;
+	char				*key;
+	char				*value;
+	struct s_env_node	*next;
+}	t_env_node;
+
+typedef struct s_env
+{
+	t_env_node	**buffer_env;
+}	t_env;
+
+int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
+int		init_env_node_member(t_env_node *tmp, char *env);
+int		push_back(t_env_node **env_node, char *env);
+int		init_env_array(t_env **env_array);
+void	init_env(t_env **env_array, char **env);
+
+void	free_env_node(t_env_node *node);
+void	free_env(t_env *env);
+
+#endif
 
 // typedef enum e_token_type
 // {
@@ -57,31 +82,3 @@
 //     struct s_token* left;
 //     struct s_token* right;
 // } t_line;
-
-#define MAX_SIZE_ENV 128
-
-typedef struct s_env_node
-{
-    int is_equal;
-    char* key;
-    char* value;
-    struct s_env_node* next;
-} t_env_node;
-
-typedef struct s_env
-{
-   t_env_node** buffer_env; 
-} t_env;
-
-
-void init_env(t_env** env_array, char** env);
-int push_back(t_env_node** env_node, char* env);
-int init_env_node_member(t_env_node* tmp, char* env);
-
-void env_free(t_env** env);
-void env_node_free(t_env_node** env_node);
-void env_node_free_member(t_env_node** tmp);
-void free_env_node(t_env_node *node);
-void free_env(t_env *env);
-
-#endif
