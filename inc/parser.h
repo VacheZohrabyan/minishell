@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/15 17:22:33 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/18 22:28:09 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "libft.h"
-
+# include "lexical.h" 
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
+
+typedef struct s_ast
+{
+	char			*operator;
+	struct s_ast	*next;
+}	t_ast;
 
 typedef struct s_env_node
 {
