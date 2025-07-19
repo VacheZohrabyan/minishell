@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 20:48:44 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 15:21:20 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/19 19:30:11 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,26 @@
 int	valid_syntax_breket(t_token *current)
 {
 	t_token	*tmp;
-	int		count;
+	int		open;
+	int		close;
+	int		flag_open;
+	int		flag_close;
 
 	tmp = current;
-	count = 0;
+	flag_close = 0;
+	flag_open = 0;
+	open = 0;
+	close = 0;
 	if (!current)
 		return (0);
-	while (tmp && tmp->next)
+	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_OPEN)
-			++count;
-		else if (tmp->token_type == TOKEN_CLOSE)
-		{
-			--count;
-			if (count < 0)
-				return (printf("syntax error"
-						" near unexpected token `)'\n"), 0);
-		}
+		chlp1(tmp, &open, &flag_open);
+		chlp2(tmp, &close, &flag_close, &open);
 		tmp = tmp->next;
 	}
-	if (count != 0)
-		return (printf("syntax error"
-				" near unexpected token `)'\n"), 0);
+	if (!check(open, close, flag_open, flag_close))
+		return (0);
 	return (1);
 }
 
@@ -94,4 +92,3 @@ int	syntax_checker(t_token *token)
 	}
 	return (1);
 }
-

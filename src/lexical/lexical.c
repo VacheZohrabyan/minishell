@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 15:17:50 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/19 18:34:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ t_token	*lexical(char *buf)
 		token = lexical_push_back(token, buffer[i++]);
 	split_free(&buffer);
 	free(buf_malloc);
-	if (!syntax_checker(token))
-		return (token);
-	return (token);
 	printf("hendl\n");
+	if (!syntax_checker(token))
+		return (NULL);
+	return (token);
 }

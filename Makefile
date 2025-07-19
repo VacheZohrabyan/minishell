@@ -19,6 +19,7 @@ SRC     := \
 	$(SRCDIR)/lexical/lexical_util.c \
 	$(SRCDIR)/lexical/hendle_token.c \
 	$(SRCDIR)/parsing/syntax_checker.c \
+	$(SRCDIR)/parsing/syntax_checker_utils.c \
 	$(LIBFT)/split.c \
 	$(LIBFT)/substr.c \
 	$(LIBFT)/strdup.c \
