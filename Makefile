@@ -16,6 +16,8 @@ SRC     := \
 	$(SRCDIR)/free/token_node_free.c \
 	$(SRCDIR)/my_signal/sig.c \
 	$(SRCDIR)/lexical/lexical.c \
+	$(SRCDIR)/lexical/lexical_util.c \
+	$(SRCDIR)/lexical/hendle_token.c \
 	$(SRCDIR)/parsing/syntax_checker.c \
 	$(LIBFT)/split.c \
 	$(LIBFT)/substr.c \
