@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:26:01 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/19 14:16:47 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ int				syntax_checker(t_token *token);
 int				valid_syntax_pipe_or_and(t_token *token);
 int				valid_syntax_breket(t_token *current);
 int				check_double_operator(t_token *token,
-					t_token_type token_type, const char *str);
+						t_token_type token_type, const char *str);
+char* add_spaces_around_specials(const char* buffer);
+int is_special(char c);
 
 void			token_node_free(t_token **token);
 

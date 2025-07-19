@@ -6,11 +6,63 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 20:48:44 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:34:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/19 14:26:17 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
+
+// int foo(t_token* current)
+// {
+// 	t_token* tmp = current;
+// 	t_token_type type;
+
+// 	tmp = tmp->next;
+// 	while (tmp && tmp->next)
+// 	{
+// 		if (tmp->token_type == TOKEN_WORD && )
+// 		{
+// 			tmp = tmp->next;
+// 			while (tmp && tmp->next)
+// 			{
+// 				if (tmp->token_type == TOKEN_WORD && tmp->next->token_type == type)
+// 				{
+// 					if (tmp->next->token_type == TOKEN_CLOSE)
+// 						return (1);
+// 				}
+// 				tmp = tmp->next;
+// 			}
+// 		}
+// 	}
+// 	return (0);
+// }
+
+// int valid_syntax_breket(t_token* token)
+// {
+// 	t_token* tmp;
+// 	tmp = token;
+// 	while (tmp && tmp->next)
+// 	{
+// 		if (tmp->token_type == TOKEN_OPEN && foo(tmp))
+// 		{
+// 		}
+// 	}
+// }
+
+int ft_is_digit_node(t_token* tmp)
+{
+	size_t i = 0;
+	
+	while (tmp->file_name[i])
+	{
+		if (tmp->file_name[i] >= 'a' && tmp->file_name[i] <= 'z')
+		{
+			return (1);
+		}
+		++i;
+	}
+	return (0);
+}
 
 int	valid_syntax_breket(t_token *current)
 {
@@ -25,9 +77,10 @@ int	valid_syntax_breket(t_token *current)
 	{
 		if (tmp->token_type == TOKEN_OPEN)
 			++count;
-		else if (tmp->token_type == TOKEN_CLOSE)
+		else if (tmp->token_type == TOKEN_CLOSE && tmp->prev->token_type == TOKEN_WORD)
 		{
-			--count;
+			if (ft_is_digit_node(tmp->prev))
+				--count;
 			if (count < 0)
 				return (printf("syntax error"
 						"near unexpected token `)'\n"), 0);
@@ -87,15 +140,12 @@ int	valid_syntax_pipe_or_and(t_token *token)
 
 int	syntax_checker(t_token *token)
 {
-	if (!valid_syntax_breket(token))
+	if (valid_syntax_breket(token))
 	{
-		token_node_free(&token);
-		return (0);
+		if (valid_syntax_pipe_or_and(token))
+			return (1);
+		return (1);
 	}
-	if (!valid_syntax_pipe_or_and(token))
-	{
-		token_node_free(&token);
-		return (0);
-	}
-	return (1);
+	token_node_free(&token);
+	return (0);
 }

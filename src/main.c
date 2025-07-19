@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:49:09 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:40:26 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/19 12:20:54 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		add_history(buffer);
 		token = lexical(buffer);
+		while (token)
+		{
+			printf("%d -> %s\n", token->token_type, token->file_name);
+			token = token->next;
+		}
 		token_node_free(&token);
 		free(buffer);
 		buffer = NULL;
