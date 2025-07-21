@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexical_util.c                                     :+:      :+:    :+:   */
+/*   strcmp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 15:11:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:51:56 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/07/21 12:22:01 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/07/21 18:09:44 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/include.h"
+#include "../inc/include.h"
 
-int	is_special(char c)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	return (c == '|' || c == '<' || c == '>'
-		|| c == ';' || c == '(' || c == ')' || c == '&');
-}
+	size_t	i;
 
-int	is_double_special(const char *buffer, size_t i)
-{
-	return (
-		(buffer[i] == '<' && buffer[i + 1] == '<')
-		|| (buffer[i] == '>' && buffer[i + 1] == '>')
-		|| (buffer[i] == '|' && buffer[i + 1] == '|')
-		|| (buffer[i] == '&' && buffer[i + 1] == '&')
-	);
+	i = 0;
+	while ((s1[i] || s2[i]))
+	{
+		if (s1[i] != s2[i])
+		{
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		}
+		++i;
+	}
+	return (0);
 }

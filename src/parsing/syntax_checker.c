@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 20:48:44 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 19:30:11 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:51:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/parser.h"
+#include "../../inc/include.h"
 
 int	valid_syntax_breket(t_token *current)
 {

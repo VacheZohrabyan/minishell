@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 11:36:50 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:29:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:52:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/lexical.h"
+#include "../../inc/include.h"
 
 void	token_node_free(t_token **token)
 {

@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:35:02 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:39:22 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:52:02 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/lexical.h"
+#include "../../inc/include.h"
 
 void	insert_sort_for_list(t_token *token)
 {

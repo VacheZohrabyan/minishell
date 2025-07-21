@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 19:22:04 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 19:31:55 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:51:32 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/parser.h"
+#include "../../inc/include.h"
 
 int	is_valid_close_breaket(t_token *tmp, int open)
 {

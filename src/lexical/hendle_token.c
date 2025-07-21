@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 15:05:51 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 15:11:50 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:52:04 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/lexical.h"
+#include "../../inc/include.h"
 
 size_t	handle_double_special(const char *buffer,
 		char *result, size_t i, size_t *j)

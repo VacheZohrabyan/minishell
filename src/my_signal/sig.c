@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 22:34:55 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:51:48 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/my_signal.h"
+#include "../../inc/include.h"
 
 void	ctrlc(int sig)
 {

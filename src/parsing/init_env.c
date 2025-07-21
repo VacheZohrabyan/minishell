@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:55:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 21:36:30 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:51:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/parser.h"
+#include "../../inc/include.h"
 
 int	init_env_node_value(t_env_node *tmp, char *env, size_t key_size)
 {

@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_free.c                                       :+:      :+:    :+:   */
+/*   sintax.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/18 11:35:07 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:52:11 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/07/21 12:11:37 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/07/21 18:10:42 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/include.h"
+#ifndef SINTAX_H
+# define SINTAX_H
 
-void	split_free(char ***buffer)
-{
-	size_t	i;
+# include "include.h"
 
-	i = 0;
-	if (!buffer || !*buffer)
-		return ;
-	while ((*buffer)[i])
-	{
-		free((*buffer)[i]);
-		i++;
-	}
-	free(*buffer);
-	*buffer = NULL;
-}
+int		sintax(t_token *token);
+int		command_word_for_os(t_token *token);
+int		command_token(char *str);
+int		command_word(char *str);
+
+#endif

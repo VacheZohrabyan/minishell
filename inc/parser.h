@@ -6,17 +6,15 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 19:29:46 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:11:03 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "libft.h"
-# include "lexical.h" 
+# include "include.h"
+
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
 
@@ -44,7 +42,6 @@ int		init_env_node_member(t_env_node *tmp, char *env);
 int		push_back(t_env_node **env_node, char *env);
 int		init_env_array(t_env **env_array);
 void	init_env(t_env **env_array, char **env);
-
 void	chlp1(t_token *tmp, int *open, int *flag_open);
 void	chlp2(t_token *tmp, int *close, int *flag_close, int *open);
 int		check(int open, int close, int flag_open, int flag_close);

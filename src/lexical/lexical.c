@@ -6,11 +6,11 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/19 18:34:23 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:58:02 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/lexical.h"
+#include "../../inc/include.h"
 
 t_token_type	check_token_type(char *buffer)
 {
@@ -79,7 +79,6 @@ t_token	*lexical(char *buf)
 		token = lexical_push_back(token, buffer[i++]);
 	split_free(&buffer);
 	free(buf_malloc);
-	printf("hendl\n");
 	if (!syntax_checker(token))
 		return (NULL);
 	return (token);
