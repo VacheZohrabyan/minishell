@@ -21,6 +21,8 @@ SRC     := \
 	$(SRCDIR)/parsing/syntax_checker.c \
 	$(SRCDIR)/parsing/syntax_checker_utils.c \
 	$(SRCDIR)/syntax/syntax.c \
+	$(SRCDIR)/builtin/builtin.c \
+	$(SRCDIR)/builtin/cmd_pwd.c \
 	$(LIBFT)/split.c \
 	$(LIBFT)/substr.c \
 	$(LIBFT)/strdup.c \
@@ -36,6 +38,7 @@ HEADERS := $(INCDIR)/libft.h \
 		   $(INCDIR)/my_signal.h \
 		   $(INCDIR)/include.h \
 		   $(INCDIR)/syntax.h \
+		   $(INCDIR)/builtin.h \
 
 $(OBJDIR)/%.o: %.c $(HEADERS)
 	@mkdir -p $(dir $@)

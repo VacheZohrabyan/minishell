@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:11:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/17 15:28:21 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:36:54 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 int	command_word(char *str)
 {
-	return (ft_strcmp(str, "echo") || ft_strcmp(str, "cd")
-		|| ft_strcmp(str, "pwd") || ft_strcmp(str, "export")
-		|| ft_strcmp(str, "unset") || ft_strcmp(str, "env")
-		|| ft_strcmp(str, "exit"));
+	return (ft_strcmp(str, "echo") || ft_strcmp(str, "cd") || ft_strcmp(str,
+			"pwd") || ft_strcmp(str, "export") || ft_strcmp(str, "unset")
+		|| ft_strcmp(str, "env") || ft_strcmp(str, "exit"));
 }
 
 int	command_token(char *str)
@@ -59,10 +58,7 @@ int	command_word_for_os(t_token *token)
 		}
 	}
 	else
-	{
-		wait(NULL);	
-	}
-
+		wait(NULL);
 	return (0);
 }
 

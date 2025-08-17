@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/16 13:39:12 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/17 16:47:29 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	t_env	*env_node = NULL;
-	t_token	*token = NULL;
-	char	*buffer = NULL;
+	t_env	*env_node;
+	t_token	*token;
+	char	*buffer;
+
+	env_node = NULL;
+	token = NULL;
+	buffer = NULL;
 	if (argc != 1 || !argv[0])
 		return (0);
 	init_env(&env_node, env);
@@ -25,13 +29,19 @@ int	main(int argc, char **argv, char **env)
 	{
 		buffer = readline("minishell>"); // PROMPT
 		if (!buffer)
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(buffer);
 		token = lexical(buffer);
 		if (token)
 		{
 			if (syntax(token))
+			{
+				check_builtin(token->file_name);
 				printf("okey\n");
+			}
 			token_node_free(&token);
 		}
 		else

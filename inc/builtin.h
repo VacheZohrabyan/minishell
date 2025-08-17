@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   include.h                                          :+:      :+:    :+:   */
+/*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/17 16:17:58 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/08/17 16:31:16 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INCLUDE_H
-# define INCLUDE_H
+#ifndef BUILTIN_H
+# define BUILTIN_H
 
+# include "include.h"
 # include <stdio.h>
-# include <unistd.h>
 # include <stdlib.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <readline/history.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include "lexical.h"
-# include "libft.h"
-# include "parser.h"
-# include "my_signal.h"
-# include "syntax.h"
-# include "builtin.h"
+# include <unistd.h>
+
+int	cmd_pwd(void);
+int	check_builtin(char *cmd);
 
 #endif
