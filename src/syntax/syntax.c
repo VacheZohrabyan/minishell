@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:11:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/16 13:40:09 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:28:21 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,37 @@ int	command_word_for_os(t_token *token)
 	t_token	*tmp;
 	char	*path;
 	char	*full_path;
+	pid_t	fork_pid;
 
-	path = "/bin/";
-	tmp = token;
-	full_path = ft_strjoin(path, tmp->file_name);
-	if (!full_path)
+	fork_pid = fork();
+	if (fork_pid < 0)
 	{
-		perror("ft_strjoin failed");
+		perror("fork failed");
 		exit(EXIT_FAILURE);
 	}
-	char *argv[] = {tmp->file_name, NULL};
-	if (execv(full_path, argv) == -1)
+	else if (fork_pid == 0)
 	{
-		perror("command not found");
-		free(full_path);
-		exit(EXIT_FAILURE);
+		path = "/bin/";
+		tmp = token;
+		full_path = ft_strjoin(path, tmp->file_name);
+		if (!full_path)
+		{
+			perror("ft_strjoin failed");
+			exit(EXIT_FAILURE);
+		}
+		char *argv[] = {tmp->file_name, NULL};
+		if (execv(full_path, argv) == -1)
+		{
+			perror("command not found");
+			free(full_path);
+			exit(EXIT_FAILURE);
+		}
 	}
+	else
+	{
+		wait(NULL);	
+	}
+
 	return (0);
 }
 

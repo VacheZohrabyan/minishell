@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 12:11:37 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/16 13:40:09 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/08/17 15:19:02 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/08/17 15:19:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SINTAX_H
-# define SINTAX_H
+#ifndef SYNTAX_H
+# define SYNTAX_H
 
 # include "include.h"
 

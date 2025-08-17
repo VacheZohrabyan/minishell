@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 15:21:40 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/17 15:23:19 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/08/16 13:39:12 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,9 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	t_env	*env_node;
-	t_token	*token;
-	char	*buffer;
-
-	env_node = NULL;
-	token = NULL;
-	buffer = NULL;
+	t_env	*env_node = NULL;
+	t_token	*token = NULL;
+	char	*buffer = NULL;
 	if (argc != 1 || !argv[0])
 		return (0);
 	init_env(&env_node, env);
@@ -32,7 +28,6 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		add_history(buffer);
 		token = lexical(buffer);
-		printf("hello\n");
 		if (token)
 		{
 			if (syntax(token))
