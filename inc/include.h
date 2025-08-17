@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 18:11:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:22:49 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@
 # include "libft.h"
 # include "parser.h"
 # include "my_signal.h"
-# include "sintax.h"
+# include "syntax.h"
 
 #endif

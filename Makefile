@@ -21,6 +21,7 @@ SRC     := \
 	$(SRCDIR)/parsing/syntax_checker.c \
 	$(SRCDIR)/parsing/syntax_checker_utils.c \
 	$(SRCDIR)/sintax/sintax.c \
+	$(SRCDIR)/syntax/syntax.c \
 	$(LIBFT)/split.c \
 	$(LIBFT)/substr.c \
 	$(LIBFT)/strdup.c \
@@ -35,7 +36,11 @@ HEADERS := $(INCDIR)/libft.h \
 		   $(INCDIR)/lexical.h \
 		   $(INCDIR)/my_signal.h \
 		   $(INCDIR)/include.h \
+<<<<<<< HEAD
 		   $(INCDIR)/sintax.h \
+=======
+		   $(INCDIR)/syntax.h \
+>>>>>>> 8a24e45 (Minishell)
 
 $(OBJDIR)/%.o: %.c $(HEADERS)
 	@mkdir -p $(dir $@)
