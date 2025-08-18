@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 18:11:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:08:17 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_env_node
 typedef struct s_env
 {
 	t_env_node	**buffer_env;
+	int 		exit_code;
 }	t_env;
 
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);

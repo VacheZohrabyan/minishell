@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/17 16:47:29 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:13:26 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			if (syntax(token))
 			{
-				check_builtin(token->file_name);
+				check_builtin(token, env_node);
 				printf("okey\n");
 			}
 			token_node_free(&token);

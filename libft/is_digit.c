@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   is_digist.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/18 14:15:17 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/08/18 13:50:55 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/08/18 13:50:56 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "../inc/libft.h"
 
-# include "include.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-
-int	cmd_pwd(void);
-int	cmd_exit(t_token *token, t_env *env);
-int	check_builtin(t_token *token, t_env *env);
-
-#endif
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}

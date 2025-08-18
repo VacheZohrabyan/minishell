@@ -1,0 +1,85 @@
+#include "../../inc/builtin.h"
+
+long	ft_atol(const char *str)
+{
+	long	result;
+	int		sign;
+	int		i;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
+}
+
+int	is_numeric(char *status)
+{
+	int	i;
+
+	i = 0;
+	if (!status || status[0] == '\0')
+		return (1);
+	if (status[0] == '+' || status[0] == '-')
+		i++;
+	if (status[i] == '\0')
+		return (1);
+	while (status[i])
+	{
+		if (!ft_isdigit((unsigned char)status[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	check_exit_argument(t_token *token)
+{
+	if (is_numeric(token->next->file_name))
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(token->next->file_name, 2);
+		ft_putendl_fd(": numeric argument required", 2);
+		// free all here
+		exit(2);
+	}
+}
+
+#include "../../inc/builtin.h"
+
+int	cmd_exit(t_token *token, t_env *env)
+{
+	int	argc;
+	int	exit_code;
+
+	ft_putendl_fd("exit", 1);
+
+	argc = 0;
+	if (token->next)
+		argc = 1 + (token->next->next != NULL);
+	if (!token->next)
+		exit(env->exit_code);
+
+	check_exit_argument(token);
+	if (token->next && token->next->next)
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		env->exit_code = 1;
+		return (1);
+	}
+	exit_code = (int)(ft_atol(token->next->file_name) % 256);
+	// free all here
+	exit(exit_code);
+}

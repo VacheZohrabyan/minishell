@@ -23,12 +23,16 @@ SRC     := \
 	$(SRCDIR)/syntax/syntax.c \
 	$(SRCDIR)/builtin/builtin.c \
 	$(SRCDIR)/builtin/cmd_pwd.c \
+	$(SRCDIR)/builtin/cmd_exit.c \
 	$(LIBFT)/split.c \
+	$(LIBFT)/is_digit.c \
 	$(LIBFT)/substr.c \
 	$(LIBFT)/strdup.c \
 	$(LIBFT)/strlen.c \
 	$(LIBFT)/strcmp.c \
 	$(LIBFT)/strjoin.c \
+	$(LIBFT)/ft_putstr_fd.c \
+	$(LIBFT)/ft_putendl_fd.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)
 
