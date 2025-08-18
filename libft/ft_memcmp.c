@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 19:57:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/01/23 20:07:41 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/01/17 11:54:02 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/01/31 13:44:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	int	i;
+	unsigned char	*ucs1;
+	unsigned char	*ucs2;
+	size_t			i;
 
+	ucs1 = (unsigned char *)s1;
+	ucs2 = (unsigned char *)s2;
 	i = 0;
-	while (s[i])
+	while (i < n)
 	{
-		write(fd, &s[i], 1);
+		if (ucs1[i] != ucs2[i])
+			return (ucs1[i] - ucs2[i]);
 		i++;
 	}
+	return (0);
 }

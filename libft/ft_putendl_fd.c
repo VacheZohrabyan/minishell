@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/18 14:19:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/18 14:20:33 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/01/23 20:01:27 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/01/23 20:05:59 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
 void	ft_putendl_fd(char *s, int fd)
 {

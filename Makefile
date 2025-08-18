@@ -24,40 +24,36 @@ SRC     := \
 	$(SRCDIR)/builtin/builtin.c \
 	$(SRCDIR)/builtin/cmd_pwd.c \
 	$(SRCDIR)/builtin/cmd_exit.c \
-	$(LIBFT)/split.c \
-	$(LIBFT)/is_digit.c \
-	$(LIBFT)/substr.c \
-	$(LIBFT)/strdup.c \
-	$(LIBFT)/strlen.c \
-	$(LIBFT)/strcmp.c \
-	$(LIBFT)/strjoin.c \
-	$(LIBFT)/ft_putstr_fd.c \
-	$(LIBFT)/ft_putendl_fd.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)
 
-HEADERS := $(INCDIR)/libft.h \
-		   $(INCDIR)/parser.h \
+HEADERS := $(INCDIR)/parser.h \
 		   $(INCDIR)/lexical.h \
 		   $(INCDIR)/my_signal.h \
 		   $(INCDIR)/include.h \
 		   $(INCDIR)/syntax.h \
 		   $(INCDIR)/builtin.h \
+		   $(INCDIR)/types.h \
 
 $(OBJDIR)/%.o: %.c $(HEADERS)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: $(NAME)
+all: lib $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -lreadline -o $(NAME)
+$(NAME): $(OBJ)  $(LIBFT)/libft.a
+	$(CC) $(CFLAGS) $(OBJ) -lreadline -o $(NAME) -L./$(LIBFT) -lft
+
+lib:
+	make -C $(LIBFT)
 
 clean:
 	rm -rf $(OBJDIR)
+	make -C $(LIBFT) clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C $(LIBFT) fclean
 
 re: fclean all
 

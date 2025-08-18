@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/17 16:17:58 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/18 16:13:24 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include "types.h"
 # include "lexical.h"
-# include "libft.h"
+# include "../libft/libft.h"
 # include "parser.h"
 # include "my_signal.h"
 # include "syntax.h"

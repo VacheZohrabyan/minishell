@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strcmp.c                                           :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 12:22:01 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 18:09:44 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/01/16 14:02:00 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/01/16 14:04:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/include.h"
+#include "libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+int	ft_isascii(int c)
 {
-	size_t	i;
-
-	i = 0;
-	while ((s1[i] || s2[i]))
-	{
-		if (s1[i] != s2[i])
-		{
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		}
-		++i;
-	}
+	if (c >= 0 && c <= 0177)
+		return (1);
 	return (0);
 }

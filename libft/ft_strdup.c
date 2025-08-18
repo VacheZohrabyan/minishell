@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 19:57:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/01/23 20:07:41 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/01/17 15:33:35 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/01/17 15:56:51 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+char	*ft_strdup(const char *s1)
 {
-	int	i;
+	char	*dup;
+	size_t	i;
 
 	i = 0;
-	while (s[i])
+	dup = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
+	if (!dup)
+		return (0);
+	while (s1[i] != '\0')
 	{
-		write(fd, &s[i], 1);
+		dup[i] = s1[i];
 		i++;
 	}
+	dup[i] = '\0';
+	return (dup);
 }

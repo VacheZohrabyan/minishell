@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strdup.c                                           :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/12 14:57:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/18 13:28:06 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/01/23 19:15:16 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/01/23 19:33:14 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	size_t	s_len;
-	char	*ptr;
-	size_t	i;
+	char	*res;
+	int		len;
+	int		i;
 
-	s_len = ft_strlen(s1);
-	ptr = (char *)malloc((s_len + 1) * sizeof(char));
-	if (!ptr)
-		return (NULL);
+	len = ft_strlen(s);
+	res = (char *)malloc(len + 1);
+	if (!res)
+		return (0);
 	i = 0;
-	while (i < s_len)
+	while (s[i] != '\0')
 	{
-		ptr[i] = s1[i];
+		res[i] = f(i, s[i]);
 		i++;
 	}
-	ptr[i] = '\0';
-	return (ptr);
+	res[i] = '\0';
+	return (res);
 }
