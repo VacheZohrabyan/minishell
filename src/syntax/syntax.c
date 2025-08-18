@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:11:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 22:18:21 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/18 22:19:13 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,4 @@ int	syntax(t_token *token)
     }
     return 1;
 }
-//u verj
+//u verj // ha u bultini mech mi hat argc popoxakan kar if i mech em gre vor ashxater
