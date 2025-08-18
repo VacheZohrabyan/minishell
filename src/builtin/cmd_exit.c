@@ -67,6 +67,10 @@ int	cmd_exit(t_token *token, t_env *env)
 	ft_putendl_fd("exit", 1);
 
 	argc = 0;
+	if (argc == 0)
+	{
+		
+	}
 	if (token->next)
 		argc = 1 + (token->next->next != NULL);
 	if (!token->next)
