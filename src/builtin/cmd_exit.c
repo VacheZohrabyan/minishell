@@ -61,21 +61,11 @@ void	check_exit_argument(t_token *token)
 
 int	cmd_exit(t_token *token, t_env *env)
 {
-	int	argc;
 	int	exit_code;
 
 	ft_putendl_fd("exit", 1);
-
-	argc = 0;
-	if (argc == 0)
-	{
-		
-	}
-	if (token->next)
-		argc = 1 + (token->next->next != NULL);
 	if (!token->next)
 		exit(env->exit_code);
-
 	check_exit_argument(token);
 	if (token->next && token->next->next)
 	{

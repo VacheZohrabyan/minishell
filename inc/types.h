@@ -25,4 +25,30 @@ typedef struct s_token
 	struct s_token	*prev;
 }					t_token;
 
+typedef struct s_ast
+{
+	char			*operator;
+	struct s_ast	*next;
+}	t_ast;
+
+typedef struct s_env_node
+{
+	int					is_equal;
+	char				*key;
+	char				*value;
+	struct s_env_node	*next;
+}	t_env_node;
+
+typedef struct s_env
+{
+	t_env_node	**buffer_env;
+	int 		exit_code;
+}	t_env;
+
+typedef struct s_shell
+{
+	t_env *env;
+	t_token	*token;
+} t_shell;
+
 #endif

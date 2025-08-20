@@ -37,9 +37,8 @@ int	main(int argc, char **argv, char **env)
 		token = lexical(buffer);
 		if (token)
 		{
-			if (syntax(token))
+			if (syntax(token, env_node))
 			{
-				check_builtin(token, env_node);
 				printf("okey\n");
 			}
 			token_node_free(&token);
