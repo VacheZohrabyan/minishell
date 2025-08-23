@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:11:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 22:19:13 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/23 13:44:48 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,8 @@ int	syntax(t_token *token, t_env *env)
                     tmp = tmp->next;
                     continue;
                 }
-                command_word_for_os(tmp);
+                else
+                    command_word_for_os(tmp);
             }
         }
         else if (command_token(tmp->file_name))
