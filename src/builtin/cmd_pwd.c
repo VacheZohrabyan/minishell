@@ -2,15 +2,13 @@
 
 int	cmd_pwd(void)
 {
-	char *cwd;
+	char	cwd[PATH_MAX];
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	if (!getcwd(cwd, sizeof(cwd)))
 	{
 		perror("pwd");
 		return (1);
 	}
 	printf("%s\n", cwd);
-	free(cwd);
 	return (0);
 }

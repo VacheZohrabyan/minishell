@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 14:08:17 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:46:55 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
 
+t_shell	*init_shell(char **env);
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
 int		init_env_node_member(t_env_node *tmp, char *env);
 int		push_back(t_env_node **env_node, char *env);

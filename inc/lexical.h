@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 16:03:26 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:21:20 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "include.h"
 
-t_token			*lexical(char *buf);
+t_token			*lexical(t_shell *shell);
 t_token_type	check_token_type(char *buffer);
 t_token			*lexical_push_back(t_token *token, char *buffer);
 

@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:11:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 13:44:48 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:04:38 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,113 +30,108 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 int	command_word(char *str)
 {
-	return (ft_strcmp(str, "echo") == 0 
-		|| ft_strcmp(str, "cd") == 0
-		|| ft_strcmp(str, "pwd") == 0
-		|| ft_strcmp(str, "export") == 0
-		|| ft_strcmp(str, "unset") == 0
-		|| ft_strcmp(str, "env") == 0
-		|| ft_strcmp(str, "exit")) == 0;
+	return ((ft_strcmp(str, "echo") == 0 || ft_strcmp(str, "cd") == 0
+			|| ft_strcmp(str, "pwd") == 0 || ft_strcmp(str, "export") == 0
+			|| ft_strcmp(str, "unset") == 0 || ft_strcmp(str, "env") == 0
+			|| ft_strcmp(str, "exit")) == 0);
 }
 
 int	command_token(char *str)
 {
-	return (ft_strcmp(str, "(") == 0
-	 	|| ft_strcmp(str, ")") == 0
-		|| ft_strcmp(str, "|") == 0
-		|| ft_strcmp(str, "||") == 0
-		|| ft_strcmp(str, "&&") == 0
-		|| ft_strcmp(str, ">") == 0
-		|| ft_strcmp(str, ">>") == 0
-		|| ft_strcmp(str, "<") == 0
+	return (ft_strcmp(str, "(") == 0 || ft_strcmp(str, ")") == 0
+		|| ft_strcmp(str, "|") == 0 || ft_strcmp(str, "||") == 0
+		|| ft_strcmp(str, "&&") == 0 || ft_strcmp(str, ">") == 0
+		|| ft_strcmp(str, ">>") == 0 || ft_strcmp(str, "<") == 0
 		|| ft_strcmp(str, "<<") == 0);
 }
 
-char** join_many_path(t_token** token) // esem avelacre
+char	**join_many_path(t_token **token) // esem avelacre
 {
-    size_t  size_word;
-    size_t  i;
+	size_t size_word;
+	size_t i;
 	t_token *tmp;
 
-    size_word = 0;
-    tmp = *token;
-    while (tmp && tmp->token_type == TOKEN_WORD)
-    {
-        size_word++;
-        tmp = tmp->next;
-    }
-    char **argv = malloc(sizeof(char *) * (size_word + 1));
-    if (!argv)
-        return (NULL);
-    tmp = *token;
-    i = 0;
-    while (i < size_word)
-    {
-        argv[i] = ft_strdup(tmp->file_name);
-        if (!argv[i]) {
-            while (i > 0)
-                free(argv[--i]);
-            free(argv);
-            return (NULL);
-        }
-        tmp = tmp->next;
-        i++;
-    }
-    argv[size_word] = NULL;
+	size_word = 0;
+	tmp = *token;
+	while (tmp && tmp->token_type == TOKEN_WORD)
+	{
+		size_word++;
+		tmp = tmp->next;
+	}
+	char **argv = malloc(sizeof(char *) * (size_word + 1));
+	if (!argv)
+		return (NULL);
+	tmp = *token;
+	i = 0;
+	while (i < size_word)
+	{
+		argv[i] = ft_strdup(tmp->cmd);
+		if (!argv[i])
+		{
+			while (i > 0)
+				free(argv[--i]);
+			free(argv);
+			return (NULL);
+		}
+		tmp = tmp->next;
+		i++;
+	}
+	argv[size_word] = NULL;
 	*token = tmp;
-    return (argv);
+	return (argv);
 }
 
-int command_word_for_os(t_token *token)
+int	command_word_for_os(t_token *token)
 {
-    t_token *tmp;
-    char **argv; //es functian
-    pid_t fork_pid;
+	t_token	*tmp;
+	pid_t	fork_pid;
 
-    tmp = token;
-    argv = join_many_path(&tmp);
-    fork_pid = fork();
-    if (fork_pid < 0)
-    {
-        perror("fork failed");
-        exit(EXIT_FAILURE);
-    }
-    else if (fork_pid == 0)
-    {
-        execvp(argv[0], argv);
-        perror("command not found");
-        exit(EXIT_FAILURE);
-    }
-    else
-        wait(NULL);
-    return (0);
+	char **argv; // es functian
+	tmp = token;
+	argv = join_many_path(&tmp);
+	fork_pid = fork();
+	if (fork_pid < 0)
+	{
+		perror("fork failed");
+		exit(EXIT_FAILURE);
+	}
+	else if (fork_pid == 0)
+	{
+		execvp(argv[0], argv);
+		perror("command not found");
+		exit(EXIT_FAILURE);
+	}
+	else
+		wait(NULL);
+	return (0);
 }
 
-int	syntax(t_token *token, t_env *env)
+int	syntax(t_shell *shell, t_token *token)
 {
-	t_token *tmp = token;
+	t_token	*tmp;
 
-    while (tmp)
-    {
-        if (tmp->token_type == TOKEN_WORD)
-        {
-            if (command_word(tmp->file_name))
-            {
-                if (check_builtin(tmp, env))
-                {
-                    tmp = tmp->next;
-                    continue;
-                }
-                else
-                    command_word_for_os(tmp);
-            }
-        }
-        else if (command_token(tmp->file_name))
-        {
-            printf("command_token\n"); //vaxy kanem
-        }
-        tmp = tmp->next;
-    }
-    return 1;
+	tmp = token;
+	while (tmp)
+	{
+		if (tmp->token_type == TOKEN_WORD)
+		{
+			if (command_word(tmp->cmd))
+			{
+				if (check_builtin(shell))
+				{
+					tmp = tmp->next;
+					continue ;
+				}
+				else
+					command_word_for_os(tmp);
+			}
+		}
+		else if (command_token(tmp->cmd))
+		{
+			printf("command_token\n"); // vaxy kanem
+		}
+		tmp = tmp->next;
+	}
+	return (1);
 }
-//u verj // ha u bultini mech mi hat argc popoxakan kar if i mech em gre vor ashxater
+// u verj

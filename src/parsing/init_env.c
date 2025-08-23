@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:55:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:51:23 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:13:07 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ int	init_env_array(t_env **env_array)
 	*env_array = (t_env *)malloc(sizeof(t_env));
 	if (!*env_array)
 		return (-1);
-	(*env_array)->buffer_env
-		= (t_env_node **)malloc(sizeof(t_env_node *) * MAX_SIZE_ENV);
+	(*env_array)->buffer_env = (t_env_node **)malloc(sizeof(t_env_node *)
+			* MAX_SIZE_ENV);
 	if (!(*env_array)->buffer_env)
 	{
 		free(*env_array);

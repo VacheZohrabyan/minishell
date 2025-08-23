@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 13:48:47 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:05:39 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,38 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	t_env	*env_node;
-	t_token	*token;
-	char	*buffer;
+	t_shell	*shell;
 
-	env_node = NULL;
-	token = NULL;
-	buffer = NULL;
+	shell = NULL;
 	if (argc != 1 || !argv[0])
 		return (0);
-	init_env(&env_node, env);
+	shell = init_shell(env);
 	sig();
 	while (1)
 	{
-		buffer = readline("minishell>"); // PROMPT
-		if (!buffer)
+		shell->buffer = readline("minishell>"); // PROMPT
+		if (!shell->buffer)
 		{
 			printf("exit\n");
 			break ;
 		}
-		add_history(buffer);
-		token = lexical(buffer);
-		if (token)
+		add_history(shell->buffer);
+		shell->token = lexical(shell);
+		if (shell->token)
 		{
-			if (syntax(token, env_node))
+			if (syntax(shell, shell->token))
 			{
 				printf("okey\n");
 			}
-			token_node_free(&token);
+			token_node_free(&shell->token);
 		}
 		else
 			printf("token_NULL\n");
-		free(buffer);
-		buffer = NULL;
+		free(shell->buffer);
+		shell->buffer = NULL;
 	}
-	token_node_free(&token);
-	free_env(env_node);
+	token_node_free(&shell->token);
+	free_env(shell->env_list);
+	// free(shell);
 	return (0);
 }

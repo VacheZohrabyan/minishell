@@ -15,21 +15,21 @@ typedef enum e_tokken_type
 	TOKEN_REDIRECT_OUT,    // >
 	TOKEN_REDIRECT_APPEND, // >>
 	TOKEN_HEREDOC,         // <<
-}					t_token_type;
+}						t_token_type;
 
 typedef struct s_token
 {
-	t_token_type	token_type;
-	char			*file_name;
-	struct s_token	*next;
-	struct s_token	*prev;
-}					t_token;
+	t_token_type		token_type;
+	char				*cmd;
+	struct s_token		*next;
+	struct s_token		*prev;
+}						t_token;
 
 typedef struct s_ast
 {
-	char			*operator;
-	struct s_ast	*next;
-}	t_ast;
+	char				*operator;
+	struct s_ast		*next;
+}						t_ast;
 
 typedef struct s_env_node
 {
@@ -37,18 +37,22 @@ typedef struct s_env_node
 	char				*key;
 	char				*value;
 	struct s_env_node	*next;
-}	t_env_node;
+}						t_env_node;
 
 typedef struct s_env
 {
-	t_env_node	**buffer_env;
-	int 		exit_code;
-}	t_env;
+	t_env_node			**buffer_env;
+	int					exit_code;
+}						t_env;
 
 typedef struct s_shell
 {
-	t_env *env;
-	t_token	*token;
-} t_shell;
+	char				**env;
+	char				*hist;
+	t_env				*env_list;
+	int					history_fd;
+	t_token				*token;
+	char				*buffer;
+}						t_shell;
 
 #endif

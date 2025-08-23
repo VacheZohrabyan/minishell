@@ -4,10 +4,12 @@ long	ft_atol(const char *str)
 {
 	long	result;
 	int		sign;
+	int		digit;
 	int		i;
 
 	result = 0;
 	sign = 1;
+	digit = 0;
 	i = 0;
 	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
@@ -19,7 +21,10 @@ long	ft_atol(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		result = result * 10 + (str[i] - '0');
+		digit = str[i] - '0';
+		if (result > (LONG_MAX - digit) / 10)
+			return (0);
+		result = result * 10 + digit;
 		i++;
 	}
 	return (result * sign);
@@ -47,33 +52,32 @@ int	is_numeric(char *status)
 
 void	check_exit_argument(t_token *token)
 {
-	if (is_numeric(token->next->file_name))
+	if (is_numeric(token->next->cmd) || !ft_atol(token->next->cmd))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(token->next->file_name, 2);
+		ft_putstr_fd(token->next->cmd, 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		// free all here
-		exit(2);
+		exit(255);
 	}
 }
 
-#include "../../inc/builtin.h"
-
-int	cmd_exit(t_token *token, t_env *env)
+int	cmd_exit(t_shell *shell)
 {
-	int	exit_code;
+	long	val;
 
+	val = 0;
 	ft_putendl_fd("exit", 1);
-	if (!token->next)
-		exit(env->exit_code);
-	check_exit_argument(token);
-	if (token->next && token->next->next)
+	if (!shell->token->next)
+		exit(shell->env_list->exit_code);
+	check_exit_argument(shell->token);
+	if (shell->token->next->next)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		env->exit_code = 1;
+		shell->env_list->exit_code = 1;
 		return (1);
 	}
-	exit_code = (int)(ft_atol(token->next->file_name) % 256);
-	// free all here
-	exit(exit_code);
+	shell->env_list->exit_code = (unsigned char)val;
+	// free shell/env here
+	exit(shell->env_list->exit_code);
 }

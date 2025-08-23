@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 16:03:43 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:56:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 	if (!tmp)
 		return (NULL);
 	tmp->token_type = check_token_type(buffer);
-	tmp->file_name = ft_strdup(buffer);
+	tmp->cmd = ft_strdup(buffer);
 	tmp->next = NULL;
 	tmp->prev = NULL;
 	if (!token)
@@ -64,22 +64,21 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 	return (token);
 }
 
-t_token	*lexical(char *buf)
+t_token	*lexical(t_shell *shell)
 {
-	t_token	*token;
 	size_t	i;
 	char	**buffer;
 	char	*buf_malloc;
 
-	buf_malloc = add_spaces_around_specials(buf);
+	buf_malloc = add_spaces_around_specials(shell->buffer);
 	i = 0;
-	token = NULL;
+	shell->token = NULL;
 	buffer = ft_split(buf_malloc, ' ');
 	while (buffer[i])
-		token = lexical_push_back(token, buffer[i++]);
+		shell->token = lexical_push_back(shell->token, buffer[i++]);
 	split_free(&buffer);
 	free(buf_malloc);
-	if (!syntax_checker(token))
+	if (!syntax_checker(shell->token))
 		return (NULL);
-	return (token);
+	return (shell->token);
 }

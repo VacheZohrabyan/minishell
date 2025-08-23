@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_node_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 11:36:50 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:52:07 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:56:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	token_node_free(t_token **token)
 		*token = (*token)->next;
 		tmp->next = NULL;
 		tmp->prev = NULL;
-		free(tmp->file_name);
+		free(tmp->cmd);
 		free(tmp);
 	}
 }

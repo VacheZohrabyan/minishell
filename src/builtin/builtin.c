@@ -1,10 +1,10 @@
 #include "../../inc/builtin.h"
 
-int	check_builtin(t_token *token, t_env *env)
+int	check_builtin(t_shell *shell)
 {
-	if (!ft_strcmp("pwd", token->file_name))
+	if (!ft_strcmp("pwd", shell->token->cmd))
 		return (cmd_pwd());
-	else if (!ft_strcmp("exit", token->file_name))
-		return (cmd_exit(token, env));
+	else if (!ft_strcmp("exit", shell->token->cmd))
+		return (cmd_exit(shell));
 	return (0);
 }
