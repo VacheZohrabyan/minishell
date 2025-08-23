@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/18 14:13:26 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/23 13:18:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,50 @@ int	main(int argc, char **argv, char **env)
 	t_env	*env_node;
 	t_token	*token;
 	char	*buffer;
+	pid_t pid;
 
 	env_node = NULL;
 	token = NULL;
 	buffer = NULL;
+	pid = fork();
 	if (argc != 1 || !argv[0])
 		return (0);
 	init_env(&env_node, env);
 	sig();
 	while (1)
 	{
-		buffer = readline("minishell>"); // PROMPT
-		if (!buffer)
+		if (pid < 0)
 		{
-			printf("exit\n");
-			break ;
+			printf("chi exe");
 		}
-		add_history(buffer);
-		token = lexical(buffer);
-		if (token)
+		else if (pid == 0)
 		{
-			if (syntax(token))
+			buffer = readline("minishell>"); // PROMPT
+			if (!buffer)
 			{
-				check_builtin(token, env_node);
-				printf("okey\n");
+				printf("exit\n");
+				break ;
 			}
-			token_node_free(&token);
+			add_history(buffer);
+			token = lexical(buffer);
+			if (token)
+			{
+				if (syntax(token))
+				{
+					check_builtin(token, env_node);
+					printf("okey\n");
+				}
+				token_node_free(&token);
+			}
+			else
+				printf("token_NULL\n");
+			free(buffer);
+			buffer = NULL;
 		}
 		else
-			printf("token_NULL\n");
-		free(buffer);
-		buffer = NULL;
+		{
+			wait(NULL);	
+		}
 	}
 	token_node_free(&token);
 	free_env(env_node);
