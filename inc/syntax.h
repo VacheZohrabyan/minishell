@@ -15,7 +15,7 @@
 
 # include "include.h"
 
-int	syntax(t_token *token);
+int	syntax(t_token *token, t_env *env);
 int	command_word_for_os(t_token *token);
 int	command_token(char *str);
 int	command_word(char *str);

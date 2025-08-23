@@ -18,26 +18,6 @@
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
 
-typedef struct s_ast
-{
-	char			*operator;
-	struct s_ast	*next;
-}	t_ast;
-
-typedef struct s_env_node
-{
-	int					is_equal;
-	char				*key;
-	char				*value;
-	struct s_env_node	*next;
-}	t_env_node;
-
-typedef struct s_env
-{
-	t_env_node	**buffer_env;
-	int 		exit_code;
-}	t_env;
-
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
 int		init_env_node_member(t_env_node *tmp, char *env);
 int		push_back(t_env_node **env_node, char *env);

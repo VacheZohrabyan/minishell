@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 13:18:51 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/23 13:26:32 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,15 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("exit\n");
 				break ;
+			if (syntax(token, env_node))
+			{
+				printf("okey\n");
 			}
 			add_history(buffer);
 			token = lexical(buffer);
 			if (token)
 			{
-				if (syntax(token))
+				if (syntax(token, env_node))
 				{
 					check_builtin(token, env_node);
 					printf("okey\n");
@@ -65,4 +68,5 @@ int	main(int argc, char **argv, char **env)
 	token_node_free(&token);
 	free_env(env_node);
 	return (0);
+}
 }

@@ -52,41 +52,50 @@ int	command_token(char *str)
 		|| ft_strcmp(str, "<<") == 0);
 }
 
-char** join_meny_path(t_token** token) // esem avelacre
+char** join_many_path(t_token** token) // esem avelacre
 {
-    size_t size_word = 0;
-	t_token *tmp = *token;
-    while (tmp && tmp->token_type == TOKEN_WORD) {
+    size_t  size_word;
+    size_t  i;
+	t_token *tmp;
+
+    size_word = 0;
+    tmp = *token;
+    while (tmp && tmp->token_type == TOKEN_WORD)
+    {
         size_word++;
         tmp = tmp->next;
     }
-    char **argv = malloc(sizeof(char*) * (size_word + 1));
+    char **argv = malloc(sizeof(char *) * (size_word + 1));
     if (!argv)
-	{
-        return NULL;
-	}
-	tmp = *token;
-    for (size_t i = 0; i < size_word; i++) {
+        return (NULL);
+    tmp = *token;
+    i = 0;
+    while (i < size_word)
+    {
         argv[i] = ft_strdup(tmp->file_name);
         if (!argv[i]) {
             while (i > 0)
                 free(argv[--i]);
             free(argv);
-            return NULL;
+            return (NULL);
         }
         tmp = tmp->next;
+        i++;
     }
     argv[size_word] = NULL;
 	*token = tmp;
-    return argv;
+    return (argv);
 }
 
 int command_word_for_os(t_token *token)
 {
-    t_token *tmp = token;
-    char **argv = join_meny_path(&tmp); //es functian
-    pid_t fork_pid = fork();
+    t_token *tmp;
+    char **argv; //es functian
+    pid_t fork_pid;
 
+    tmp = token;
+    argv = join_many_path(&tmp);
+    fork_pid = fork();
     if (fork_pid < 0)
     {
         perror("fork failed");
@@ -99,13 +108,11 @@ int command_word_for_os(t_token *token)
         exit(EXIT_FAILURE);
     }
     else
-    {
         wait(NULL);
-    }
-    return 0;
+    return (0);
 }
 
-int	syntax(t_token *token)
+int	syntax(t_token *token, t_env *env)
 {
 	t_token *tmp = token;
 
@@ -115,10 +122,11 @@ int	syntax(t_token *token)
         {
             if (command_word(tmp->file_name))
             {
-                printf("builtin: %s\n", tmp->file_name); //es printf khanes go biltinery kgres
-            }
-            else
-            {
+                if (check_builtin(tmp, env))
+                {
+                    tmp = tmp->next;
+                    continue;
+                }
                 command_word_for_os(tmp);
             }
         }
