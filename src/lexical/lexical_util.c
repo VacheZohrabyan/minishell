@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 15:11:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:51:56 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:56:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,5 @@ int	is_double_special(const char *buffer, size_t i)
 	return (
 		(buffer[i] == '<' && buffer[i + 1] == '<')
 		|| (buffer[i] == '>' && buffer[i + 1] == '>')
-		|| (buffer[i] == '|' && buffer[i + 1] == '|')
-		|| (buffer[i] == '&' && buffer[i + 1] == '&')
 	);
 }

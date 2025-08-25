@@ -20,7 +20,6 @@ SRC     := \
 	$(SRCDIR)/lexical/hendle_token.c \
 	$(SRCDIR)/parsing/syntax_checker.c \
 	$(SRCDIR)/parsing/syntax_checker_utils.c \
-	$(SRCDIR)/syntax/syntax.c \
 	$(SRCDIR)/builtin/builtin.c \
 	$(SRCDIR)/builtin/cmd_pwd.c \
 	$(SRCDIR)/builtin/cmd_exit.c \

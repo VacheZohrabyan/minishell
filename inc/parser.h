@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 14:46:55 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:35:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,20 @@
 
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
+
+typedef struct s_reidrect
+{
+    char* argv;
+    struct s_reidrect* next
+} t_reidrect;
+
+typedef struct s_command
+{
+    char **argv;
+    t_reidrect *reidrect;
+    int herodoc;
+    struct s_command *next;
+} t_command;
 
 t_shell	*init_shell(char **env);
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
@@ -31,6 +45,7 @@ int		is_valid_close_breaket(t_token *tmp, int open);
 
 void	free_env_node(t_env_node *node);
 void	free_env(t_env *env);
+t_command* parsing(t_token* token);
 
 #endif
 

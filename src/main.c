@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 18:05:39 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:07:33 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
-
+	t_command* command = NULL;
 	shell = NULL;
 	if (argc != 1 || !argv[0])
 		return (0);
@@ -33,10 +33,7 @@ int	main(int argc, char **argv, char **env)
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
-			if (syntax(shell, shell->token))
-			{
-				printf("okey\n");
-			}
+			command = parsing(shell->token);
 			token_node_free(&shell->token);
 		}
 		else
