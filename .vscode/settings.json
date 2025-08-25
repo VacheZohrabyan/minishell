@@ -3,6 +3,8 @@
         "readline.h": "c",
         "libft.h": "c",
         "include.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "builtin.h": "c",
+        "limits.h": "c"
     }
 }

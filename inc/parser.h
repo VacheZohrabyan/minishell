@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/25 18:35:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/25 23:00:25 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 typedef struct s_reidrect
 {
     char* argv;
-    struct s_reidrect* next
+    int fd;
 } t_reidrect;
 
 typedef struct s_command
 {
     char **argv;
     t_reidrect *reidrect;
+    int token;
     int herodoc;
     struct s_command *next;
 } t_command;

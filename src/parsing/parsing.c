@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/25 18:37:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/25 23:13:52 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,38 +40,64 @@ void push_back_command(t_command** command, t_token **token)
 		exit(0);
 	}	
 	
-	if (!(*command))
+	if (*command)
 	{
-		new_command->argv = (char**)malloc(sizeof(char*) * word_count(tmp));
+		while (current->next)
+			current = current->next;
+	}
+	if (tmp->token_type == TOKEN_WORD)
+	{
+		new_command->argv = (char**)malloc(sizeof(char*) * (word_count(tmp) + 1));
 		if (!(new_command->argv))
 			exit (0); //stex hendl kanes
 		new_command->reidrect = NULL;
 		new_command->herodoc = 0;
-		if (tmp->token_type == TOKEN_WORD)
+		printf("stex\n");
+		while (tmp)
 		{
-			while (tmp)
+			if (tmp->token_type == TOKEN_WORD)
 			{
-				if (tmp->token_type == TOKEN_WORD)
-				{
-					new_command->argv[i] = ft_strdup(tmp->cmd);
-					++i;
-					tmp = tmp->next;
-					continue;
-				}
-				*token = tmp;
-				current = new_command;
+				new_command->argv[i] = ft_strdup(tmp->cmd);
+				++i;
+				tmp = tmp->next;
+				continue;
 			}
-		}
-		else
-		{
-			t_reidrect* new_redir = new_command->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
-			new_redir->argv = ft_strdup(tmp->cmd);
-			t_reidrect* current_redir = 
+			*token = tmp;
+			current = new_command;
+			current->next = NULL;
+			current->reidrect = NULL;
+			new_command->argv[i] = NULL;
 		}
 	}
 	else
 	{
-		
+		new_command->argv = NULL;
+		if (tmp->token_type == TOKEN_HEREDOC)
+		{
+			new_command->herodoc = 1;
+			new_command->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
+			if ((new_command->reidrect->fd = open(tmp->next->cmd, O_RDONLY | O_WRONLY | O_CREAT)) < 0)
+			{
+				exit(0); //esel hendl kanes
+			}
+			new_command->reidrect->argv = ft_strdup(tmp->cmd);
+			if (!(new_command->reidrect->argv))
+			{
+				exit(0); //esel hendl kanes
+			}
+		}
+		else
+		{
+			new_command->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
+			new_command->reidrect->argv = ft_strdup(tmp->cmd);
+			new_command->herodoc = 0;
+			new_command->reidrect->argv = ft_strdup(tmp->cmd);
+			if (!(new_command->reidrect->argv))
+			{
+				exit(0); //esel hendl kanes
+			}
+		}
+		*token = tmp;
 	}
 }
 
@@ -79,16 +105,15 @@ t_command* parsing(t_token* token)
 {
 	t_token* tmp = token;
 	t_command* command = NULL;
-	command->reidrect = NULL;.
-	+--
+	printf("parsing\n");
 	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_WORD)
-		{
-			push_back_command(&command, &tmp);
-		}
+		push_back_command(&command, &tmp);
+		if (!tmp)
+			return command;
+		tmp = tmp->next;
 	}
-	return NULL;
+	return command;
 }
 
 t_shell	*init_shell(char **env)
