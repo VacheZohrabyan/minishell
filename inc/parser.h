@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/26 15:39:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 19:01:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,17 @@
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
 
-typedef struct s_reidrect
+typedef struct s_redirect
 {
-    char* argv;
-    int fd;
-} t_reidrect;
+    char* file_name;
+    t_token_type token_type;
+    struct s_redirect *next;
+} t_redirect;
 
 typedef struct s_command
 {
     char **argv;
-    t_reidrect *reidrect;
-    int token;
-    int herodoc;
-    int argv_is_string;
+    t_redirect *redirect;
     struct s_command *next;
 } t_command;
 
@@ -47,7 +45,7 @@ int		is_valid_close_breaket(t_token *tmp, int open);
 
 void	free_env_node(t_env_node *node);
 void	free_env(t_env *env);
-t_command* parsing(t_token* token);
+void parsing(t_command** command, t_token* token);
 
 #endif
 

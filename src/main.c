@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/26 15:41:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 19:11:16 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,26 @@ int	main(int argc, char **argv, char **env)
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
-			command = parsing(shell->token);
+			parsing(&command ,shell->token);
 			if (!command)
 			{
 				printf("chexav\n");
 			}
-			int i = 0;
-			while (command)
-			{
-				if (command->token)
-				{
-					printf("%s ", command->reidrect->argv);
-					command = command->next;
-					continue;
-				}
-				while (command->argv[i])
-				{
-					printf("%s ", command->argv[i]);
-					++i;
-				}
-				command = command->next;
-			}
+			// while (command)
+			// {
+			// 	if (command->token)
+			// 	{
+			// 		printf("%s ", command->reidrect->argv);
+			// 		command = command->next;
+			// 		continue;
+			// 	}
+			// 	while (command->argv[i])
+			// 	{
+			// 		printf("%s ", command->argv[i]);
+			// 		++i;
+			// 	}
+			// 	command = command->next;
+			// }
 			token_node_free(&shell->token);
 		}
 		free(shell->buffer);
