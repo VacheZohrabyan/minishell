@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/25 23:00:25 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:39:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_command
     t_reidrect *reidrect;
     int token;
     int herodoc;
+    int argv_is_string;
     struct s_command *next;
 } t_command;
 

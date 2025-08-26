@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/25 23:13:52 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:45:57 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,77 +28,77 @@ size_t word_count(t_token* tmp)
 	return size;
 }
 
+// int add_redirect_append(t_command** current, t_token** token)
+// {
+// 	while ((*token)->token_type == TOKEN_REDIRECT_APPEND)
+// 	{
+// 		(*token) = (*token)->next;
+// 		if (!token)
+// 		{
+// 			printf("minishell: syntax error near unexpected token `newline'\n");
+// 			//free() hendl;
+// 			return -1;
+// 		}
+// 		else if ((*token)->token_type != TOKEN_WORD)
+// 		{
+// 			printf("minishell: syntax error near unexpected token %s\n", (*token)->cmd);
+// 			//free() hendl;
+// 			return -1;
+// 		}
+// 		(*current)->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
+// 		(*current)->reidrect->argv = ft_strdup((*token)->cmd);
+// 		if (!((*current)->reidrect) || !((*current)->reidrect->argv))
+// 		{
+// 			printf("push_back_command (current->reidrect) malloc faild\n");
+// 			exit(0);
+// 		}
+// 		if (access((*current)->reidrect->argv, F_OK) == -1)
+// 		{
+// 			while (access((*current)->reidrect->argv, R_OK | X_OK) == -1)
+// 			{
+// 				while (((*current)->reidrect->fd = open((*current)->reidrect->argv, O_WRONLY | O_CREAT, 0644)) < 0)
+// 					;
+// 			}
+// 		}
+// 		else if (access((*current)->reidrect->argv, R_OK | W_OK) < 0)
+// 		{
+// 			while (((*current)->reidrect->fd = open((*current)->reidrect->argv, O_WRONLY | O_CREAT, 0644)) < 0)
+// 				;
+// 		}
+// 	}
+// 	return 0;
+// }
 
-void push_back_command(t_command** command, t_token **token)
+
+int push_back_command(t_command** command, t_token **tmp)
 {
-	t_command *current = *command;
-	t_command *new_command = (t_command*)malloc(sizeof(t_command));
-	t_token* tmp = *token;
-	int i = 0;
+	t_command* current = *command;
+	t_command* new_command = (t_command*)malloc(sizeof(t_command));
+	t_token* token = *tmp;
 	if (!new_command)
 	{
+		printf("push_back_command (new_command) malloc faild\n");
 		exit(0);
-	}	
-	
-	if (*command)
-	{
-		while (current->next)
-			current = current->next;
 	}
-	if (tmp->token_type == TOKEN_WORD)
+	if (current)
 	{
-		new_command->argv = (char**)malloc(sizeof(char*) * (word_count(tmp) + 1));
-		if (!(new_command->argv))
-			exit (0); //stex hendl kanes
-		new_command->reidrect = NULL;
-		new_command->herodoc = 0;
-		printf("stex\n");
-		while (tmp)
-		{
-			if (tmp->token_type == TOKEN_WORD)
-			{
-				new_command->argv[i] = ft_strdup(tmp->cmd);
-				++i;
-				tmp = tmp->next;
-				continue;
-			}
-			*token = tmp;
-			current = new_command;
-			current->next = NULL;
-			current->reidrect = NULL;
-			new_command->argv[i] = NULL;
-		}
+		while (current)
+			current = current->next;
 	}
 	else
 	{
-		new_command->argv = NULL;
-		if (tmp->token_type == TOKEN_HEREDOC)
-		{
-			new_command->herodoc = 1;
-			new_command->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
-			if ((new_command->reidrect->fd = open(tmp->next->cmd, O_RDONLY | O_WRONLY | O_CREAT)) < 0)
-			{
-				exit(0); //esel hendl kanes
-			}
-			new_command->reidrect->argv = ft_strdup(tmp->cmd);
-			if (!(new_command->reidrect->argv))
-			{
-				exit(0); //esel hendl kanes
-			}
-		}
-		else
-		{
-			new_command->reidrect = (t_reidrect*)malloc(sizeof(t_reidrect));
-			new_command->reidrect->argv = ft_strdup(tmp->cmd);
-			new_command->herodoc = 0;
-			new_command->reidrect->argv = ft_strdup(tmp->cmd);
-			if (!(new_command->reidrect->argv))
-			{
-				exit(0); //esel hendl kanes
-			}
-		}
-		*token = tmp;
+		*command = new_command;
+		(*command)->next = NULL;
 	}
+	current = new_command;
+	current->next = NULL;
+	// if (token->token_type == TOKEN_REDIRECT_APPEND)
+	// {
+	// 	if (add_redirect_append(&current, &token))
+	// 		return 1;
+	// }
+	
+	return 0;
 }
 
 t_command* parsing(t_token* token)
@@ -108,11 +108,13 @@ t_command* parsing(t_token* token)
 	printf("parsing\n");
 	while (tmp)
 	{
-		push_back_command(&command, &tmp);
+		if (push_back_command(&command, &tmp) == -1)
+			return NULL;
 		if (!tmp)
 			return command;
 		tmp = tmp->next;
 	}
+	token = tmp;
 	return command;
 }
 

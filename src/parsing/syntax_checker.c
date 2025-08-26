@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 20:48:44 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/07/21 17:51:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:10:45 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,19 @@ int	check_double_operator(t_token *token, t_token_type token_type,
 int	valid_syntax_pipe_or_and(t_token *token)
 {
 	t_token	*tmp;
-
 	tmp = token;
 	if (tmp->token_type != TOKEN_WORD)
-		if (tmp->token_type == TOKEN_PIPE)
+		if ((tmp->token_type == TOKEN_PIPE) || (tmp->token_type == TOKEN_OR) || (tmp->token_type == TOKEN_AND))
 			return (printf("bash: syntax error"
-					" near unexpected token `|'\n"), 0);
-	if (tmp->token_type != TOKEN_WORD)
-		if (tmp->token_type == TOKEN_OR)
-			return (printf("bash: syntax error"
-					" near unexpected token `||'\n"), 0);
-	if (tmp->token_type != TOKEN_WORD)
-		if (tmp->token_type == TOKEN_AND)
-			return (printf("bash: syntax error"
-					" near unexpected token `&&'\n"), 0);
+					" near unexpected token `%s'\n", tmp->cmd), 0);
+	// if (tmp->token_type != TOKEN_WORD)
+	// 	if (tmp->token_type == TOKEN_OR)
+	// 		return (printf("bash: syntax error"
+	// 				" near unexpected token `||'\n"), 0);
+	// if (tmp->token_type != TOKEN_WORD)
+	// 	if (tmp->token_type == TOKEN_AND)
+	// 		return (printf("bash: syntax error"
+	// 				" near unexpected token `&&'\n"), 0);
 	if (!check_double_operator(token, TOKEN_PIPE, "|"))
 		return (0);
 	if (!check_double_operator(token, TOKEN_OR, "||"))

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/25 23:12:39 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:41:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ int	main(int argc, char **argv, char **env)
 			}
 			token_node_free(&shell->token);
 		}
-		else
-			printf("token_NULL\n");
 		free(shell->buffer);
 		shell->buffer = NULL;
 	}
