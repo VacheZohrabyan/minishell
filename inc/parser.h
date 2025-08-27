@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 11:54:48 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/27 12:57:33 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
 
 typedef struct s_redirect
 {
-    char* file_name;
-    t_token_type token_type;
-    struct s_redirect *next;
-} t_redirect;
+	char				*file_name;
+	t_token_type		token_type;
+	struct s_redirect	*next;
+}	t_redirect;
 
 typedef struct s_command
 {
-    char **argv;
-    t_redirect *redirect;
-    struct s_command *next;
-} t_command;
+	char				**argv;
+	t_redirect			*redirect;
+	struct s_command	*next;
+}	t_command;
 
 t_shell	*init_shell(char **env);
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
@@ -45,7 +45,9 @@ int		is_valid_close_breaket(t_token *tmp, int open);
 
 void	free_env_node(t_env_node *node);
 void	free_env(t_env *env);
-int parsing(t_command** command, t_token* token);
+int		parsing(t_command **command, t_token *token);
+void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
+			t_token *temp, t_token *token);
 
 #endif
 
