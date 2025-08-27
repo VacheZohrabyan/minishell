@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 10:47:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/27 12:13:56 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ int	main(int argc, char **argv, char **env)
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
-			parsing(&command ,shell->token);
+			printf("stex\n");
+			if (parsing(&command ,shell->token) == -1)
+			{
+				continue;
+			}
 			if (!command)
 			{
-				printf("chexav\n");
+				continue;
 			}
 			int i = 0;
 			while (command)
@@ -61,6 +65,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	token_node_free(&shell->token);
 	free_env(shell->env_list);
+	free(shell);
 	// free(shell);
 	return (0);
 }

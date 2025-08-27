@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 10:49:31 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/27 12:11:08 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,20 @@ char** init_argv(t_redirect** redirect, t_token* token, t_token* temp)
 {
 	int count = 0;
 	t_token *tmp = temp;
-    while (tmp != token) {
+    while (tmp != token)
+	{
+		printf("tmp = %s\n", tmp->cmd);
         if (tmp->token_type == TOKEN_WORD)
             count++;
-		else if (tmp && tmp->next->token_type != TOKEN_WORD && !count)
+		else if (!tmp->next)
 		{
 			printf("minishell: syntax error near unexpected token `newline'\n");
-			exit(0);
+			return NULL;
 		}
-		else if (tmp && tmp->next->token_type != TOKEN_WORD && count)
+		else if (tmp && tmp->next->token_type != TOKEN_WORD)
 		{
 			printf("minishell: syntax error near unexpected token `%s'\n", tmp->next->cmd);
-			exit(0);
+			return NULL;
 		}
 		
         tmp = tmp->next;
@@ -70,7 +72,7 @@ char** init_argv(t_redirect** redirect, t_token* token, t_token* temp)
             node->token_type = tmp->token_type;
             tmp = tmp->next;
             node->file_name = ft_strdup(tmp->cmd);
-            node->next = NULL;
+			node->next = NULL;
             if (!*redirect)
                 *redirect = node;
             else {
@@ -87,12 +89,17 @@ char** init_argv(t_redirect** redirect, t_token* token, t_token* temp)
 }
 
 
-void push_back_command(t_command** command, t_token* token, t_token* temp)
+int push_back_command(t_command** command, t_token* token, t_token* temp)
 {
 	 t_command *node = malloc(sizeof(t_command));
     node->redirect = NULL;
     node->argv = init_argv(&node->redirect, temp, token);
-    node->next = NULL;
+    if (!(node->argv))
+	{
+		free(node);
+		return (-1);
+	}
+	node->next = NULL;
     if (!*command)
         *command = node;
     else {
@@ -101,21 +108,29 @@ void push_back_command(t_command** command, t_token* token, t_token* temp)
             cur = cur->next;
         cur->next = node;
     }
+	return 0;
 }
 
-void parsing(t_command** command, t_token* token)
+int parsing(t_command** command, t_token* token)
 {
 	 t_token *start = token;
     t_token *tmp = token;
     while (tmp) {
         if (tmp->token_type == TOKEN_PIPE) {
-            push_back_command(command, start, tmp);
+            if (push_back_command(command, start, tmp) == -1)
+			{
+				printf("-21\n");
+				return (-1);
+			}
             start = tmp->next;
         }
         tmp = tmp->next;
     }
     if (start)
-        push_back_command(command, start, NULL);
+	{
+		push_back_command(command, start, NULL);
+	}
+	return (0);
 }
 
 t_shell	*init_shell(char **env)

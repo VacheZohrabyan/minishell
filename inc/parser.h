@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/26 19:01:26 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/27 11:54:48 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		is_valid_close_breaket(t_token *tmp, int open);
 
 void	free_env_node(t_env_node *node);
 void	free_env(t_env *env);
-void parsing(t_command** command, t_token* token);
+int parsing(t_command** command, t_token* token);
 
 #endif
 
