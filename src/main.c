@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/26 19:11:16 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/27 10:47:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,22 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("chexav\n");
 			}
-			// while (command)
-			// {
-			// 	if (command->token)
-			// 	{
-			// 		printf("%s ", command->reidrect->argv);
-			// 		command = command->next;
-			// 		continue;
-			// 	}
-			// 	while (command->argv[i])
-			// 	{
-			// 		printf("%s ", command->argv[i]);
-			// 		++i;
-			// 	}
-			// 	command = command->next;
-			// }
+			int i = 0;
+			while (command)
+			{
+				i = 0;
+				while (command->argv[i] && command->argv)
+				{
+            		printf("  argv[%d] = %s\n", i, command->argv[i]);
+					++i;
+				}
+				while (command->redirect)
+				{
+					printf("  redirect: type=%d, file=%s\n", command->redirect->token_type, command->redirect->file_name);
+					command->redirect = command->redirect->next;
+				}
+				command = command->next;
+			}
 			token_node_free(&shell->token);
 		}
 		free(shell->buffer);
