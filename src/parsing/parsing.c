@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 12:52:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 13:18:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	parsing(t_command **command, t_token *token)
 		{
 			if (push_back_command(command, start, tmp) == -1)
 			{
+				free_command(*command);
 				printf("-21\n");
 				return (-1);
 			}

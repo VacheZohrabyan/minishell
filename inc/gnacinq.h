@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_pwd.c                                          :+:      :+:    :+:   */
+/*   gnacinq.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/27 13:46:18 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 13:31:32 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/08/28 12:20:29 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/08/28 12:21:17 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/builtin.h"
+#ifndef GNACINQ_H
+#define GNACINQ_H
 
-int	cmd_pwd(void)
-{
-	char	cwd[PATH_MAX];
+#include "include.h"
 
-	if (!getcwd(cwd, sizeof(cwd)))
-	{
-		perror("pwd");
-		return (1);
-	}
-	printf("%s\n", cwd);
-	return (0);
-}
+int gnacinq(t_command* command);
+
+#endif

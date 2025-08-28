@@ -15,6 +15,7 @@ SRC     := \
 	$(SRCDIR)/free/env_node_free.c \
 	$(SRCDIR)/free/split_free.c \
 	$(SRCDIR)/free/token_node_free.c \
+	$(SRCDIR)/free/free_command.c \
 	$(SRCDIR)/my_signal/sig.c \
 	$(SRCDIR)/lexical/lexical.c \
 	$(SRCDIR)/lexical/lexical_util.c \
@@ -24,6 +25,7 @@ SRC     := \
 	$(SRCDIR)/builtin/builtin.c \
 	$(SRCDIR)/builtin/cmd_pwd.c \
 	$(SRCDIR)/builtin/cmd_exit.c \
+	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)
 
