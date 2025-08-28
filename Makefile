@@ -25,7 +25,9 @@ SRC     := \
 	$(SRCDIR)/builtin/builtin.c \
 	$(SRCDIR)/builtin/cmd_pwd.c \
 	$(SRCDIR)/builtin/cmd_exit.c \
+	$(SRCDIR)/builtin/cmd_env.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
+	$(SRCDIR)/run.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)
 

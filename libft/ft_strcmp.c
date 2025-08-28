@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/28 14:53:04 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/08/28 14:50:00 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/08/28 14:50:03 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "libft.h"
 
-# include "include.h"
-# include <limits.h> //Path_max -i hamar
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t i;
 
-int	cmd_pwd(void);
-int	cmd_exit(t_shell *shell);
-int	cmd_env(t_env *env);
-int	check_builtin(t_shell *shell);
-
-#endif
+	i = 0;
+	while ((s1[i] || s2[i]))
+	{
+		if (s1[i] != s2[i])
+		{
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		}
+		++i;
+	}
+	return (0);
+}

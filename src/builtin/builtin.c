@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 13:46:41 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:05:28 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	check_builtin(t_shell *shell)
 {
-	if (!ft_strncmp("pwd", shell->token->cmd,
-			ft_strlen(shell->token->cmd)))
+	if (!ft_strcmp("pwd", shell->token->cmd))
 		return (cmd_pwd());
-	else if (!ft_strncmp("exit", shell->token->cmd,
-			ft_strlen(shell->token->cmd)))
+	else if (!ft_strcmp("exit", shell->token->cmd))
 		return (cmd_exit(shell));
+	else if (!ft_strcmp("env", shell->token->cmd))
+		return (cmd_env(shell->env_list));
 	return (0);
 }

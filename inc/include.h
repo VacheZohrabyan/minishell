@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 12:21:39 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:10:24 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,7 @@
 # include "my_signal.h"
 # include "syntax.h"
 # include "builtin.h"
-#include "gnacinq.h"
+# include "gnacinq.h"
+
+void	run(t_shell *shell);
 #endif

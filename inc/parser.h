@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 13:01:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:56:03 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,6 @@
 
 # define MALLOC_ERROR "malloc faild \n"
 # define MAX_SIZE_ENV 128
-
-typedef struct s_redirect
-{
-	char				*file_name;
-	t_token_type		token_type;
-	struct s_redirect	*next;
-}	t_redirect;
-
-typedef struct s_command
-{
-	char				**argv;
-	t_redirect			*redirect;
-	struct s_command	*next;
-}	t_command;
 
 t_shell	*init_shell(char **env);
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);

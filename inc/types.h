@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 13:43:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:56:23 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,20 @@ typedef struct s_env
 	int					exit_code;
 }						t_env;
 
+typedef struct s_redirect
+{
+	char				*file_name;
+	t_token_type		token_type;
+	struct s_redirect	*next;
+}	t_redirect;
+
+typedef struct s_command
+{
+	char				**argv;
+	t_redirect			*redirect;
+	struct s_command	*next;
+}	t_command;
+
 typedef struct s_shell
 {
 	char				**env;
@@ -65,6 +79,7 @@ typedef struct s_shell
 	int					history_fd;
 	t_token				*token;
 	char				*buffer;
+	t_command			*command;
 }						t_shell;
 
 #endif
