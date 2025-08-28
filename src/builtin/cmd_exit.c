@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/27 13:46:56 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:30:41 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	cmd_exit(t_shell *shell)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		shell->env_list->exit_code = 1;
-		return (1);
+		return (0);
 	}
 	shell->env_list->exit_code = (unsigned char)val;
 	// free shell/env here

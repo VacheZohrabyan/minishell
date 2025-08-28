@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 15:14:37 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:21:36 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	free_env(t_env *env);
 int		parsing(t_command **command, t_token *token);
 void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
 			t_token *temp, t_token *token);
-void free_redirect(t_redirect* redirect);
-void free_command(t_command* command);
+void free_redirect(t_redirect** redirect);
+void free_command(t_command** command);
 
 #endif
 
