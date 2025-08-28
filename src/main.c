@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/08/28 15:08:53 by zaleksan         ###   ########.fr       */
-=======
-/*   Updated: 2025/08/28 14:31:13 by vzohraby         ###   ########.fr       */
->>>>>>> 44af7940553ff4dcaeed2cd9cda7b58c49888632
+/*   Updated: 2025/08/28 15:16:53 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +37,19 @@ int	main(int argc, char **argv, char **env)
 			if (parsing(&(shell->command) ,shell->token) == -1)
 			{
 				token_node_free(&shell->token);
-<<<<<<< HEAD
 				free_command(shell->command);
-=======
-				free_command(&command);
->>>>>>> 44af7940553ff4dcaeed2cd9cda7b58c49888632
 				continue;
 			}
 			gnacinq(shell->command);
 			run(shell);
 			token_node_free(&shell->token);
-<<<<<<< HEAD
 			free_command(shell->command);
-=======
-			free_command(&command);
-			printf("command main = %p\n", command);
->>>>>>> 44af7940553ff4dcaeed2cd9cda7b58c49888632
+
 		}
 		free(shell->buffer);
 		shell->buffer = NULL;
 	}
-<<<<<<< HEAD
 	free_command(shell->command);
-=======
-	free_command(&command);
-	// printf("command main = %p\n", command);
->>>>>>> 44af7940553ff4dcaeed2cd9cda7b58c49888632
 	printf("stex\n");
 	token_node_free(&shell->token);
 	free_env(shell->env_list);
