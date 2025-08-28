@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/28 14:53:04 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:19:47 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define BUILTIN_H
 
 # include "include.h"
-# include <limits.h> //Path_max -i hamar
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+#define PATH_MAX        4096
 
 int	cmd_pwd(void);
 int	cmd_exit(t_shell *shell);
