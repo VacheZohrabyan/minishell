@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 13:12:13 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:31:13 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,19 @@ int	main(int argc, char **argv, char **env)
 			if (parsing(&command ,shell->token) == -1)
 			{
 				token_node_free(&shell->token);
-				free_command(command);
+				free_command(&command);
 				continue;
 			}
 			gnacinq(command);
 			token_node_free(&shell->token);
-			free_command(command);
+			free_command(&command);
+			printf("command main = %p\n", command);
 		}
 		free(shell->buffer);
 		shell->buffer = NULL;
 	}
-	free_command(command);
+	free_command(&command);
+	// printf("command main = %p\n", command);
 	printf("stex\n");
 	token_node_free(&shell->token);
 	free_env(shell->env_list);

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 13:01:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:30:54 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	free_env(t_env *env);
 int		parsing(t_command **command, t_token *token);
 void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
 			t_token *temp, t_token *token);
-void free_redirect(t_redirect* redirect);
-void free_command(t_command* command);
+void free_redirect(t_redirect** redirect);
+void free_command(t_command** command);
 
 #endif
 

@@ -6,37 +6,41 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 13:34:29 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:25:01 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-void heredoc_file_open_wr(t_redirect *redirect)
+int heredoc_file_open_wr(t_redirect *redirect)
 {
 	int fd = 0;
-	int bytes;
-	char buffer[BUFFER_SIZE];
-	char* str;
+	char* buffer;
 	fd = open(redirect->file_name, O_RDWR | O_CREAT, 0777);
 	if (fd != -1)
 	{
-		while ((bytes = read(0, buffer, BUFFER_SIZE)) != 0)
+		while (1)
 		{
-			buffer[bytes] = '\0';
-			write (fd, buffer, ft_strlen(buffer));
-			if (ft_strncmp(redirect->file_name, buffer, ft_strlen(buffer) - 1) == 0)
+			buffer = readline(">");
+			if (!buffer)
+			{
+				printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
+				return (-1);
+			}
+			write(fd, buffer, ft_strlen(buffer));
+			write(fd, "\n", 1);
+			if (!ft_strncmp(redirect->file_name, buffer, ft_strlen(buffer)))
 				break;
-			buffer[0] = '\0';
 		}
 	}
-	while ((str = get_next_line(fd)))
+	while ((buffer = get_next_line(fd)))
 	{
-		add_history(str);
-		free(str);
-		str = NULL;
+		printf("%s\n", buffer); //history.file
+		free(buffer);
+		buffer = NULL;
 	}
 	close(fd);
+	return (0);
 }
 
 int any(t_redirect* redirect)
@@ -47,15 +51,22 @@ int any(t_redirect* redirect)
 	{
 		if (tmp->token_type == TOKEN_REDIRECT_IN)
 		{
+			printf("stexic\n");
 			if (access(tmp->file_name, F_OK) == -1)
 			{
-				printf("minishell: %s: No such file or directory", tmp->file_name);
+				printf("minishell: %s: No such file or directory\n", tmp->file_name);
 				return -1;
 			}
+			printf("kamel stexic\n");
 		}
 		else if (tmp->token_type == TOKEN_HEREDOC)
 		{
-			heredoc_file_open_wr(tmp);
+			if (heredoc_file_open_wr(tmp) == -1)
+				return (-1);
+		}
+		else 
+		{
+			
 		}
 		tmp = tmp->next;
 	}
