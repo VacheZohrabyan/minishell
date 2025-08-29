@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/28 15:19:47 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 13:08:12 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define BUILTIN_H
 
 # include "include.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
 
 #define PATH_MAX        4096
 

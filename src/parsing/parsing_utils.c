@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 12:50:54 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 14:39:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 11:05:35 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	fill_argv_and_redirects(t_redirect **redirect,
 
 	i = 0;
 	tmp = temp;
+	
 	while (tmp != token)
 	{
 		if (tmp->token_type == TOKEN_WORD)

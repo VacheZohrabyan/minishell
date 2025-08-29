@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 12:20:29 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 12:21:17 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 13:23:46 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 #include "include.h"
 
-int gnacinq(t_command* command);
+int gnacinq(t_shell* command);
 
 #endif

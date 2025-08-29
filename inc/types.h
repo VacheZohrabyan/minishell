@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 14:56:23 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/29 14:44:28 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_redirect
 {
 	char				*file_name;
 	t_token_type		token_type;
+	int fd;
 	struct s_redirect	*next;
 }	t_redirect;
 

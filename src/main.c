@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 15:22:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 14:16:34 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,32 @@ int	main(int argc, char **argv, char **env)
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
-			printf("stex\n");
 			if (parsing(&(shell->command) ,shell->token) == -1)
 			{
 				token_node_free(&shell->token);
 				free_command(&(shell->command));
 				continue;
 			}
-			gnacinq(shell->command);
-			run(shell);
-			token_node_free(&shell->token);
+			// int i = 0;
+			// while (shell->command)
+			// {
+			// 	i = 0;
+			// 	while (shell->command->argv[i] && shell->command->argv)
+			// 	{
+            // 		printf("  argv[%d] = %s\n", i, shell->command->argv[i]);
+			// 		++i;
+			// 	}
+			// 	while (shell->command->redirect)
+			// 	{
+			// 		printf("  redirect: type=%d, file=%s\n", shell->command->redirect->token_type, shell->command->redirect->file_name);
+			// 		shell->command->redirect = shell->command->redirect->next;
+			// 	}
+			// 	shell->command = shell->command->next;
+			// }
+			gnacinq(shell);
+			// run(shell);
+			// token_node_free(&shell->token);
 			free_command(&(shell->command));
-
 		}
 		free(shell->buffer);
 		shell->buffer = NULL;
