@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 17:34:43 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:36:51 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int argc, char **argv, char **env)
 	if (argc != 1 || !argv[0])
 		return (0);
 	shell = init_shell(env);
+	init_shell_history(shell);
 	sig();
 	while (1)
 	{
@@ -29,7 +30,7 @@ int	main(int argc, char **argv, char **env)
 			printf("exit\n");
 			break ;
 		}
-		add_history(shell->buffer);
+		record_history(shell, shell->buffer);
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
@@ -63,6 +64,7 @@ int	main(int argc, char **argv, char **env)
 		free(shell->buffer);
 		shell->buffer = NULL;
 	}
+	close_shell_history(shell);
 	free_command(&(shell->command));
 	printf("stex\n");
 	token_node_free(&shell->token);

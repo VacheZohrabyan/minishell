@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 11:32:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:37:25 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 static t_redirect	*init_new_redirect(t_token **tmp)
 {
 	t_redirect	*new_redirect;
+
 	new_redirect = (t_redirect *)malloc(sizeof(t_redirect));
 	new_redirect->token_type = (*tmp)->token_type;
 	(*tmp) = (*tmp)->next;
@@ -70,18 +71,20 @@ int	validate_and_count(t_token *start, t_token *end)
 		if (tmp->token_type == TOKEN_WORD)
 			count++;
 		else
-			return count;
+			return (count);
 		tmp = tmp->next;
 	}
 	return (count);
 }
 
-void	fill_argv_and_redirects(t_redirect **redirect,
-	char **argv, t_token *start, t_token *end)
+void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
+		t_token *start, t_token *end)
 {
 	t_token	*tmp;
 	int		i;
-	int     count = validate_and_count(start, end);
+	int		count;
+
+	count = validate_and_count(start, end);
 	i = 0;
 	tmp = start;
 	while (tmp && tmp != end)
@@ -97,7 +100,7 @@ void	fill_argv_and_redirects(t_redirect **redirect,
 		}
 		tmp = tmp->next;
 		if (!tmp)
-			break;
+			break ;
 	}
 	if (argv)
 		argv[i] = NULL;
@@ -114,14 +117,13 @@ static char	**init_argv(t_redirect **redirect, t_token *end, t_token *start)
 	{
 		argv = (char **)malloc(sizeof(char *) * (count + 1));
 		if (!argv)
-			return NULL;
+			return (NULL);
 	}
 	fill_argv_and_redirects(redirect, argv, start, end);
 	return (argv);
 }
 
-static int	push_back_command(t_command **command,
-	t_token *start, t_token *end)
+static int	push_back_command(t_command **command, t_token *start, t_token *end)
 {
 	t_command	*new_node;
 	t_command	*cur;
@@ -181,6 +183,9 @@ t_shell	*init_shell(char **env)
 	shell->token = NULL;
 	shell->buffer = NULL;
 	shell->env = env;
+	shell->history_fd = -1;
 	init_env(&shell->env_list, shell->env);
+	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME"),
+			"/.minishell_history");
 	return (shell);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 14:44:28 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:12:34 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 
 typedef enum e_tokken_type
 {
-	TOKEN_WORD,// ls.... file.txt
-	TOKEN_OPEN,// (
-	TOKEN_CLOSE,// )
-	TOKEN_PIPE,// |
-	TOKEN_OR,// ||
-	TOKEN_AND,// &&
-	TOKEN_REDIRECT_IN,// <
-	TOKEN_REDIRECT_OUT,// >
-	TOKEN_REDIRECT_APPEND,// >>
-	TOKEN_HEREDOC,// <<
-}	t_token_type;
+	TOKEN_WORD,            // ls.... file.txt
+	TOKEN_OPEN,            // (
+	TOKEN_CLOSE,           // )
+	TOKEN_PIPE,            // |
+	TOKEN_OR,              // ||
+	TOKEN_AND,             // &&
+	TOKEN_REDIRECT_IN,     // <
+	TOKEN_REDIRECT_OUT,    // >
+	TOKEN_REDIRECT_APPEND, // >>
+	TOKEN_HEREDOC,         // <<
+}						t_token_type;
 
 typedef struct s_token
 {
@@ -61,21 +61,21 @@ typedef struct s_redirect
 {
 	char				*file_name;
 	t_token_type		token_type;
-	int fd;
+	int					fd;
 	struct s_redirect	*next;
-}	t_redirect;
+}						t_redirect;
 
 typedef struct s_command
 {
 	char				**argv;
 	t_redirect			*redirect;
 	struct s_command	*next;
-}	t_command;
+}						t_command;
 
 typedef struct s_shell
 {
 	char				**env;
-	char				*hist;
+	char				*history;
 	t_env				*env_list;
 	int					history_fd;
 	t_token				*token;
