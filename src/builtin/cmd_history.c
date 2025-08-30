@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_history.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/08/30 19:05:33 by zaleksan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/builtin.h"
 
 int	load_history(t_shell *shell)
@@ -13,7 +25,8 @@ int	load_history(t_shell *shell)
 		perror("minishell: history");
 		return (-1);
 	}
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		len = ft_strlen(line);
 		if (len > 0 && line[len - 1] == '\n')
@@ -21,6 +34,7 @@ int	load_history(t_shell *shell)
 		if (*line)
 			add_history(line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
@@ -39,13 +53,6 @@ int	init_shell_history(t_shell *shell)
 	return (0);
 }
 
-void	close_shell_history(t_shell *shell)
-{
-	if (shell->history_fd != -1)
-		close(shell->history_fd);
-	shell->history_fd = -1;
-}
-
 int	record_history(t_shell *shell, const char *line)
 {
 	add_history(shell->buffer);
@@ -58,45 +65,6 @@ int	record_history(t_shell *shell, const char *line)
 	return (0);
 }
 
-int	history_c(t_shell *shell)
-{
-	int	fd;
-
-	if (!shell->command->argv)
-		return (0);
-	if (!ft_strcmp("-c", shell->command->argv[1]))
-	{
-		fd = open(shell->history, O_TRUNC | O_WRONLY, 0644);
-		if (fd != -1)
-			close(fd);
-		rl_clear_history();
-		return (1);
-	}
-	return (0);
-}
-
-int	print_history(t_shell *shell)
-{
-	int		fd;
-	char	*line;
-	int		n;
-
-	n = 1;
-	fd = open(shell->history, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("minishell: history");
-		return (-1);
-	}
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("   %d  %s", n++, line);
-		free(line);
-	}
-	close(fd);
-	return (1);
-}
-
 int	cmd_history(t_shell *shell)
 {
 	if (!shell || !shell->history)
@@ -107,6 +75,6 @@ int	cmd_history(t_shell *shell)
 	if (!shell->command->argv[1])
 		return (print_history(shell), 1);
 	if (history_c(shell) || check_argument(shell->command, "history"))
-		return (printf("hist\n"), -1);
+		return (-1);
 	return (1);
 }

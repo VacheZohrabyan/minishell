@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 15:21:36 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:07:35 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	chlp1(t_token *tmp, int *open, int *flag_open);
 void	chlp2(t_token *tmp, int *close, int *flag_close, int *open);
 int		check(int open, int close, int flag_open, int flag_close);
 int		is_valid_close_breaket(t_token *tmp, int open);
+char	*get_env_param(t_env *env, char *key);
 
 void	free_env_node(t_env_node *node);
 void	free_env(t_env *env);
