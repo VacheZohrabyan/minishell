@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 15:53:57 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:54:11 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,4 @@ int	check_builtin(t_shell *shell)
 	else if (!ft_strcmp("env", shell->token->cmd))
 		return (cmd_env(shell->env_list));
 	return (0);
-	
 }
