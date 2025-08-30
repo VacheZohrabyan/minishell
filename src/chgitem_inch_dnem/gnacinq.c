@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 15:00:16 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:48:42 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,33 @@
 
 int heredoc_file_open_wr(t_shell* shell, t_redirect *redirect)
 {
-	int fd = 0;
 	char* buffer;
-	fd = open(redirect->file_name, O_RDWR | O_CREAT, 0777);
-	if (fd != -1)
+	int pipefd[2];
+	char* str;
+	str = NULL;
+	if (pipe(pipefd) == -1)
+		return (-1);
+	while (1)
 	{
-		while (1)
+		buffer = readline(">");
+		if (!buffer)
 		{
-			buffer = readline(">");
-			if (!buffer)
-			{
-				printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
-				return (-1);
-			}
-			else if (buffer[0] == '\n')
-			write(fd, buffer, ft_strlen(buffer));
-			write(fd, "\n", 1);
-			if (!ft_strncmp(redirect->file_name, buffer, ft_strlen(buffer)))
-				break;
+			printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
+			return (-1);
+			close(pipefd[1]);
 		}
-	}
-	char* str = NULL;
-	buffer = NULL;
-	while ((buffer = get_next_line(fd)))
-	{
-		str = ft_strjoin_gnl(str, buffer);
+		write(pipefd[1], buffer, ft_strlen(buffer));
+		write(pipefd[1], "\n", 1);
+		str = ft_strjoin(str, buffer);
+		str = ft_strjoin(str, "\n");
+		if (!ft_strncmp(redirect->file_name, buffer, ft_strlen(buffer)))
+			break;
 		free(buffer);
 		buffer = NULL;
 	}
 	record_history(shell, str);
-	close(fd);
+	close(pipefd[0]);
+	redirect->fd = pipefd[0];
 	return (0);
 }
 
