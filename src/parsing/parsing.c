@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 19:37:25 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:36:52 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ t_shell	*init_shell(char **env)
 	shell->env = env;
 	shell->history_fd = -1;
 	init_env(&shell->env_list, shell->env);
-	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME"),
+	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME", 1),
 			"/.minishell_history");
 	return (shell);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 15:51:51 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:36:16 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ int	check_builtin(t_shell *shell)
 		return (cmd_env(shell->env_list));
 	else if (!ft_strcmp("history", shell->command->argv[0]))
 		return (cmd_history(shell));
+	else if (!ft_strcmp("cd", shell->command->argv[0]))
+		return (cmd_cd(shell));
 	return (0);
 }

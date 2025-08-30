@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 18:08:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:52:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	main(int argc, char **argv, char **env)
 			// 	}
 			// 	shell->command = shell->command->next;
 			// }
-			printf("che\n");
 			run(shell);
 			token_node_free(&shell->token);
 			free_command(&(shell->command));
