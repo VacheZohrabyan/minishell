@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/30 15:39:21 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 16:28:49 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 char	*get_env_param(t_env *env, char *key);
 int		cmd_pwd(void);
 int		cmd_exit(t_shell *shell);
+int		check_argument(t_command *command, char *err_msg);
 int		cmd_env(t_env *env);
 int		check_builtin(t_shell *shell);
 

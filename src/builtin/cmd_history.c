@@ -2,8 +2,8 @@
 
 int	load_history(t_shell *shell)
 {
-	int	fd;
-	char *line;
+	int		fd;
+	char	*line;
 
 	fd = open(shell->history, O_RDONLY);
 	if (fd == -1)
@@ -52,17 +52,28 @@ int	record_history(t_shell *shell, const char *line)
 	return (0);
 }
 
-int	cmd_history(t_shell *shell)
+int	history_c(t_shell *shell)
+{
+	int	fd;
+	if (!shell->command->argv)
+		return (0);
+	if (!ft_strcmp("-c", shell->command->argv[1]))
+	{
+		fd = open(shell->history, O_TRUNC | O_WRONLY, 0644);
+		if (fd != -1)
+			close(fd);
+		rl_clear_history();
+		return (1);
+	}
+	return (0);
+}
+
+int	print_history(t_shell *shell)
 {
 	int		fd;
 	char	*line;
 	int		n;
 
-	if (!shell || !shell->history)
-	{
-		printf("minishell: history file not set\n");
-		return (-1);
-	}
 	n = 1;
 	fd = open(shell->history, O_RDONLY);
 	if (fd == -1)
@@ -76,5 +87,19 @@ int	cmd_history(t_shell *shell)
 		free(line);
 	}
 	close(fd);
+	return (1);
+}
+
+int	cmd_history(t_shell *shell)
+{
+	if (!shell || !shell->history)
+	{
+		printf("minishell: history file not set\n");
+		return (-1);
+	}
+	if (!shell->command->argv[1])
+		return (print_history(shell), 1);
+	if (history_c(shell) || check_argument(shell->command, "history"))
+		return (printf("hist\n"), -1);
 	return (1);
 }

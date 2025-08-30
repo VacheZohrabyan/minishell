@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 14:19:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 16:54:34 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,19 @@ int	is_numeric(char *status)
 	return (0);
 }
 
-void	check_exit_argument(t_command *command)
+int	check_argument(t_command *command, char *err_msg)
 {
 	if (is_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
 	{
-		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(err_msg, 2);
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(command->argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		// free all here
-		exit(255);
+		return (0);
 	}
+	return (1);
 }
 
 int	cmd_exit(t_shell *shell)
@@ -82,13 +85,14 @@ int	cmd_exit(t_shell *shell)
 	ft_putendl_fd("exit", 1);
 	if (!shell->command->argv[1])
 		exit(shell->env_list->exit_code);
-	check_exit_argument(shell->command);
 	if (shell->command->argv[2])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		shell->env_list->exit_code = 1;
 		return (1);
 	}
+	if (check_argument(shell->command, "exit"))
+		exit (255);
 	shell->env_list->exit_code = (unsigned char)val;
 	// free shell/env here
 	exit(shell->env_list->exit_code);
