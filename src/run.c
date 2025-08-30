@@ -5,10 +5,9 @@ void	run(t_shell *shell)
 	if (shell->command->next == NULL)
 	{
 		if (!check_builtin(shell))
-			printf("Zhenya\n");
-		else
-			printf("Vache\n");
+		{
+			printf("chexav\n");
+			gnacinq(shell);
+		}
 	}
-	else
-		printf("open process");
 }

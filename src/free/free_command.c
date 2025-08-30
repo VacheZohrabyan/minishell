@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 12:49:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 14:52:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:07:21 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void free_redirect(t_redirect** redirect)
             tmp->file_name = NULL;
         }
         free(tmp);
-        tmp->next = NULL;
         tmp = NULL;
     }
     (*redirect) = NULL;
@@ -56,8 +55,6 @@ void free_command(t_command** command)
             free(tmp->argv);
         }
         free(tmp);
-        tmp->redirect = NULL;
-        tmp->next = NULL;
         tmp = NULL;
     }
     (*command) = NULL;

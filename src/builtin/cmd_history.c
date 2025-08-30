@@ -79,5 +79,5 @@ int	cmd_history(t_shell *shell)
 		free(line);
 	}
 	close(fd);
-	return (0);
+	return (1);
 }

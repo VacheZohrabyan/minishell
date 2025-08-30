@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 17:41:43 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:19:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	cmd_exit(t_shell *shell)
 
 	val = 0;
 	ft_putendl_fd("exit", 1);
-	printf("%s\n", shell->command->argv[1]);
 	if (!shell->command->argv[1])
 		exit(shell->env_list->exit_code);
 	check_exit_argument(shell->command);
@@ -88,7 +87,7 @@ int	cmd_exit(t_shell *shell)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		shell->env_list->exit_code = 1;
-		return (0);
+		return (1);
 	}
 	shell->env_list->exit_code = (unsigned char)val;
 	// free shell/env here

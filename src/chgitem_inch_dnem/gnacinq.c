@@ -6,14 +6,14 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 16:42:15 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:00:16 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
 
-int heredoc_file_open_wr(t_redirect *redirect)
+int heredoc_file_open_wr(t_shell* shell, t_redirect *redirect)
 {
 	int fd = 0;
 	char* buffer;
@@ -28,48 +28,59 @@ int heredoc_file_open_wr(t_redirect *redirect)
 				printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
 				return (-1);
 			}
+			else if (buffer[0] == '\n')
 			write(fd, buffer, ft_strlen(buffer));
 			write(fd, "\n", 1);
 			if (!ft_strncmp(redirect->file_name, buffer, ft_strlen(buffer)))
 				break;
 		}
 	}
+	char* str = NULL;
+	buffer = NULL;
 	while ((buffer = get_next_line(fd)))
 	{
-		printf("%s\n", buffer); //history.file
+		str = ft_strjoin_gnl(str, buffer);
 		free(buffer);
 		buffer = NULL;
 	}
+	record_history(shell, str);
 	close(fd);
 	return (0);
 }
 
-int any(t_redirect* redirect)
+int any(t_shell *shell, t_redirect* redirect)
 {
 	t_redirect* tmp = redirect;
-
+	// printf("any\n");
 	while (tmp)
 	{
 		if (tmp->token_type == TOKEN_REDIRECT_IN)
 		{
+			// printf("any-redirection\n");
 			if ((tmp->fd = access(tmp->file_name, F_OK)) == -1)
 			{
 				printf("minishell: %s: No such file or directory\n", tmp->file_name);
 				return -1;
 			}
+			// printf("any-redirection-verch\n");
 		}
 		else if (tmp->token_type == TOKEN_HEREDOC)
 		{
-			if (heredoc_file_open_wr(tmp) == -1)
+			// printf("any-herdoc\n");
+			if (heredoc_file_open_wr(shell, tmp) == -1)
 				return (-1);
+			// printf("any-herdoc-verch\n");
 		}
 		else 
 		{
+			// printf("any-else\n");
 			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT, 0664)) < 0)
 				return -1;
+			// printf("any-else-verch\n");
 		}
 		tmp = tmp->next;
 	}
+	// printf("any-verch\n");
 	return 0;
 }
 
@@ -85,7 +96,7 @@ void command_proc(t_command* com)
 	}
 	else if (pid == 0)
 	{
-		dup2(com->redirect->fd, STDOUT_FILENO);
+		// dup2(com->redirect->fd, STDOUT_FILENO);
 		
 		if (execv(str, com->argv) == -1)
 		{
@@ -196,20 +207,22 @@ int gnacinq(t_shell* shell)
 	t_command *tmp = shell->command;
 	if (!tmp->argv)
 	{
-		while (tmp)
+		// printf("gnacinq\n");
+		while (tmp->redirect)
 		{
-			if (tmp->redirect)
-			{
-				if (any(tmp->redirect) == -1)
-					return -1;
-			}
+			if (any(shell, tmp->redirect) == -1)
+				return -1;
+			tmp->redirect = tmp->redirect->next;
 		}
+		// printf("gnacinq-verch\n");
 	}
-	else if (!(tmp->next))
+	else if (!(tmp->next) && tmp->argv)
 	{
-		if (any(tmp->redirect) == -1)
+		// printf("gnacinq else if\n");
+		if (any(shell, tmp->redirect) == -1)
 			return -1;
 		command_proc(tmp);
+		// printf("gnacinq else if\n");
 	}
 	else
 	{
@@ -217,7 +230,7 @@ int gnacinq(t_shell* shell)
 		while (tmp)
 		{
 			++count;
-			if (any(tmp->redirect) == -1)
+			if (any(shell, tmp->redirect) == -1)
 				return -1;
 			tmp = tmp->next;
 		}

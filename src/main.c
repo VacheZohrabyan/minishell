@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 19:36:51 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:22:49 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ int	main(int argc, char **argv, char **env)
 			{
 				token_node_free(&shell->token);
 				free_command(&(shell->command));
-				continue;
+				break;
 			}
 			// int i = 0;
 			// while (shell->command)
 			// {
 			// 	i = 0;
-			// 	while (shell->command->argv[i] && shell->command->argv)
+			// 	while (shell->command->argv && shell->command->argv[i])
 			// 	{
             // 		printf("  argv[%d] = %s\n", i, shell->command->argv[i]);
 			// 		++i;
@@ -56,9 +56,9 @@ int	main(int argc, char **argv, char **env)
 			// 	}
 			// 	shell->command = shell->command->next;
 			// }
-			gnacinq(shell);
+			printf("che\n");
 			run(shell);
-			// token_node_free(&shell->token);
+			token_node_free(&shell->token);
 			free_command(&(shell->command));
 		}
 		free(shell->buffer);

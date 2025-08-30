@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:18 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 15:05:13 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:19:32 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ int	cmd_pwd(void)
 		return (-1);
 	}
 	printf("%s\n", cwd);
-	return (0);
+	return (1);
 }

@@ -20,5 +20,5 @@ int	cmd_env(t_env *env)
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
