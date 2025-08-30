@@ -6,6 +6,7 @@
         "history.h": "c",
         "builtin.h": "c",
         "limits.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "my_signal.h": "c"
     }
 }

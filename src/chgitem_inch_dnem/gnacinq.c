@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 15:48:42 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 18:08:39 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,15 @@ void command_proc(t_command* com)
 	else if (pid == 0)
 	{
 		// dup2(com->redirect->fd, STDOUT_FILENO);
-		
+		setup_child_signals();
 		if (execv(str, com->argv) == -1)
 		{
 			perror("Execv faild");
 			exit(0);
 		}
-		close(com->redirect->fd);
+		// close(com->redirect->fd);
 	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		free(str);
-		str = NULL;
-	}
+	waitpid(pid, &status, 0);
 }
 
 void command_many_proc(t_command* com, int count)
@@ -174,6 +169,7 @@ void command_many_proc(t_command* com, int count)
 				close(pipe_fd[j][1]);
 				++j;
 			}
+			setup_child_signals();
 			char* str = ft_strjoin("/bin/", com->argv[0]);
 			if (execv(str, tmp->argv) == -1)
 			{
@@ -216,9 +212,16 @@ int gnacinq(t_shell* shell)
 	else if (!(tmp->next) && tmp->argv)
 	{
 		// printf("gnacinq else if\n");
-		if (any(shell, tmp->redirect) == -1)
-			return -1;
-		command_proc(tmp);
+		if (!tmp->redirect)
+		{
+			command_proc(tmp);
+		}
+		else
+		{
+			if (any(shell, tmp->redirect) == -1)
+				return -1;
+			command_proc(tmp);
+		}
 		// printf("gnacinq else if\n");
 	}
 	else
