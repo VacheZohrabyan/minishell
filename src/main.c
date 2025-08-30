@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 14:22:49 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:48:24 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	main(int argc, char **argv, char **env)
 		return (0);
 	shell = init_shell(env);
 	init_shell_history(shell);
+	load_history(shell);
 	sig();
 	while (1)
 	{

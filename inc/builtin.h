@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/29 18:54:38 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:39:21 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int		record_history(t_shell *shell, const char *line);
 int		init_shell_history(t_shell *shell);
 void	close_shell_history(t_shell *shell);
 int		cmd_history(t_shell *shell);
+int		load_history(t_shell *shell);
 
 #endif

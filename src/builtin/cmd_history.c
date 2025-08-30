@@ -1,25 +1,23 @@
 #include "../../inc/builtin.h"
 
-char	*get_env_param(t_env *env, char *key)
+int	load_history(t_shell *shell)
 {
-	size_t		i;
-	t_env_node	*node;
+	int	fd;
+	char *line;
 
-	if (!env || !key)
-		return (NULL);
-	i = 0;
-	while (env->buffer_env[i])
+	fd = open(shell->history, O_RDONLY);
+	if (fd == -1)
 	{
-		node = env->buffer_env[i];
-		while (node)
-		{
-			if (ft_strcmp(key, node->key) == 0)
-				return (node->value);
-			node = node->next;
-		}
-		i++;
+		perror("minishell: history");
+		return (-1);
 	}
-	return (NULL);
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		add_history(line);
+		free(line);
+	}
+	close(fd);
+	return (0);
 }
 
 int	init_shell_history(t_shell *shell)
@@ -74,7 +72,6 @@ int	cmd_history(t_shell *shell)
 	}
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		add_history(line);
 		printf("   %d  %s", n++, line);
 		free(line);
 	}

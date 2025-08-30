@@ -10,6 +10,7 @@ LIBFT   := libft
 SRC     := \
 	$(SRCDIR)/main.c \
 	$(SRCDIR)/parsing/parsing.c \
+	$(SRCDIR)/parsing/env_utils.c \
 	$(SRCDIR)/parsing/init_env.c \
 	$(SRCDIR)/free/env_node_free.c \
 	$(SRCDIR)/free/split_free.c \
