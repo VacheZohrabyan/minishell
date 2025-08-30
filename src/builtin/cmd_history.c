@@ -4,7 +4,9 @@ int	load_history(t_shell *shell)
 {
 	int		fd;
 	char	*line;
+	size_t	len;
 
+	len = 0;
 	fd = open(shell->history, O_RDONLY);
 	if (fd == -1)
 	{
@@ -13,7 +15,11 @@ int	load_history(t_shell *shell)
 	}
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		add_history(line);
+		len = ft_strlen(line);
+		if (len > 0 && line[len - 1] == '\n')
+			line[len - 1] = '\0';
+		if (*line)
+			add_history(line);
 		free(line);
 	}
 	close(fd);
@@ -55,6 +61,7 @@ int	record_history(t_shell *shell, const char *line)
 int	history_c(t_shell *shell)
 {
 	int	fd;
+
 	if (!shell->command->argv)
 		return (0);
 	if (!ft_strcmp("-c", shell->command->argv[1]))
