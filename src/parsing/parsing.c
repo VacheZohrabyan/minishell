@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 19:36:52 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/01 13:04:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-
-// else if (!tmp->next)
-// {
-// 	printf("minishell: syntax error near unexpected token `newline'\n");
-// 	return (-1);
-// }
-// else if (tmp->next->token_type != TOKEN_WORD)
-// {
-// 	printf("minishell: syntax error near unexpected token `%s'\n",
-// 		tmp->next->cmd);
-// 	return (-1);
-// }
 
 static t_redirect	*init_new_redirect(t_token **tmp)
 {
@@ -132,7 +120,7 @@ static int	push_back_command(t_command **command, t_token *start, t_token *end)
 	new_node->redirect = NULL;
 	new_node->argv = init_argv(&new_node->redirect, end, start);
 	new_node->next = NULL;
-	if (!*command)
+	if (!(*command))
 		*command = new_node;
 	else
 	{
@@ -151,6 +139,7 @@ int	parsing(t_command **command, t_token *token)
 
 	start = token;
 	tmp = token;
+	*command = NULL;
 	while (tmp)
 	{
 		if (tmp->token_type == TOKEN_PIPE)

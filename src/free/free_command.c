@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 12:49:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 13:07:21 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/01 13:52:57 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void free_redirect(t_redirect** redirect)
 void free_command(t_command** command)
 {
     int i;
-    if (!*command || !command)
+    if (!(*command) || !command)
         return;
     t_command* tmp;
     while ((*command))

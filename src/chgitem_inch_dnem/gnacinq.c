@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 18:08:39 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:57:50 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,38 @@ int any(t_shell *shell, t_redirect* redirect)
 {
 	t_redirect* tmp = redirect;
 	// printf("any\n");
+	// if (!redirect)
+	// 	return -1;
 	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_REDIRECT_IN)
+		if (tmp->token_type == TOKEN_REDIRECT_IN)// <
 		{
-			// printf("any-redirection\n");
+			printf("any-redirection\n");
 			if ((tmp->fd = access(tmp->file_name, F_OK)) == -1)
 			{
 				printf("minishell: %s: No such file or directory\n", tmp->file_name);
 				return -1;
 			}
-			// printf("any-redirection-verch\n");
+			printf("any-redirection-verch\n");
 		}
-		else if (tmp->token_type == TOKEN_HEREDOC)
+		else if (tmp->token_type == TOKEN_HEREDOC) // <<
 		{
 			// printf("any-herdoc\n");
 			if (heredoc_file_open_wr(shell, tmp) == -1)
 				return (-1);
 			// printf("any-herdoc-verch\n");
 		}
-		else 
+		else if (tmp->token_type == TOKEN_REDIRECT_OUT)// >
 		{
 			// printf("any-else\n");
-			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT, 0664)) < 0)
+			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
 				return -1;
 			// printf("any-else-verch\n");
+		}
+		else // >>
+		{
+			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
+				return -1;
 		}
 		tmp = tmp->next;
 	}
@@ -85,7 +92,6 @@ void command_proc(t_command* com)
 {
 	pid_t pid = fork();
 	int status;
-	char* str = ft_strjoin("/bin/", com->argv[0]);
 	if (pid < 0)
 	{
 		printf("error fork()\n");
@@ -94,89 +100,91 @@ void command_proc(t_command* com)
 	else if (pid == 0)
 	{
 		// dup2(com->redirect->fd, STDOUT_FILENO);
+		// if ((any(shell, com->redirect) != -1))
+		// {
+		// 	dup2(com->redirect->fd, STDOUT_FILENO);
+		// 	close(com->redirect->fd);
+		// }
+		char* str = ft_strjoin("/bin/", com->argv[0]);
 		setup_child_signals();
 		if (execv(str, com->argv) == -1)
 		{
 			perror("Execv faild");
 			exit(0);
 		}
+		free(str);
 		// close(com->redirect->fd);
 	}
 	waitpid(pid, &status, 0);
 }
 
-void command_many_proc(t_command* com, int count)
+void command_many_proc(t_shell* shell, int count)
 {
 	int** pipe_fd;
-	t_command* tmp = com;
-	pipe_fd = (int**)malloc(sizeof(int*) * count);
+	t_command* tmp = shell->command;
+	pid_t* pids;
+	pipe_fd = (int**)malloc(sizeof(int*) * (count - 1));
 	if (!pipe_fd)
 		return;
+	pids = (pid_t*)malloc(sizeof(pid_t) * count);
 	int i = 0;
-	while (i < count)
+	if (count > 1)
 	{
-		pipe_fd[i] = (int*)malloc(sizeof(int) * 2);
-		if (!pipe_fd[i])
+		while (i < count - 1)
 		{
-			while (i)
+			pipe_fd[i] = (int*)malloc(sizeof(int) * 2);
+			if (!pipe_fd[i] || (pipe(pipe_fd[i]) == -1))
 			{
-				free(pipe_fd[i]);
-				pipe_fd[i] = NULL;
-				--i;
-			}
-			free(pipe_fd);
-			pipe_fd = NULL;
-			return;
-		}		
-		++i;
-	}
-	i = 0;
-	while (i < count - 1)
-	{
-		if (pipe(pipe_fd[i]) == -1)
-		{
-			while (i)
-			{
-				free(pipe_fd[i]);
-				pipe_fd[i] = NULL;
-				--i;
-			}
-			free(pipe_fd);
-			pipe_fd = NULL;
-			return ;
+				while (i)
+				{
+					--i;
+					free(pipe_fd[i]);
+					pipe_fd[i] = NULL;
+				}
+				free(pipe_fd);
+				pipe_fd = NULL;
+				return;
+			}		
+			++i;
 		}
-		++i;
 	}
 	i = 0;
 	while (tmp && i < count)
 	{
 		pid_t pid = fork();
 		if (pid < 0)
-		{
 			return;
-		}
 		else if (pid == 0)
 		{
 			if (i > 0)
-				dup2(pipe_fd[i - 1][1], STDIN_FILENO);
+				dup2(pipe_fd[i - 1][0], STDIN_FILENO);
 			if (i < count - 1)
 				dup2(pipe_fd[i][1], STDOUT_FILENO);
-			
 			int j = 0;
-			while (j < count - 1)
+			while (j < count - 1 && count > 1)
 			{
 				close(pipe_fd[j][0]);
 				close(pipe_fd[j][1]);
 				++j;
 			}
+			printf("stex\n");
+			if ((any(shell, tmp->redirect) != -1))
+			{
+				printf("mtav\n");
+				dup2(tmp->redirect->fd, STDOUT_FILENO);
+				close(tmp->redirect->fd);
+			}
 			setup_child_signals();
-			char* str = ft_strjoin("/bin/", com->argv[0]);
+			char* str = ft_strjoin("/bin/", tmp->argv[0]);
 			if (execv(str, tmp->argv) == -1)
 			{
 				printf("command_many_proc execv faild\n");
 				return ;
 			}
+			free(str);
 		}
+		else 
+			pids[i] = pid;
 		tmp = tmp->next;
 		++i;
 	}
@@ -185,14 +193,18 @@ void command_many_proc(t_command* com, int count)
 	{
 		close(pipe_fd[j][0]);
 		close(pipe_fd[j][1]);
+		free(pipe_fd[j]);
 		++j;
 	}
+	free(pipe_fd);
 	i = 0;
+	int status = 0;
 	while (i < count)
 	{
-		wait(NULL);
+		waitpid(pids[i], &status, 0);
 		++i;
 	}
+	free(pids);
 }
 
 int gnacinq(t_shell* shell)
@@ -200,29 +212,22 @@ int gnacinq(t_shell* shell)
 	t_command *tmp = shell->command;
 	if (!tmp->argv)
 	{
-		// printf("gnacinq\n");
 		while (tmp->redirect)
 		{
 			if (any(shell, tmp->redirect) == -1)
 				return -1;
 			tmp->redirect = tmp->redirect->next;
 		}
-		// printf("gnacinq-verch\n");
 	}
 	else if (!(tmp->next) && tmp->argv)
 	{
-		// printf("gnacinq else if\n");
-		if (!tmp->redirect)
+		if (tmp->redirect)
 		{
-			command_proc(tmp);
-		}
-		else
-		{
+			printf("else if\n");
 			if (any(shell, tmp->redirect) == -1)
 				return -1;
-			command_proc(tmp);
 		}
-		// printf("gnacinq else if\n");
+		command_proc(tmp);
 	}
 	else
 	{
@@ -230,12 +235,9 @@ int gnacinq(t_shell* shell)
 		while (tmp)
 		{
 			++count;
-			if (any(shell, tmp->redirect) == -1)
-				return -1;
 			tmp = tmp->next;
 		}
-		tmp = shell->command;
-		command_many_proc(tmp, count);
+		command_many_proc(shell, count);
 	}
 	return 0;
 }

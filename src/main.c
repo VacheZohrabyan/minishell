@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 19:52:04 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/01 13:53:30 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **env)
 	setup_shell_signals();
 	while (1)
 	{
-		shell->buffer = readline("minishell>"); // PROMPT
+		shell->buffer = readline("minishell>");
 		if (!shell->buffer)
 		{
 			printf("exit\n");
@@ -41,22 +41,6 @@ int	main(int argc, char **argv, char **env)
 				free_command(&(shell->command));
 				break;
 			}
-			// int i = 0;
-			// while (shell->command)
-			// {
-			// 	i = 0;
-			// 	while (shell->command->argv && shell->command->argv[i])
-			// 	{
-            // 		printf("  argv[%d] = %s\n", i, shell->command->argv[i]);
-			// 		++i;
-			// 	}
-			// 	while (shell->command->redirect)
-			// 	{
-			// 		printf("  redirect: type=%d, file=%s\n", shell->command->redirect->token_type, shell->command->redirect->file_name);
-			// 		shell->command->redirect = shell->command->redirect->next;
-			// 	}
-			// 	shell->command = shell->command->next;
-			// }
 			run(shell);
 			token_node_free(&shell->token);
 			free_command(&(shell->command));
@@ -66,9 +50,9 @@ int	main(int argc, char **argv, char **env)
 	}
 	close_shell_history(shell);
 	free_command(&(shell->command));
-	printf("stex\n");
 	token_node_free(&shell->token);
 	free_env(shell->env_list);
+	free(shell->history);
 	free(shell);
 	return (0);
 }
