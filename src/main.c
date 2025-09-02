@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/01 13:53:30 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:49:14 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **env)
 	shell = init_shell(env);
 	init_shell_history(shell);
 	load_history(shell);
-	setup_shell_signals();
+	sig();
 	while (1)
 	{
 		shell->buffer = readline("minishell>");

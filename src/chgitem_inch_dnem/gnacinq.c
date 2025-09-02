@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/02 12:59:33 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/02 16:02:53 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,42 +45,38 @@ int heredoc_file_open_wr(t_shell* shell, t_redirect *redirect)
 	return (0);
 }
 
-int any_other(t_shell *shell)
+int any_other(t_shell *shell, t_redirect* redirect)
 {
-	t_command* command = shell->command;
+	t_redirect* red = redirect;
 	int flag = 0;
 	// if (!redirect)
 	// 	return -1;
-	while (command)
+	while (red)
 	{
-		while (command->redirect)
+		if (red->token_type == TOKEN_REDIRECT_IN)// <
 		{
-			if (command->redirect->token_type == TOKEN_REDIRECT_IN)// <
+			if ((red->fd = access(red->file_name, F_OK)) == -1)
 			{
-				if ((command->redirect->fd = access(command->redirect->file_name, F_OK)) == -1)
-				{
-					printf("minishell: %s: No such file or directory\n", command->redirect->file_name);
-					flag = -1;
-				}
+				printf("minishell: %s: No such file or directory\n", red->file_name);
+				flag = -1;
 			}
-			else if (command->redirect->token_type == TOKEN_HEREDOC) // <<
-			{
-				if (heredoc_file_open_wr(shell, command->redirect) == -1)
-					flag = -1;
-			}
-			else if (command->redirect->token_type == TOKEN_REDIRECT_OUT)// >
-			{
-				if ((command->redirect->fd = open(command->redirect->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
-					flag = -1;
-			}
-			else // >>
-			{
-				if ((command->redirect->fd = open(command->redirect->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
-					flag = -1;
-			}
-			command->redirect = command->redirect->next;
 		}
-		command = command->next;
+		else if (red->token_type == TOKEN_HEREDOC) // <<
+		{
+			if (heredoc_file_open_wr(shell, red) == -1)
+				flag = -1;
+		}
+		else if (red->token_type == TOKEN_REDIRECT_OUT)// >
+		{
+			if ((red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
+				flag = -1;
+		}
+		else if (red->token_type == TOKEN_REDIRECT_APPEND) 
+		{
+			if ((red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
+				flag = -1;
+		}
+		red = red->next;
 	}
 	return flag;
 }
@@ -94,7 +90,7 @@ int any(t_shell *shell, t_redirect* redirect)
 	{
 		if (tmp->token_type == TOKEN_REDIRECT_IN)// <
 		{
-			check_builtin(shell);
+			// check_builtin(shell);
 			if ((tmp->fd = access(tmp->file_name, F_OK)) == -1)
 			{
 				printf("minishell: %s: No such file or directory\n", tmp->file_name);
@@ -105,7 +101,7 @@ int any(t_shell *shell, t_redirect* redirect)
 		}
 		else if (tmp->token_type == TOKEN_HEREDOC) // <<
 		{
-			check_builtin(shell);
+			// check_builtin(shell);
 			if (heredoc_file_open_wr(shell, tmp) == -1)
 				return (-1);
 			dup2(tmp->fd, STDIN_FILENO);
@@ -113,15 +109,15 @@ int any(t_shell *shell, t_redirect* redirect)
 		}
 		else if (tmp->token_type == TOKEN_REDIRECT_OUT)// >
 		{			
-			check_builtin(shell);
+			// check_builtin(shell);
 			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
 				return -1;
 			dup2(tmp->fd, STDOUT_FILENO);
             close(tmp->fd);
 		}
-		else // >>
+		else if (tmp->token_type == TOKEN_REDIRECT_APPEND) // >>
 		{
-			check_builtin(shell);
+			// check_builtin(shell);
 			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
 				return -1;
 			dup2(tmp->fd, STDOUT_FILENO);
@@ -132,9 +128,10 @@ int any(t_shell *shell, t_redirect* redirect)
 	return 0;
 }
 
-void command_proc(t_command* com)
+void command_proc(t_shell *shell, t_command* com)
 {
 	pid_t pid = fork();
+	// printf("stex\n");
 	int status;
 	if (pid < 0)
 	{
@@ -143,14 +140,16 @@ void command_proc(t_command* com)
 	}
 	else if (pid == 0)
 	{
-		// dup2(com->redirect->fd, STDOUT_FILENO);
-		// if ((any(shell, com->redirect) != -1))
-		// {
-		// 	dup2(com->redirect->fd, STDOUT_FILENO);
-		// 	close(com->redirect->fd);
-		// }
 		char* str = ft_strjoin("/bin/", com->argv[0]);
-		setup_child_signals();
+		// dup2(com->redirect->fd, STDOUT_FILENO);
+		if ((any(shell, com->redirect) == -1))
+		{
+			printf("argv = %s\n", str);
+			dup2(com->redirect->fd, STDOUT_FILENO);
+			close(com->redirect->fd);
+		}
+		// signal(SIG_DFL, ctrlc);
+		
 		if (execv(str, com->argv) == -1)
 		{
 			perror("Execv faild");
@@ -169,7 +168,7 @@ void command_many_proc(t_shell* shell, int count)
 	pid_t* pids;
 	pipe_fd = (int**)malloc(sizeof(int*) * (count - 1));
 	if (!pipe_fd)
-		return;
+	return;
 	pids = (pid_t*)malloc(sizeof(pid_t) * count);
 	int i = 0;
 	if (count > 1)
@@ -211,14 +210,16 @@ void command_many_proc(t_shell* shell, int count)
 				close(pipe_fd[j][1]);
 				++j;
 			}
-			printf("stex\n");
-			// if ((any(shell, tmp->redirect) != -1))
-			// {
-			// 	printf("mtav\n");
-			// 	dup2(tmp->redirect->fd, STDOUT_FILENO);
-			// 	close(tmp->redirect->fd);
-			// }
-			setup_child_signals();
+			t_redirect* red = tmp->redirect;
+			while (red)
+			{
+				if (any_other(shell, red) != -1)
+				{
+					dup2(red->fd, STDOUT_FILENO);
+					close(red->fd);
+				}
+				red = red->next;
+			}
 			char* str = ft_strjoin("/bin/", tmp->argv[0]);
 			if (execv(str, tmp->argv) == -1)
 			{
@@ -267,10 +268,10 @@ int gnacinq(t_shell* shell)
 	{
 		if (tmp->redirect)
 		{
-			if (any(shell, tmp->redirect) == -1)
-				return -1;
+			any_other(shell, tmp->redirect);
 		}
-		command_proc(tmp);
+		tmp = shell->command;
+		command_proc(shell, tmp);
 	}
 	else
 	{
@@ -280,8 +281,12 @@ int gnacinq(t_shell* shell)
 			++count;
 			tmp = tmp->next;
 		}
-		if (any_other(shell) == -1)
-			return -1;
+		tmp = shell->command;
+		while (tmp)
+		{
+			any_other(shell, tmp->redirect);
+			tmp = tmp->next;
+		}
 		command_many_proc(shell, count);
 	}
 	return 0;

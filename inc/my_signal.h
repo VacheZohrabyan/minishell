@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:58:23 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/30 18:08:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:50:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "include.h"
 
 void	ctrlc(int sig);
-void	setup_shell_signals(void);
-void	setup_child_signals(void);
+void  sig();
 
 #endif
