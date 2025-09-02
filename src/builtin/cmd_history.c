@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/30 19:05:33 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:54:03 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,16 @@ int	record_history(t_shell *shell, const char *line)
 	return (0);
 }
 
-int	cmd_history(t_shell *shell)
+int	cmd_history(t_shell *shell, t_command *command)
 {
 	if (!shell || !shell->history)
 	{
 		printf("minishell: history file not set\n");
 		return (-1);
 	}
-	if (!shell->command->argv[1])
+	if (!command->argv[1])
 		return (print_history(shell), 1);
-	if (history_c(shell) || check_argument(shell->command, "history"))
+	if (history_c(shell) || check_argument(command, "history"))
 		return (-1);
 	return (1);
 }
