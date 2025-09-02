@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/01 14:57:50 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:59:33 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,46 +45,90 @@ int heredoc_file_open_wr(t_shell* shell, t_redirect *redirect)
 	return (0);
 }
 
+int any_other(t_shell *shell)
+{
+	t_command* command = shell->command;
+	int flag = 0;
+	// if (!redirect)
+	// 	return -1;
+	while (command)
+	{
+		while (command->redirect)
+		{
+			if (command->redirect->token_type == TOKEN_REDIRECT_IN)// <
+			{
+				if ((command->redirect->fd = access(command->redirect->file_name, F_OK)) == -1)
+				{
+					printf("minishell: %s: No such file or directory\n", command->redirect->file_name);
+					flag = -1;
+				}
+			}
+			else if (command->redirect->token_type == TOKEN_HEREDOC) // <<
+			{
+				if (heredoc_file_open_wr(shell, command->redirect) == -1)
+					flag = -1;
+			}
+			else if (command->redirect->token_type == TOKEN_REDIRECT_OUT)// >
+			{
+				if ((command->redirect->fd = open(command->redirect->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
+					flag = -1;
+			}
+			else // >>
+			{
+				if ((command->redirect->fd = open(command->redirect->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
+					flag = -1;
+			}
+			command->redirect = command->redirect->next;
+		}
+		command = command->next;
+	}
+	return flag;
+}
+
 int any(t_shell *shell, t_redirect* redirect)
 {
 	t_redirect* tmp = redirect;
-	// printf("any\n");
 	// if (!redirect)
 	// 	return -1;
 	while (tmp)
 	{
 		if (tmp->token_type == TOKEN_REDIRECT_IN)// <
 		{
-			printf("any-redirection\n");
+			check_builtin(shell);
 			if ((tmp->fd = access(tmp->file_name, F_OK)) == -1)
 			{
 				printf("minishell: %s: No such file or directory\n", tmp->file_name);
 				return -1;
 			}
-			printf("any-redirection-verch\n");
+			dup2(tmp->fd, STDIN_FILENO);
+			close(tmp->fd);
 		}
 		else if (tmp->token_type == TOKEN_HEREDOC) // <<
 		{
-			// printf("any-herdoc\n");
+			check_builtin(shell);
 			if (heredoc_file_open_wr(shell, tmp) == -1)
 				return (-1);
-			// printf("any-herdoc-verch\n");
+			dup2(tmp->fd, STDIN_FILENO);
+            close(tmp->fd);
 		}
 		else if (tmp->token_type == TOKEN_REDIRECT_OUT)// >
-		{
-			// printf("any-else\n");
+		{			
+			check_builtin(shell);
 			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
 				return -1;
-			// printf("any-else-verch\n");
+			dup2(tmp->fd, STDOUT_FILENO);
+            close(tmp->fd);
 		}
 		else // >>
 		{
+			check_builtin(shell);
 			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
 				return -1;
+			dup2(tmp->fd, STDOUT_FILENO);
+            close(tmp->fd);
 		}
 		tmp = tmp->next;
 	}
-	// printf("any-verch\n");
 	return 0;
 }
 
@@ -168,12 +212,12 @@ void command_many_proc(t_shell* shell, int count)
 				++j;
 			}
 			printf("stex\n");
-			if ((any(shell, tmp->redirect) != -1))
-			{
-				printf("mtav\n");
-				dup2(tmp->redirect->fd, STDOUT_FILENO);
-				close(tmp->redirect->fd);
-			}
+			// if ((any(shell, tmp->redirect) != -1))
+			// {
+			// 	printf("mtav\n");
+			// 	dup2(tmp->redirect->fd, STDOUT_FILENO);
+			// 	close(tmp->redirect->fd);
+			// }
 			setup_child_signals();
 			char* str = ft_strjoin("/bin/", tmp->argv[0]);
 			if (execv(str, tmp->argv) == -1)
@@ -223,7 +267,6 @@ int gnacinq(t_shell* shell)
 	{
 		if (tmp->redirect)
 		{
-			printf("else if\n");
 			if (any(shell, tmp->redirect) == -1)
 				return -1;
 		}
@@ -237,6 +280,8 @@ int gnacinq(t_shell* shell)
 			++count;
 			tmp = tmp->next;
 		}
+		if (any_other(shell) == -1)
+			return -1;
 		command_many_proc(shell, count);
 	}
 	return 0;
