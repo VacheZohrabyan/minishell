@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/02 12:57:26 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:01:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@ int	check_builtin(t_shell *shell, t_command *command)
 		return (cmd_history(shell, command));
 	else if (!ft_strcmp("cd", command->argv[0]))
 		return (cmd_cd(shell, command));
+	else if (!ft_strcmp("echo", command->argv[0]))
+		return (cmd_echo(command));
 	return (0);
 }
