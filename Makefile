@@ -30,6 +30,7 @@ SRC     := \
 	$(SRCDIR)/builtin/history_utils.c \
 	$(SRCDIR)/builtin/cmd_cd.c \
 	$(SRCDIR)/builtin/cmd_echo.c \
+	$(SRCDIR)/builtin/cmd_export.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 	$(SRCDIR)/run.c \
 
