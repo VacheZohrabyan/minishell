@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/02 14:49:14 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/04 14:43:25 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		record_history(shell, shell->buffer);
 		shell->token = lexical(shell);
+		printf("Shell->token = %s\n", shell->token->cmd);
 		if (shell->token)
 		{
 			if (parsing(&(shell->command) ,shell->token) == -1)

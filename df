@@ -32,3 +32,20 @@ drwxr-xr-x  8 vzohraby 2024_yerevan   132 Sep  2 14:19 src
 -rw-r--r--  1 vzohraby 2024_yerevan     0 Sep  2 16:03 tre
 drwxr-xr-x  2 vzohraby 2024_yerevan    46 Sep  2 13:00 .vscode
 -rw-r--r--  1 vzohraby 2024_yerevan     0 Sep  2 16:03 yt
+total 96
+drwxr-xr-x  8 vzohraby 2024_yerevan   175 Sep  2 16:04 .
+drwx------ 29 vzohraby 2024_yerevan  4096 Sep  2 15:51 ..
+-rw-r--r--  1 vzohraby 2024_yerevan  1932 Sep  2 16:04 df
+-rw-r--r--  1 vzohraby 2024_yerevan     0 Sep  2 16:04 esd
+drwxr-xr-x  8 vzohraby 2024_yerevan   220 Sep  2 16:04 .git
+drwxr-xr-x  2 vzohraby 2024_yerevan   140 Sep  2 16:04 inc
+drwxr-xr-x  2 vzohraby 2024_yerevan  4096 Sep  2 16:04 libft
+-rw-r--r--  1 vzohraby 2024_yerevan  1523 Sep  2 16:04 Makefile
+-rwxr-xr-x  1 vzohraby 2024_yerevan 72464 Sep  2 16:04 minishell
+drwxr-xr-x  3 vzohraby 2024_yerevan    17 Sep  2 16:04 obj
+-rw-r--r--  1 vzohraby 2024_yerevan    55 Sep  2 16:04 sd
+-rw-r--r--  1 vzohraby 2024_yerevan  1960 Sep  2 16:04 sds
+drwxr-xr-x  8 vzohraby 2024_yerevan   132 Sep  2 16:04 src
+-rw-r--r--  1 vzohraby 2024_yerevan     0 Sep  2 16:04 tre
+drwxr-xr-x  2 vzohraby 2024_yerevan    46 Sep  2 16:04 .vscode
+-rw-r--r--  1 vzohraby 2024_yerevan     0 Sep  2 16:04 yt

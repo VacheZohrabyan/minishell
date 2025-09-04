@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/26 14:10:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/04 17:29:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,126 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 	return (token);
 }
 
+// int find_open_34(char* str, char elem)
+// {
+// 	size_t i = 0;
+// 	while (str + )
+// }
+
+// int find_close_34(char* str, char elem)
+// {
+// 	size_t i = 0;
+// 	while ()
+// }
+
+char* find_bracket(char* buffer)
+{
+	size_t i = 0;
+	size_t j = 0;
+	size_t open = 0;
+	size_t close = 0;
+	char* str = NULL;
+	char* line = NULL;
+	printf("' = %c\n", 39);
+	while (buffer[i])
+	{
+		if (buffer[i] == 39 || buffer[i] == 34)
+		{
+			j = i;
+			open = ++i;
+			close = i;
+			close++;
+			
+			if (buffer[j] && buffer[j] == 39)
+			{
+				printf("open = %zu\n", open);
+				while (buffer[close])
+				{
+					printf("buffer[%zu] = %c\n", i, buffer[i]);
+					if (buffer[close] == 39)
+					{
+						break;
+					}
+					close++;
+				}
+				printf("close = %zu\n", close);
+				if ((close - open) > 1)
+				{
+					str = (char*)malloc(sizeof(char) * (close - open + 1));
+					if (!str)
+					{
+						printf("str malloc ' ' faild\n");
+						exit (0);
+					}
+					j = 0;
+					while (buffer[open + j] && (open + j) < close)
+					{
+						str[j] = buffer[open + j];
+						++j;
+					}
+					str[j] = '\0';
+					line = ft_strjoin(line, str);
+					free(str);
+					str = NULL;
+					i = close;
+				}
+				
+			}
+			else if (buffer[j] == 34)
+			{	
+				if (buffer[j] && buffer[j] == 34)
+				{
+					printf("open = %zu\n", open);
+					while (buffer[close])
+					{
+						printf("buffer[%zu] = %c\n", i, buffer[i]);
+						if (buffer[close] == '"')
+						{
+							break;
+						}
+						close++;
+					}
+					printf("close = %zu\n", close);
+					if ((close - open) > 1)
+					{
+						str = (char*)malloc(sizeof(char) * (close - open + 1));
+						if (!str)
+						{
+							printf("str malloc ' ' faild\n");
+							exit (0);
+						}
+						j = 0;
+						while (buffer[open + j] && (open + j) < close)
+						{
+							str[j] = buffer[open + j];
+							++j;
+						}
+						str[j] = '\0';
+						line = ft_strjoin(line, str);
+						free(str);
+						str = NULL;
+						i = close;
+					}
+				}
+			}
+		}
+		++i;
+	}
+	printf("line = %s\n", line);
+
+	return line;	
+}
+
 t_token	*lexical(t_shell *shell)
 {
 	size_t	i;
 	char	**buffer;
 	char	*buf_malloc;
-
+	printf("shell->buffer = %s\n", shell->buffer);
+	if (!find_bracket(shell->buffer))
+	{
+		return NULL;
+	}
 	buf_malloc = add_spaces_around_specials(shell->buffer);
 	i = 0;
 	shell->token = NULL;
