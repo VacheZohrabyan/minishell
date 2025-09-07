@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/04 17:29:26 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/07 11:11:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ char* find_bracket(char* buffer)
 		}
 		++i;
 	}
-	printf("line = %s\n", line);
 
 	return line;	
 }
@@ -179,11 +178,7 @@ t_token	*lexical(t_shell *shell)
 	size_t	i;
 	char	**buffer;
 	char	*buf_malloc;
-	printf("shell->buffer = %s\n", shell->buffer);
-	if (!find_bracket(shell->buffer))
-	{
-		return NULL;
-	}
+	// find_bracket(shell->buffer)
 	buf_malloc = add_spaces_around_specials(shell->buffer);
 	i = 0;
 	shell->token = NULL;

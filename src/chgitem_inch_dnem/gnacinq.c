@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/02 16:02:53 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/07 11:24:12 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,18 @@ void command_proc(t_shell *shell, t_command* com)
 	{
 		char* str = ft_strjoin("/bin/", com->argv[0]);
 		// dup2(com->redirect->fd, STDOUT_FILENO);
+		
 		if ((any(shell, com->redirect) == -1))
 		{
-			printf("argv = %s\n", str);
+			// printf("argv = %s\n", str);
 			dup2(com->redirect->fd, STDOUT_FILENO);
 			close(com->redirect->fd);
+		}
+		if (check_builtin(shell, com))
+		{
+			dup2(com->redirect->fd, STDOUT_FILENO);
+			close(com->redirect->fd);
+			waitpid(pid, &status, 0);
 		}
 		// signal(SIG_DFL, ctrlc);
 		
@@ -221,7 +228,13 @@ void command_many_proc(t_shell* shell, int count)
 				red = red->next;
 			}
 			char* str = ft_strjoin("/bin/", tmp->argv[0]);
-			if (execv(str, tmp->argv) == -1)
+			if (check_builtin(shell, tmp))
+			{
+				dup2(tmp->redirect->fd, STDOUT_FILENO);
+				close(tmp->redirect->fd);
+				break;
+			}
+			else if (execv(str, tmp->argv) == -1)
 			{
 				printf("command_many_proc execv faild\n");
 				return ;
