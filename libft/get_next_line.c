@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:02:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/05/09 13:17:51 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:40:19 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*read_file(int fd, char *buffer)
 		if (bytesread == 0)
 			break ;
 		buffer = ft_strjoin_gnl(buffer, line_buffer);
-		if (ft_strchr(buffer, '\n'))
+		if (ft_strchr_gnl(buffer, '\n'))
 			break ;
 	}
 	free(line_buffer);

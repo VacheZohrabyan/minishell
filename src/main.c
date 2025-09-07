@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/07 11:11:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/07 12:58:50 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
-	
+
 	shell = NULL;
 	if (argc != 1 || !argv[0])
 		return (0);
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **env)
 	sig();
 	while (1)
 	{
-		shell->buffer = readline("minishell>");
+		shell->buffer = readline("minishell> ");
 		if (!shell->buffer)
 		{
 			printf("exit\n");
@@ -35,16 +35,18 @@ int	main(int argc, char **argv, char **env)
 		shell->token = lexical(shell);
 		if (shell->token)
 		{
-			if (parsing(&(shell->command) ,shell->token) == -1)
+			if (parsing(&(shell->command), shell->token) == -1)
 			{
+				// printf("exit code = %d\n", shell->env_list->exit_code);
 				token_node_free(&shell->token);
 				free_command(&(shell->command));
-				break;
+				break ;
 			}
 			run(shell);
+			// printf("exit code = %d\n", shell->env_list->exit_code);
 			token_node_free(&shell->token);
 			free_command(&(shell->command));
- 		}
+		}
 		free(shell->buffer);
 		shell->buffer = NULL;
 	}

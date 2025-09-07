@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:03:06 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/02 12:56:34 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:01:06 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@ int	cmd_cd(t_shell *shell, t_command *command)
 {
 	char	*path;
 
+	if (command->argv[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		shell->env_list->exit_code = 1;
+		return (1);
+	}
 	if (!command->argv[1] || ft_strcmp(command->argv[1],
 			"~") == 0)
 	{

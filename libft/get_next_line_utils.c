@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:58:27 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/05/09 13:18:07 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/04 19:40:07 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	ft_strlen_gnl(const char *src)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr_gnl(const char *s, int c)
 {
 	size_t			i;
 

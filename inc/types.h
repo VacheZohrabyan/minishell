@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/01 12:44:49 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:11:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_shell
 	char				**env;
 	char				*history;
 	t_env				*env_list;
+	t_env				*export_list;
 	int					history_fd;
 	t_token				*token;
 	char				*buffer;
