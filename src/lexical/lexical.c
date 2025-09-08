@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/07 11:11:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/08 18:14:47 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 // 	while ()
 // }
 
-char* find_bracket(char* buffer)
+char* check_bracket(char* buffer)
 {
 	size_t i = 0;
 	size_t j = 0;
@@ -84,7 +84,6 @@ char* find_bracket(char* buffer)
 	size_t close = 0;
 	char* str = NULL;
 	char* line = NULL;
-	printf("' = %c\n", 39);
 	while (buffer[i])
 	{
 		if (buffer[i] == 39 || buffer[i] == 34)
@@ -96,17 +95,14 @@ char* find_bracket(char* buffer)
 			
 			if (buffer[j] && buffer[j] == 39)
 			{
-				printf("open = %zu\n", open);
 				while (buffer[close])
 				{
-					printf("buffer[%zu] = %c\n", i, buffer[i]);
 					if (buffer[close] == 39)
 					{
 						break;
 					}
 					close++;
 				}
-				printf("close = %zu\n", close);
 				if ((close - open) > 1)
 				{
 					str = (char*)malloc(sizeof(char) * (close - open + 1));
@@ -133,17 +129,14 @@ char* find_bracket(char* buffer)
 			{	
 				if (buffer[j] && buffer[j] == 34)
 				{
-					printf("open = %zu\n", open);
 					while (buffer[close])
 					{
-						printf("buffer[%zu] = %c\n", i, buffer[i]);
 						if (buffer[close] == '"')
 						{
 							break;
 						}
 						close++;
 					}
-					printf("close = %zu\n", close);
 					if ((close - open) > 1)
 					{
 						str = (char*)malloc(sizeof(char) * (close - open + 1));
@@ -169,8 +162,105 @@ char* find_bracket(char* buffer)
 		}
 		++i;
 	}
-
+	free(buffer);
 	return line;	
+}
+
+void funct(t_token* start, t_token* end)
+{
+	if (start == end)
+	{
+		
+	}
+	t_token* tmp = start;
+	char* str = NULL;
+	while (tmp != end->next)
+	{
+		str = ft_strjoin_gnl(str, tmp->cmd);
+		str = ft_strjoin_gnl(str, " ");
+		tmp = tmp->next;
+	}
+	str = check_bracket(str);
+	t_token* new_node = (t_token*)malloc(sizeof(t_token));
+	if (!new_node)
+		return;
+	new_node->cmd = str;
+	new_node->token_type = TOKEN_WORD;
+	new_node->prev = start->prev;
+	new_node->next = end->next;
+	if (start->prev)
+		start->prev->next = new_node;
+	if (end->next)
+		end->next->prev = new_node;
+	// while (start != end->next)
+	// {
+	// 	tmp = start;
+	// 	start = start->next;
+	// 	free(tmp->cmd);
+	// 	tmp->cmd = NULL;
+	// 	free(tmp);
+	// 	tmp = NULL;
+	// }
+}
+
+int find_bracket(char* str, int c)
+{
+	int i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return 1;
+		++i;
+	}
+	return 0;
+}
+
+int find_bracket_list(t_token** token)
+{
+	t_token* start = NULL;
+	t_token* end = NULL;
+	t_token* tmp = *token;
+	while (tmp)
+	{
+		if ((find_bracket(tmp->cmd, 39) || find_bracket(tmp->cmd, 34)))
+		{		
+			start = tmp;
+			break;
+		}
+		tmp = tmp->next;
+	}
+	if (!start)
+	{
+		printf("start is null\n");
+		return 0;
+	}
+	tmp = start;
+	while (tmp)
+	{
+		if (tmp->token_type == TOKEN_WORD)
+		{
+			if ((find_bracket(tmp->cmd, 39) || find_bracket(tmp->cmd, 34)))
+				end = tmp;
+		}
+		else if (tmp->token_type != TOKEN_WORD && end)
+			break;
+		tmp = tmp->next;
+	}
+	if (!end)
+		return 0;
+	funct(start, end);
+	return 1;
+}
+
+void find_funct(t_token* token)
+{
+	t_token* tmp = token;
+	while (tmp)
+	{
+		printf("stex\n");
+		find_bracket_list(&tmp);
+		tmp = tmp->next;
+	}
 }
 
 t_token	*lexical(t_shell *shell)
@@ -178,13 +268,19 @@ t_token	*lexical(t_shell *shell)
 	size_t	i;
 	char	**buffer;
 	char	*buf_malloc;
-	// find_bracket(shell->buffer)
 	buf_malloc = add_spaces_around_specials(shell->buffer);
 	i = 0;
 	shell->token = NULL;
 	buffer = ft_split(buf_malloc, ' ');
 	while (buffer[i])
 		shell->token = lexical_push_back(shell->token, buffer[i++]);
+	find_funct(shell->token);
+	while (shell->token)
+	{
+		printf("%s", shell->token->cmd);
+		shell->token = shell->token->next;
+	}
+	printf("\n");
 	split_free(&buffer);
 	free(buf_malloc);
 	if (!syntax_checker(shell->token))
