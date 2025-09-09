@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/07 12:58:50 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:15:04 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,21 @@ int	main(int argc, char **argv, char **env)
 				free_command(&(shell->command));
 				break ;
 			}
+			// while (shell->command)
+			// {
+			// 	int i = 0;
+			// 	while (shell->command->argv && shell->command->argv[i])
+			// 	{
+			// 		printf("argv[%d] = %s\n", i, argv[i]);
+			// 		++i;
+			// 	}
+			// 	while (shell->command->redirect)
+			// 	{
+			// 		printf("		redirect = %s", shell->command->redirect->file_name);
+			// 		shell->command->redirect = shell->command->redirect->next;
+			// 	}
+			// 	shell->command = shell->command->next;
+			// }
 			run(shell);
 			// printf("exit code = %d\n", shell->env_list->exit_code);
 			token_node_free(&shell->token);

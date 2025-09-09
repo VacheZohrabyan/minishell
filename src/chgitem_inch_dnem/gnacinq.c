@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/07 11:24:12 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:23:53 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,17 +272,17 @@ int gnacinq(t_shell* shell)
 	{
 		while (tmp->redirect)
 		{
-			if (any(shell, tmp->redirect) == -1)
+			if (any_other(shell, tmp->redirect) == -1)
 				return -1;
 			tmp->redirect = tmp->redirect->next;
 		}
 	}
 	else if (!(tmp->next) && tmp->argv)
 	{
-		if (tmp->redirect)
-		{
-			any_other(shell, tmp->redirect);
-		}
+		// if (tmp->redirect)
+		// {
+		// 	any_other(shell, tmp->redirect);
+		// }
 		tmp = shell->command;
 		command_proc(shell, tmp);
 	}

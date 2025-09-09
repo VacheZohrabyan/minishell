@@ -1,32 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   my_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/09 16:55:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:31:19 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 static int	word_count(char const *s, char c)
 {
 	int	i;
 	int	count;
-
+	
 	i = 0;
 	count = 0;
 	while (s[i] == c)
 		i++;
 	while (s[i] != '\0')
 	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
+		if (s[i] == '\'' || s[i] == '"')
+		{
+			++count;
+			// ++i;
+			if (s[i] == '\'')
+			{
+				++i;
+				while (s[i] != '\'')
+					++i;
+			}
+			else if (s[i] == '"')
+			{
+				++i;
+				while (s[i] != '"')
+					++i;
+			}
+		}
+		else if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0' || s[i + 1] == '\'' || s[i + 1] == '"'))
 			count++;
 		i++;
 	}
+	printf("count = %d\n", count);
 	return (count);
 }
 
@@ -73,8 +92,33 @@ static char	**split_copy(const char *s, char c, char **res)
 		while (*s == c && *s != '\0')
 			s++;
 		word_len_val = 0;
-		while (s[word_len_val] != '\0' && s[word_len_val] != c)
-			word_len_val++;
+		// while (s[word_len_val] != '\0' && s[word_len_val] != c)
+		// 	word_len_val++;
+		if (s[word_len_val] == '\'' || s[word_len_val] == '"')
+		{
+			// while (s[word_len_val] != '\0')
+			// {
+			// 	
+				if (s[word_len_val] == '\'')
+				{
+					++s;
+					while (s[word_len_val] != '\'')
+						++word_len_val;
+				}
+				else if (s[word_len_val] == '"')
+				{
+					++s;
+					while (s[word_len_val] != '"')
+						++word_len_val;
+				}
+			// }
+			// printf("")
+		}
+		else
+		{
+			while ((s[word_len_val] != '\0' && s[word_len_val] != c) && (s[word_len_val] != '\'' && s[word_len_val] != '"'))
+				word_len_val++;
+		}
 		if (word_len_val != 0)
 			res[i] = fill_word(s, word_len_val);
 		else
@@ -82,13 +126,15 @@ static char	**split_copy(const char *s, char c, char **res)
 		if (!res[i])
 			ft_free(res, i + 1);
 		s += word_len_val;
+		if ((*s == '\'' || *s == '"') && *s != '\0')
+			s++;
 		i++;
 	}
 	res[i] = NULL;
 	return (res);
 }
 
-char	**ft_split(char const *s, char c)
+char	**my_split(char const *s, char c)
 {
 	char	**res;
 	int		size;
