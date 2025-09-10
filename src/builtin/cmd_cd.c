@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:03:06 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/04 19:01:06 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/10 12:34:16 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ int	cmd_cd(t_shell *shell, t_command *command)
 {
 	char	*path;
 
+	if (!ft_strcmp(command->argv[0], "cd.."))
+	{
+		return (printf("cd..: command not found\n"), 1);
+	}
 	if (command->argv[2])
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);

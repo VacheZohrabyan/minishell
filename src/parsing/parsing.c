@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 10:29:06 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/10 15:59:19 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,24 @@ static t_redirect	*init_new_redirect(t_token **tmp)
 	new_redirect = (t_redirect *)malloc(sizeof(t_redirect));
 	new_redirect->token_type = (*tmp)->token_type;
 	(*tmp) = (*tmp)->next;
+	if ((*tmp)->cmd == NULL)
+	{
+		free(new_redirect);
+		return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
+	}
 	new_redirect->file_name = ft_strdup((*tmp)->cmd);
 	new_redirect->next = NULL;
 	return (new_redirect);
 }
 
-static void	add_redirect(t_redirect **redirect, t_token **tmp)
+static int	add_redirect(t_redirect **redirect, t_token **tmp)
 {
 	t_redirect	*new_redirect;
 	t_redirect	*cur;
 
 	new_redirect = init_new_redirect(tmp);
+	if (new_redirect == NULL)
+		return -1;
 	if (!*redirect)
 		*redirect = new_redirect;
 	else
@@ -39,6 +46,7 @@ static void	add_redirect(t_redirect **redirect, t_token **tmp)
 			cur = cur->next;
 		cur->next = new_redirect;
 	}
+	return 0;
 }
 
 static int	add_word(char **argv, int i, t_token *tmp)
@@ -53,37 +61,54 @@ int	validate_and_count(t_token *start, t_token *end)
 	int		count;
 	count = 0;
 	tmp = start;
+	if (tmp->token_type == TOKEN_WORD)
+	{
+		tmp = tmp->next;
+		++count;
+	}
 	while (tmp != end)
 	{
-		if (tmp->token_type == TOKEN_WORD)
-			count++;
-		else
-			return (count);
+		if (tmp->token_type != TOKEN_WORD && tmp->next->token_type == TOKEN_WORD)
+		{
+			tmp = tmp->next;
+			continue;
+		}
+		else if (tmp->token_type == TOKEN_WORD && tmp->prev->token_type == TOKEN_WORD)
+			++count;
 		tmp = tmp->next;
+		if (!tmp)
+			break ;
 	}
 	return (count);
 }
 
-void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
+int	fill_argv_and_redirects(t_redirect **redirect, char **argv,
 		t_token *start, t_token *end)
 {
 	t_token	*tmp;
 	int		i;
-	int		count;
+	int		count = 0;
 
 	count = validate_and_count(start, end);
 	i = 0;
 	tmp = start;
+	if (tmp->token_type == TOKEN_WORD)
+	{
+		i = add_word(argv, i, tmp);
+		--count;
+		tmp = tmp->next;
+	}
 	while (tmp && tmp != end)
 	{
-		if (tmp->token_type == TOKEN_WORD && count)
+		if (tmp->token_type != TOKEN_WORD && tmp->next->token_type == TOKEN_WORD)
+		{
+			if (add_redirect(redirect, &tmp))
+				return -1;
+		}
+		if (tmp->prev && tmp->token_type == TOKEN_WORD && tmp->prev->token_type == TOKEN_WORD && count)
 		{
 			i = add_word(argv, i, tmp);
 			--count;
-		}
-		else
-		{
-			add_redirect(redirect, &tmp);
 		}
 		tmp = tmp->next;
 		if (!tmp)
@@ -91,9 +116,10 @@ void	fill_argv_and_redirects(t_redirect **redirect, char **argv,
 	}
 	if (argv)
 		argv[i] = NULL;
+	return 0;
 }
 
-static char	**init_argv(t_redirect **redirect, t_token *end, t_token *start)
+static char	**init_argv(t_redirect **redirect, t_token *end, t_token *start, int *flag)
 {
 	char	**argv;
 	int		count;
@@ -104,9 +130,10 @@ static char	**init_argv(t_redirect **redirect, t_token *end, t_token *start)
 	{
 		argv = (char **)malloc(sizeof(char *) * (count + 1));
 		if (!argv)
-			return (NULL);
+		return (NULL);
 	}
-	fill_argv_and_redirects(redirect, argv, start, end);
+	if (fill_argv_and_redirects(redirect, argv, start, end) == -1)
+		return (*flag = -1, NULL);
 	return (argv);
 }
 
@@ -114,10 +141,17 @@ static int	push_back_command(t_command **command, t_token *start, t_token *end)
 {
 	t_command	*new_node;
 	t_command	*cur;
-
+	int flag = 0;
+	
 	new_node = (t_command *)malloc(sizeof(t_command));
 	new_node->redirect = NULL;
-	new_node->argv = init_argv(&new_node->redirect, end, start);
+	new_node->argv = init_argv(&new_node->redirect, end, start, &flag);
+	if (flag == -1)
+	{
+		free_command(command);
+		command = NULL;
+		return -1;
+	}
 	new_node->next = NULL;
 	if (!(*command))
 		*command = new_node;

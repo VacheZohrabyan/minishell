@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/04 16:11:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/10 17:37:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,7 @@
 typedef enum e_tokken_type
 {
 	TOKEN_WORD,            // ls.... file.txt
-	TOKEN_OPEN,            // (
-	TOKEN_CLOSE,           // )
 	TOKEN_PIPE,            // |
-	TOKEN_OR,              // ||
-	TOKEN_AND,             // &&
 	TOKEN_REDIRECT_IN,     // <
 	TOKEN_REDIRECT_OUT,    // >
 	TOKEN_REDIRECT_APPEND, // >>
@@ -62,6 +58,7 @@ typedef struct s_redirect
 	char				*file_name;
 	t_token_type		token_type;
 	int					fd;
+	int					to;
 	struct s_redirect	*next;
 }						t_redirect;
 

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 10:35:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/10 20:09:57 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 		return (NULL);
 	tmp->token_type = check_token_type(buffer);
 	tmp->cmd = ft_strdup(buffer);
-	printf("buffer = %s\n" , tmp->cmd);
 	tmp->next = NULL;
 	tmp->prev = NULL;
 	if (!token)
@@ -102,9 +101,16 @@ t_token	*lexical(t_shell *shell)
 	shell->token = NULL;
 	buffer = my_split(buf_malloc, ' ');
 	buffer = concat_buffer(buffer);
+	printf("buffer = %s\n", buffer[1]);
 	while (buffer[i])
 		shell->token = lexical_push_back(shell->token, buffer[i++]);
-	printf("\n");
+
+	// while (shell->token)
+	// {
+	// 	printf("shell->token_type = %u   ", shell->token->token_type);
+	// 	printf("shell->token = %s\n", shell->token->cmd);
+	// 	shell->token = shell->token->next;
+	// }
 	split_free(&buffer);
 	free(buf_malloc);
 	if (!syntax_checker(shell->token))
