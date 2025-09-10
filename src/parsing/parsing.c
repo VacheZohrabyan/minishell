@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/04 19:21:42 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:29:06 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	validate_and_count(t_token *start, t_token *end)
 {
 	t_token	*tmp;
 	int		count;
-
 	count = 0;
 	tmp = start;
 	while (tmp != end)

@@ -6,144 +6,104 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/09 19:31:19 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:35:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 
-static int	word_count(char const *s, char c)
+static int	count_words(const char *s, char c)
 {
-	int	i;
-	int	count;
-	
-	i = 0;
-	count = 0;
-	while (s[i] == c)
-		i++;
-	while (s[i] != '\0')
+	int i = 0;
+	int count = 0;
+
+	while (s[i])
 	{
+		while (s[i] == c)
+			i++;
+		if (!s[i])
+			break;
+		count++;
 		if (s[i] == '\'' || s[i] == '"')
 		{
-			++count;
-			// ++i;
-			if (s[i] == '\'')
-			{
-				++i;
-				while (s[i] != '\'')
-					++i;
-			}
-			else if (s[i] == '"')
-			{
-				++i;
-				while (s[i] != '"')
-					++i;
-			}
+			char quote = s[i++];
+			while (s[i] && s[i] != quote)
+				i++;
+			if (s[i] == quote)
+				i++;
 		}
-		else if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0' || s[i + 1] == '\'' || s[i + 1] == '"'))
-			count++;
-		i++;
+		else
+		{
+			while (s[i] && s[i] != c && s[i] != '\'' && s[i] != '"')
+				i++;
+		}
 	}
-	printf("count = %d\n", count);
 	return (count);
 }
 
-static char	*fill_word(char const *s, int len)
+static void *ft_free(char **res, int size)
+{ 
+	int i; 
+	i = 0; 
+	while (i < size) 
+	{ 
+		free(res[i]); 
+		i++; 
+	} 
+	free(res); 
+	return (NULL); 
+}
+
+static char	*extract_word(const char **s, char c)
 {
 	char	*word;
-	int		i;
+	int		len = 0;
+	char	quote;
 
-	i = 0;
-	word = (char *)malloc((len + 1) * sizeof(char));
-	if (!word)
-		return (0);
-	while (i < len)
+	while (**s == c)
+		(*s)++;
+	if (**s == '\'' || **s == '"')
 	{
-		word[i] = s[i];
-		i++;
+		quote = *(*s)++;
+		while ((*s)[len] && (*s)[len] != quote)
+			len++;
+		word = ft_substr(*s, 0, len);
+		if ((*s)[len] == quote)
+			len++;
+		*s += len;
 	}
-	word[i] = '\0';
+	else
+	{
+		while ((*s)[len] && (*s)[len] != c && (*s)[len] != '\'' && (*s)[len] != '"')
+			len++;
+		word = ft_substr(*s, 0, len);
+		*s += len;
+	}
 	return (word);
 }
 
-static void	*ft_free(char **res, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size)
-	{
-		free(res[i]);
-		i++;
-	}
-	free(res);
-	return (NULL);
-}
-
-static char	**split_copy(const char *s, char c, char **res)
-{
-	int	word_len_val;
-	int	i;
-
-	i = 0;
-	while (*s != '\0')
-	{
-		while (*s == c && *s != '\0')
-			s++;
-		word_len_val = 0;
-		// while (s[word_len_val] != '\0' && s[word_len_val] != c)
-		// 	word_len_val++;
-		if (s[word_len_val] == '\'' || s[word_len_val] == '"')
-		{
-			// while (s[word_len_val] != '\0')
-			// {
-			// 	
-				if (s[word_len_val] == '\'')
-				{
-					++s;
-					while (s[word_len_val] != '\'')
-						++word_len_val;
-				}
-				else if (s[word_len_val] == '"')
-				{
-					++s;
-					while (s[word_len_val] != '"')
-						++word_len_val;
-				}
-			// }
-			// printf("")
-		}
-		else
-		{
-			while ((s[word_len_val] != '\0' && s[word_len_val] != c) && (s[word_len_val] != '\'' && s[word_len_val] != '"'))
-				word_len_val++;
-		}
-		if (word_len_val != 0)
-			res[i] = fill_word(s, word_len_val);
-		else
-			break ;
-		if (!res[i])
-			ft_free(res, i + 1);
-		s += word_len_val;
-		if ((*s == '\'' || *s == '"') && *s != '\0')
-			s++;
-		i++;
-	}
-	res[i] = NULL;
-	return (res);
-}
-
-char	**my_split(char const *s, char c)
+char	**my_split(const char *s, char c)
 {
 	char	**res;
-	int		size;
+	int		words;
+	int		i = 0;
 
 	if (!s)
 		return (NULL);
-	size = word_count(s, c);
-	res = (char **)malloc((size + 1) * sizeof(char *));
+	words = count_words(s, c);
+	res = malloc((words + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
-	return (split_copy(s, c, res));
+	while (i < words)
+	{
+		res[i] = extract_word(&s, c);
+		if (!res[i])
+			return (ft_free(res, i));
+		i++;
+	}
+	res[i] = NULL;
+	i = 0;
+	words = 0;
+	return (res);
 }

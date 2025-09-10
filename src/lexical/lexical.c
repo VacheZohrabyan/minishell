@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:04 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:35:00 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@ t_token_type	check_token_type(char *buffer)
 {
 	if (buffer[0] == '|' && buffer[1] != '|')
 		return (TOKEN_PIPE);
-	else if (buffer[0] == '|' && buffer[1] == '|')
-		return (TOKEN_OR);
-	else if (buffer[0] == '&' && buffer[1] == '&')
-		return (TOKEN_AND);
-	else if (buffer[0] == '(')
-		return (TOKEN_OPEN);
-	else if (buffer[0] == ')')
-		return (TOKEN_CLOSE);
 	else if (buffer[0] == '<' && buffer[1] != '<')
 		return (TOKEN_REDIRECT_IN);
 	else if (buffer[0] == '<' && buffer[1] == '<')
@@ -64,6 +56,41 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 	tmp->prev = current;
 	return (token);
 }
+static char *str_join_free(char *s1, char *s2)
+{
+    char *res;
+    size_t len = strlen(s1) + strlen(s2);
+
+    res = malloc(len + 1);
+    if (!res)
+        return NULL;
+    strcpy(res, s1);
+    strcat(res, s2);
+    free(s1);
+    return res;
+}
+
+char **concat_buffer(char **buffer)
+{
+    char **res = malloc(1024 * sizeof(char *));
+    int i = 0, j = 0;
+
+    while (buffer[i])
+    {
+        res[j] = strdup(buffer[i]);
+        i++;
+
+        while (buffer[i] && buffer[i][0] != '\0' &&
+               (buffer[i][0] == '"' || buffer[i][0] == '\'' || buffer[i][0] == '$'))
+        {
+            res[j] = str_join_free(res[j], buffer[i]);
+            i++;
+        }
+        j++;
+    }
+    res[j] = NULL;
+    return res;
+}
 
 t_token	*lexical(t_shell *shell)
 {
@@ -74,6 +101,7 @@ t_token	*lexical(t_shell *shell)
 	i = 0;
 	shell->token = NULL;
 	buffer = my_split(buf_malloc, ' ');
+	buffer = concat_buffer(buffer);
 	while (buffer[i])
 		shell->token = lexical_push_back(shell->token, buffer[i++]);
 	printf("\n");
