@@ -6,82 +6,60 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 20:08:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:45:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-
-int heredoc_file_open_wr(t_shell* shell, t_redirect *redirect)
+int heredoc_file_open_wr(t_redirect *redirect)
 {
 	char* buffer;
 	int pipefd[2];
-	char* str;
-	str = NULL;
+	pid_t pid = fork();
 	buffer = NULL;
-	
 	if (pipe(pipefd) == -1)
-		return (-1);
-	while (1)
+	return (-1);
+	if (pid < 0)
 	{
-		buffer = readline(">");
-		if (!buffer)
+		return 0;
+	}
+	else if (pid == 0)
+	{
+		close(pipefd[0]);
+		signal(SIGINT, handle_sigint);
+		// signal(SIGQUIT, SIG_DFL);
+		while (1)
 		{
-			printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
-			close(pipefd[1]);
-			return (-1);
+			buffer = readline(">");
+			if (!buffer)
+			{
+				printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
+				close(pipefd[1]);
+				exit (127);
+			}
+			printf("stex= %s\n", buffer);
+			if (!ft_strcmp(redirect->file_name, buffer))
+				break;
+			write(pipefd[1], buffer, ft_strlen(buffer));
+			write(pipefd[1], "\n", 1);
+			free(buffer);
+			buffer = NULL;
 		}
-		write(pipefd[1], buffer, ft_strlen(buffer));
-		write(pipefd[1], "\n", 1);
-		if (!ft_strcmp(redirect->file_name, buffer))
-			break;
-		free(buffer);
+	}
+	else
+	{
+		int status = 0;
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		signal(SIGINT, handle_sigher);
 		close(pipefd[1]);
 	}
-	record_history(shell, str);
 	redirect->fd = pipefd[0];
 	return (0);
 }
 
-int any_other(t_shell *shell, t_redirect* redirect)
-{
-	t_redirect* red = redirect;
-	int flag = 0;
-	while (red)
-	{
-		if (red->token_type == TOKEN_REDIRECT_IN)// <
-		{
-			if ((red->fd = open(red->file_name, O_RDONLY)) == -1)
-			{
-				printf("minishell: %s: No such file or directory\n", red->file_name);
-				return (-1);
-			}
-		}
-		else if (red->token_type == TOKEN_HEREDOC) // <<
-		{
-			if (heredoc_file_open_wr(shell, red) == -1)
-				flag = -1;
-		}
-		else if (red->token_type == TOKEN_REDIRECT_OUT)// >
-		{
-			if ((red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
-			{
-				printf("chexav\n");
-				flag = -1;
-			}
-		}
-		else if (red->token_type == TOKEN_REDIRECT_APPEND) 
-		{
-			if ((red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
-				flag = -1;
-		}
-		red = red->next;
-	}
-	return flag;
-}
-
-int any(t_shell *shell, t_redirect* redirect)
+int any(t_redirect* redirect)
 {
 	t_redirect* tmp = redirect;
 	while (tmp)
@@ -94,12 +72,6 @@ int any(t_shell *shell, t_redirect* redirect)
 				return -1;
 			}
 			tmp->to = STDIN_FILENO;
-		}
-		else if (tmp->token_type == TOKEN_HEREDOC) // <<
-		{
-			if (heredoc_file_open_wr(shell, tmp) == -1)
-				return (-1);
-			tmp->to = STDOUT_FILENO;
 		}
 		else if (tmp->token_type == TOKEN_REDIRECT_OUT)// >
 		{			
@@ -158,18 +130,10 @@ char *find_command_path(char *cmd)
     return NULL;
 }
 
-void handle_sigcat(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-}
-
 void command_proc(t_shell *shell, t_command* com)
 {
 	pid_t pid = fork();
-	int status;
+	int status = 0;
 	signal(SIGINT, handle_sigcat);
 	
 	if (pid < 0)
@@ -183,14 +147,17 @@ void command_proc(t_shell *shell, t_command* com)
 		char* str = find_command_path(com->argv[0]);
 		if (com->redirect)
 		{
-			if (any(shell, com->redirect) == -1)
+			if (any(com->redirect) == -1)
+			{
+				destroy_one_waitpid(pid, status);
 				return ;
+			}
 		}
 		if (check_builtin(shell, com))
 		{
 			dup2(com->redirect->fd, STDOUT_FILENO);
 			close(com->redirect->fd);
-			waitpid(pid, &status, 0);
+			destroy_one_waitpid(pid, status);
 			return;
 		}		
 		if (execv(str, com->argv) == -1)
@@ -204,16 +171,7 @@ void command_proc(t_shell *shell, t_command* com)
 	}
 	else
 	{
-		// signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-
-		waitpid(pid, &status, 0);
-		
-		signal(SIGINT, SIG_DFL);
-		sig();
-		// signal(SIGQUIT, SIG_IGN);
-		// restore prompt handler after child exits
-			
+		destroy_one_waitpid(pid, status);		
 	}
 }
 
@@ -222,6 +180,7 @@ void command_many_proc(t_shell* shell, int count)
 	int** pipe_fd;
 	t_command* tmp = shell->command;
 	pid_t* pids;
+	int status = 0;
 	pipe_fd = (int**)malloc(sizeof(int*) * (count - 1));
 	if (!pipe_fd)
 		return;
@@ -255,6 +214,8 @@ void command_many_proc(t_shell* shell, int count)
 			return;
 		else if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			if (i > 0)
 				dup2(pipe_fd[i - 1][0], STDIN_FILENO);
 			if (i < count - 1)
@@ -269,18 +230,18 @@ void command_many_proc(t_shell* shell, int count)
 			t_redirect *red = tmp->redirect;
 			while (red) 
 			{
-                if (any(shell, red) == -1)
-                    exit(EXIT_FAILURE);
-                if (dup2(red->fd, red->to) == -1) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                close(red->fd);
+				if (red->token_type != TOKEN_HEREDOC && any(red) == -1)
+				{
+					destroy_many_waitpid(pids, status, count);
+					return;
+				}
+				dup2(red->fd, red->to);
+				close(red->fd);
                 red = red->next;
             }
 			char* str = find_command_path(tmp->argv[0]);
 			if (check_builtin(shell, tmp)) {
-				exit(EXIT_SUCCESS);  // run builtin, then exit
+				exit(EXIT_SUCCESS);
 			}
 			else if (execv(str, tmp->argv) == -1)
 			{
@@ -304,42 +265,46 @@ void command_many_proc(t_shell* shell, int count)
 	}
 	free(pipe_fd);
 	i = 0;
-	int status = 0;
-	while (i < count)
-	{
-		waitpid(pids[i], &status, 0);
-		++i;
-	}
+	destroy_many_waitpid(pids, status, count);
 	free(pids);
 }
 
 int gnacinq(t_shell* shell)
 {
-	t_command *tmp = shell->command;
-	// if (!tmp->argv)
-	// {
-	// 	while (tmp->redirect)
-	// 	{
-	// 		printf("redirect = %s\n", tmp->redirect->file_name);
-	// 		if (any(shell, tmp->redirect) == -1)
-	// 			return -1;
-	// 		tmp->redirect = tmp->redirect->next;
-	// 	}
-	// }
-	if (!(tmp->next) && tmp->argv)
+	  t_command *tmp = shell->command;
+    int count = 0;
+
+    t_command *cmd = tmp;
+    while (cmd)
+    {
+        t_redirect *red = cmd->redirect;
+        while (red)
+        {
+            if (red->token_type == TOKEN_HEREDOC)
+            {
+                if (heredoc_file_open_wr(red) == -1)
+                    return -1;
+				else if (shell->env_list->exit_code)
+					return -1;
+            }
+            red = red->next;
+        }
+        cmd = cmd->next;
+    }
+
+    if (!shell->env_list->exit_code)
 	{
-		printf("argv = %s\n", tmp->argv[1]);
-		command_proc(shell, shell->command);
-	}
-	else
-	{
-		int count = 0;
-		while (tmp)
+		cmd = tmp;
+		while (cmd)
 		{
-			++count;
-			tmp = tmp->next;
+			count++;
+			cmd = cmd->next;
 		}
-		command_many_proc(shell, count);
+
+		if (count == 1)
+			command_proc(shell, shell->command);
+		else if (count > 1)
+			command_many_proc(shell, count);
 	}
-	return 0;
+    return 0;
 }

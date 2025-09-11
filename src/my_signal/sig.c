@@ -6,11 +6,36 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 19:05:25 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:34:02 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
+
+void handle_sigher(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
+
+void handle_sigint(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	exit(130);
+}
+
+void handle_sigcat(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
 
 void	ctrlc(int sig)
 {
@@ -25,4 +50,33 @@ void sig()
 {
 	signal(SIGINT,ctrlc);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void destroy_one_waitpid(pid_t pid, int status)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+
+	waitpid(pid, &status, 0);
+	
+	signal(SIGINT, handle_sigher);
+	signal(SIGQUIT, SIG_IGN);	sig();
+}
+
+void destroy_many_waitpid(pid_t* pids, int status, int count)
+{
+	int i = 0;
+	signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+
+    i = 0;
+    while (i < count)
+    {
+        waitpid(pids[i], &status, 0);
+        i++;
+    }
+
+    signal(SIGINT, handle_sigher);
+    signal(SIGQUIT, SIG_IGN);
+	sig();
 }
