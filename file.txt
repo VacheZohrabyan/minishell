@@ -1,9 +1,0 @@
-d
-e
-file.txt
-inc
-libft
-Makefile
-minishell
-obj
-src

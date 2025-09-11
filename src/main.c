@@ -6,11 +6,13 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 09:53:46 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/11 20:43:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/include.h"
+
+// void shlvl();
 
 int	main(int argc, char **argv, char **env)
 {
@@ -22,6 +24,7 @@ int	main(int argc, char **argv, char **env)
 	shell = init_shell(env);
 	init_shell_history(shell);
 	load_history(shell);
+	// shlvl(shell);
 	sig();
 	while (1)
 	{

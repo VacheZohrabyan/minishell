@@ -6,57 +6,65 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 11:45:07 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/11 20:54:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-
 int heredoc_file_open_wr(t_redirect *redirect)
 {
-	char* buffer;
-	int pipefd[2];
-	pid_t pid = fork();
-	buffer = NULL;
-	if (pipe(pipefd) == -1)
-	return (-1);
-	if (pid < 0)
-	{
-		return 0;
-	}
-	else if (pid == 0)
-	{
-		close(pipefd[0]);
-		signal(SIGINT, handle_sigint);
-		// signal(SIGQUIT, SIG_DFL);
-		while (1)
-		{
-			buffer = readline(">");
-			if (!buffer)
-			{
-				printf("minishell: warning: here-document at line 75 delimited by end-of-file (wanted `ld')\n");
-				close(pipefd[1]);
-				exit (127);
-			}
-			printf("stex= %s\n", buffer);
-			if (!ft_strcmp(redirect->file_name, buffer))
-				break;
-			write(pipefd[1], buffer, ft_strlen(buffer));
-			write(pipefd[1], "\n", 1);
-			free(buffer);
-			buffer = NULL;
-		}
-	}
-	else
-	{
-		int status = 0;
-		signal(SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		signal(SIGINT, handle_sigher);
-		close(pipefd[1]);
-	}
-	redirect->fd = pipefd[0];
-	return (0);
+    char *buffer;
+    int pipefd[2];
+    pid_t pid;
+
+    if (pipe(pipefd) == -1)
+        return -1;
+
+    pid = fork();
+    if (pid < 0)
+        return -1;
+
+    if (pid == 0) // child
+    {
+        close(pipefd[0]);
+        signal(SIGINT, handle_sigint); // custom
+        while (1)
+        {
+            buffer = readline(">");
+            if (!buffer) // EOF (Ctrl+D)
+            {
+                fprintf(stderr, "minishell: warning: here-document delimited by EOF (wanted `%s`)\n",
+                        redirect->file_name);
+                close(pipefd[1]);
+                exit(0);
+            }
+            if (ft_strcmp(redirect->file_name, buffer) == 0) // delimiter match
+            {
+                free(buffer);
+                close(pipefd[1]);
+                exit(0);
+            }
+            write(pipefd[1], buffer, ft_strlen(buffer));
+            write(pipefd[1], "\n", 1);
+            free(buffer);
+        }
+    }
+    else // parent
+    {
+        int status;
+        close(pipefd[1]);
+        signal(SIGINT, SIG_IGN);
+        waitpid(pid, &status, 0);
+        signal(SIGINT, handle_sigher);
+
+        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+        {
+            close(pipefd[0]);
+            return -1;
+        }
+        redirect->fd = pipefd[0];
+    }
+    return 0;
 }
 
 int any(t_redirect* redirect)
@@ -90,8 +98,19 @@ int any(t_redirect* redirect)
 	return 0;
 }
 
+int absolute_path(char* cmd)
+{
+	if (cmd[0] == '/')
+		return 1;
+	else if (cmd[0] == '.' && cmd[1] == '/')
+		return 1;
+	return 0;
+}
+
 char *find_command_path(char *cmd)
 {
+	if (absolute_path(cmd))
+		return ft_strdup(cmd);
     char *path_env = getenv("PATH");
     if (!path_env)
         return NULL;
@@ -153,17 +172,19 @@ void command_proc(t_shell *shell, t_command* com)
 				return ;
 			}
 		}
-		if (check_builtin(shell, com))
+		if (!check_builtin(shell, com))
 		{
 			dup2(com->redirect->fd, STDOUT_FILENO);
 			close(com->redirect->fd);
 			destroy_one_waitpid(pid, status);
 			return;
 		}		
-		if (execv(str, com->argv) == -1)
+		else if (execv(str, com->argv) == -1)
 		{
 			free(str);
-			perror("Ex ecv faild");
+			write(2, "minishell: ", ft_strlen("minishell: "));
+			write(2, com->argv[0], ft_strlen(com->argv[0]));
+			write(2, ": command not found\n", ft_strlen(": command not found\n"));
 			return;
 		}
 		close(com->redirect->fd);
@@ -233,20 +254,22 @@ void command_many_proc(t_shell* shell, int count)
 				if (red->token_type != TOKEN_HEREDOC && any(red) == -1)
 				{
 					destroy_many_waitpid(pids, status, count);
-					return;
+					exit(0);
 				}
 				dup2(red->fd, red->to);
 				close(red->fd);
                 red = red->next;
             }
 			char* str = find_command_path(tmp->argv[0]);
-			if (check_builtin(shell, tmp)) {
+			if (!check_builtin(shell, tmp)) {
 				exit(EXIT_SUCCESS);
 			}
 			else if (execv(str, tmp->argv) == -1)
 			{
-				printf("command_many_proc execv faild\n");
-				return ;
+				write(2, "minishell: ", ft_strlen("minishell: "));
+				write(2, tmp->argv[0], ft_strlen(tmp->argv[0]));
+				write(2, ": command not found\n", ft_strlen(": command not found\n"));
+				exit(127);
 			}
 			free(str);
 		}
