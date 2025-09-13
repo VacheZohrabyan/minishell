@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 20:54:51 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 12:57:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,31 @@ char *find_command_path(char *cmd)
     return NULL;
 }
 
+void shlvl_increment(t_shell* shell, char *str)
+{
+	printf("ha\n");
+	size_t i = 0;
+	if (str[0] == '.' && str[1] == '/')
+	{
+		while (shell->env_list->buffer_env[i])
+			++i;
+		t_env_node* env = shell->env_list->buffer_env[i - 1];
+		while (env)
+		{
+			if (ft_strcmp(env->key, "SHLVL") == 0)
+			{
+				int value = ft_atoi(env->value);
+				++value;
+				free(env->value);
+				printf("value = %d\n", value);
+				env->value = ft_strdup(ft_itoa(value));
+				break;
+			}
+			env = env->next;
+		}
+	}
+}
+
 void command_proc(t_shell *shell, t_command* com)
 {
 	pid_t pid = fork();
@@ -172,19 +197,37 @@ void command_proc(t_shell *shell, t_command* com)
 				return ;
 			}
 		}
+		if (str[0] == '.' && str[1] == '/')
+		{
+			size_t i = 0;
+			while (shell->env_list->buffer_env[i])
+				++i;
+			t_env_node* env = shell->env_list->buffer_env[i];
+			while (env)
+			{
+				if (ft_strcmp(env->key, "SHLVL"))
+				{
+					int str = ft_atoi(env->value);
+					set_env_param(env, "SHLVL", ft_itoa(++str));
+					break;
+				}
+				env = env->next;
+			}
+		}
 		if (!check_builtin(shell, com))
 		{
 			dup2(com->redirect->fd, STDOUT_FILENO);
 			close(com->redirect->fd);
 			destroy_one_waitpid(pid, status);
 			return;
-		}		
+		}
 		else if (execv(str, com->argv) == -1)
 		{
 			free(str);
 			write(2, "minishell: ", ft_strlen("minishell: "));
 			write(2, com->argv[0], ft_strlen(com->argv[0]));
 			write(2, ": command not found\n", ft_strlen(": command not found\n"));
+			// destroy_one_waitpid(pid, status);
 			return;
 		}
 		close(com->redirect->fd);

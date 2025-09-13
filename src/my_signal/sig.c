@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 11:34:02 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/12 10:19:02 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void handle_sigher(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void handle_sigint(int sig)
@@ -26,6 +27,7 @@ void handle_sigint(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
+	
 	exit(130);
 }
 
@@ -35,6 +37,7 @@ void handle_sigcat(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 void	ctrlc(int sig)

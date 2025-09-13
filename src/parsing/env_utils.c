@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 15:35:10 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/02 12:33:04 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:01:35 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,17 @@ int	set_env_param(t_env *env, char *key, char *value)
 		return (0);
 	i = 0;
 	while (env->buffer_env[i])
+		++i;
+	node = env->buffer_env[--i];
+	while (node)
 	{
-		node = env->buffer_env[i];
-		while (node)
+		if (ft_strcmp(key, node->key) == 0)
 		{
-			if (ft_strcmp(key, node->key) == 0)
-			{
-				free(node->value);
-				node->value = value;
-				return (1);
-			}
-			node = node->next;
+			free(node->value);
+			node->value = ft_strdup(value);
+			return (1);
 		}
-		i++;
+		node = node->next;
 	}
 	return (0);
 }

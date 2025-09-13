@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/23 14:21:20 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/12 10:37:13 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 t_token			*lexical(t_shell *shell);
 t_token_type	check_token_type(char *buffer);
-t_token			*lexical_push_back(t_token *token, char *buffer);
+t_token			*lexical_push_back(t_shell* shell, char *buffer);
 
 int				syntax_checker(t_token *token);
 int				valid_syntax_pipe_or_and(t_token *token);

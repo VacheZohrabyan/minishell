@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 10:06:38 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/12 10:42:38 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,43 @@ t_token_type	check_token_type(char *buffer)
 		return (TOKEN_WORD);
 }
 
-t_token	*lexical_push_back(t_token *token, char *buffer)
+char* check_prompt(t_shell* shell, char* buffer)
+{
+	t_env_node* tmp = shell->env_list->buffer_env[0];
+	
+	if (buffer[0] == '$' && (buffer[1] == '"' || buffer[1] == '\''))
+		return ft_strdup(buffer + 1);
+	else if (buffer[0] == '$' && buffer[1] != '\0')
+	{
+		while (tmp)
+		{
+			if (ft_strcmp(tmp->key, buffer + 1) == 0)
+				return ft_strdup(tmp->value);
+			tmp = tmp->next;
+		}
+	}
+	else if (buffer[0] == '\'' && buffer[0] != '\0')
+		return ft_strdup(buffer);
+	return ft_strdup(buffer);
+}
+
+t_token	*lexical_push_back(t_shell* shell, char *buffer)
 {
 	t_token	*tmp;
 	t_token	*current;
-
-	current = token;
+	
+	current = shell->token;
 	tmp = (t_token *)malloc(sizeof(t_token));
 	if (!tmp)
 		return (NULL);
 	tmp->token_type = check_token_type(buffer);
-	tmp->cmd = ft_strdup(buffer);
+	tmp->cmd = check_prompt(shell, buffer);
 	tmp->next = NULL;
 	tmp->prev = NULL;
-	if (!token)
+	if (!shell->token)
 	{
-		token = tmp;
-		return (token);
+		shell->token = tmp;
+		return (shell->token);
 	}
 	else
 	{
@@ -53,7 +73,7 @@ t_token	*lexical_push_back(t_token *token, char *buffer)
 	}
 	current->next = tmp;
 	tmp->prev = current;
-	return (token);
+	return (shell->token);
 }
 // static char *str_join_free(char *s1, char *s2)
 // {
@@ -79,7 +99,7 @@ t_token	*lexical(t_shell *shell)
 	shell->token = NULL;
 	buffer = my_split(buf_malloc, ' ');
 	while (buffer[i])
-		shell->token = lexical_push_back(shell->token, buffer[i++]);
+		shell->token = lexical_push_back(shell, buffer[i++]);
 	split_free(&buffer);
 	free(buf_malloc);
 	if (!syntax_checker(shell->token))

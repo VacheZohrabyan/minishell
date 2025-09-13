@@ -6,13 +6,28 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 20:43:23 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 11:53:05 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/include.h"
 
-// void shlvl();
+void shlvl(t_shell* shell)
+{
+	t_env_node* env = shell->env_list->buffer_env[0];
+	
+	while (env)
+	{
+		if (ft_strcmp(env->key, "SHLVL") == 0)
+		{
+			free(env->value);
+			env->value = ft_strdup("1");
+			return;
+		}
+		env = env->next;
+	}
+	return ;
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -24,7 +39,7 @@ int	main(int argc, char **argv, char **env)
 	shell = init_shell(env);
 	init_shell_history(shell);
 	load_history(shell);
-	// shlvl(shell);
+	shlvl(shell);
 	sig();
 	while (1)
 	{
