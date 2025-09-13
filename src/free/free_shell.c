@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_pwd.c                                          :+:      :+:    :+:   */
+/*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/02 12:45:00 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 15:55:10 by zaleksan         ###   ########.fr       */
+/*   Created: 2025/09/13 17:37:11 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/09/13 17:39:50 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/builtin.h"
+#include "../../inc/include.h"
 
-int	cmd_pwd(void)
+void free_shell(t_shell *shell)
 {
-	char	cwd[PATH_MAX];
-
-	if (!getcwd(cwd, sizeof(cwd)))
-	{
-		perror("pwd");
-		return (0);
-	}
-	printf("builtyin %s\n", cwd);
-	return (1);
+	free_command(&(shell->command));
+	token_node_free(&shell->token);
+	free_env(&(shell->env_list));
+	free_env(&(shell->export_list));
+	free(shell->history);
+	free(shell);
 }

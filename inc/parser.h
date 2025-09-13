@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 11:26:43 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 11:25:02 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:11:31 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,10 @@ t_shell	*init_shell(char **env);
 int		init_env_node_value(t_env_node *tmp, char *env, size_t key_size);
 int		init_env_node_member(t_env_node *tmp, char *env);
 int		push_back(t_env_node **env_node, char *env);
-int		init_env_array(t_env **env_array);
-void	init_env(t_env **env_array, char **env);
-void	chlp1(t_token *tmp, int *open, int *flag_open);
-void	chlp2(t_token *tmp, int *close, int *flag_close, int *open);
-int		check(int open, int close, int flag_open, int flag_close);
-int		is_valid_close_breaket(t_token *tmp, int open);
+void	init_env(t_env **env, char **envp);
 char	*get_env_param(t_env *env, char *key, int flag);
 int		set_env_param(t_env *env, char *key, char *value);
-
-void	free_env_node(t_env_node *node);
-void	free_env(t_env *env);
+void	free_env(t_env **env);
 int		parsing(t_command **command, t_token *token);
 int		fill_argv_and_redirects(t_redirect **redirect, char **argv,
 			t_token *temp, t_token *token);

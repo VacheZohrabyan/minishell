@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/10 15:59:19 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:31:22 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,9 +205,10 @@ t_shell	*init_shell(char **env)
 	shell->token = NULL;
 	shell->buffer = NULL;
 	shell->env = env;
+	shell->command = NULL;
 	shell->history_fd = -1;
-	init_env(&shell->env_list, shell->env);
-	init_env(&shell->export_list, shell->env);
+	init_env(&(shell->env_list), shell->env);
+	init_env(&(shell->export_list), shell->env);
 	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME", 1),
 			"/.minishell_history");
 	return (shell);

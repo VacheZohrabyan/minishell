@@ -12,10 +12,10 @@ SRC     := \
 	$(SRCDIR)/parsing/parsing.c \
 	$(SRCDIR)/parsing/env_utils.c \
 	$(SRCDIR)/parsing/init_env.c \
-	$(SRCDIR)/free/env_node_free.c \
 	$(SRCDIR)/free/split_free.c \
 	$(SRCDIR)/free/token_node_free.c \
 	$(SRCDIR)/free/free_command.c \
+	$(SRCDIR)/free/free_shell.c \
 	$(SRCDIR)/my_signal/sig.c \
 	$(SRCDIR)/lexical/lexical.c \
 	$(SRCDIR)/lexical/lexical_util.c \
@@ -31,6 +31,7 @@ SRC     := \
 	$(SRCDIR)/builtin/cmd_cd.c \
 	$(SRCDIR)/builtin/cmd_echo.c \
 	$(SRCDIR)/builtin/cmd_export.c \
+	$(SRCDIR)/builtin/cmd_unset.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 	$(SRCDIR)/run.c \
 

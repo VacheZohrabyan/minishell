@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_export.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/09/13 16:44:20 by zaleksan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/builtin.h"
 
 void	swap_env_nodes(t_env_node *a, t_env_node *b)
@@ -78,43 +90,35 @@ char	*get_key(char *arg)
 	return (key);
 }
 
-int	add_or_update_env(t_env *env, char *arg)
+void	add_or_update_env(t_env *env, char *arg)
 {
 	size_t		i;
-	size_t		env_size;
 	t_env_node	*node;
 	char		*equal_sign;
+	char		*key;
 
 	i = 0;
-	env_size = 0;
 	if (!env || !arg)
-		return (-1);
+		return ;
 	equal_sign = ft_strchr(arg, '=');
-	while (env->buffer_env[i])
+	if (!equal_sign)
+		return ;
+	node = env->env_head;
+	while (node)
 	{
-		node = env->buffer_env[i];
-		while (node)
+		key = get_key(arg);
+		if (equal_sign && ft_strcmp(key, node->key) == 0)
 		{
-			if (equal_sign && ft_strncmp(arg, node->key, (equal_sign
-						- arg)) == 0)
-			{
-				free(node->value);
-				node->value = ft_strdup(equal_sign + 1);
-				node->is_equal = 1;
-				return (0);
-			}
-			else if (!equal_sign && ft_strcmp(arg, node->key) == 0)
-			{
-				node->is_equal = 0;
-				return (1);
-			}
-			node = node->next;
+			free(node->value);
+			node->value = ft_strdup(equal_sign + 1);
+			node->is_equal = 1;
+			free(key);
+			return ;
 		}
-		i++;
-		env_size++;
+		node = node->next;
 	}
-	push_back(&env->buffer_env[0], arg);
-	return (0);
+	free(key);
+	push_back(&env->env_head, arg);
 }
 
 int	cmd_export(t_shell *shell, t_command *command)
@@ -124,14 +128,13 @@ int	cmd_export(t_shell *shell, t_command *command)
 	i = 1;
 	if (!command->argv[1])
 	{
-		sort_export(shell->export_list->buffer_env[0]);
-		print_export(shell->export_list->buffer_env[0]);
+		sort_export(shell->export_list->env_head);
+		print_export(shell->export_list->env_head);
 		return (1);
 	}
 	while (command->argv[i])
 	{
-		if (add_or_update_env(shell->env_list, command->argv[i]) == -1)
-			return (1);
+		add_or_update_env(shell->env_list, command->argv[i]);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/04 19:18:05 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:40:48 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		cmd_env(t_env *env);
 int		cmd_cd(t_shell *shell, t_command *command);
 int		cmd_echo(t_command *command);
 int		cmd_export(t_shell *shell, t_command *command);
-
+int		cmd_unset(t_shell *shell, t_command *command);
 // cmd_history.c
 int		record_history(t_shell *shell, const char *line);
 int		init_shell_history(t_shell *shell);
@@ -35,4 +35,5 @@ int		load_history(t_shell *shell);
 int		cmd_history(t_shell *shell, t_command *command);
 
 int		check_builtin(t_shell *shell, t_command *command);
+void	free_shell(t_shell *shell);
 #endif

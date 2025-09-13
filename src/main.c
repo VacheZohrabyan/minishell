@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 11:53:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:40:07 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void shlvl(t_shell* shell)
 {
-	t_env_node* env = shell->env_list->buffer_env[0];
+	t_env_node* env = shell->env_list->env_head;
 	
 	while (env)
 	{
@@ -70,10 +70,6 @@ int	main(int argc, char **argv, char **env)
 		shell->buffer = NULL;
 	}
 	close_shell_history(shell);
-	free_command(&(shell->command));
-	token_node_free(&shell->token);
-	free_env(shell->env_list);
-	free(shell->history);
-	free(shell);
+	free_shell(shell);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 17:00:25 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:41:43 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ int	cmd_exit(t_shell *shell, t_command *command)
 	val = 0;
 	ft_putendl_fd("exit", 1);
 	if (!command->argv[1])
+	{
+		free_shell(shell);
 		exit(shell->env_list->exit_code);
+	}
 	if (command->argv[2] && !is_non_numeric(command->argv[1]))
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);

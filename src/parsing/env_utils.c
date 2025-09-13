@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 15:35:10 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 13:01:35 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:38:22 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,34 @@ char	*get_env_param(t_env *env, char *key, int flag)
 	if (!env || !key)
 		return (NULL);
 	i = 0;
-	while (env->buffer_env[i])
+	node = env->env_head;
+	while (node)
 	{
-		node = env->buffer_env[i];
-		while (node)
+		if (ft_strcmp(key, node->key) == 0)
 		{
-			if (ft_strcmp(key, node->key) == 0)
-			{
-				if (flag == 1)
-					return (node->value);
-				else
-					return (node->key);
-			}
-			node = node->next;
+			if (flag == 1)
+				return (node->value);
+			else
+				return (node->key);
 		}
-		i++;
+		node = node->next;
 	}
 	return (NULL);
 }
 
 int	set_env_param(t_env *env, char *key, char *value)
 {
-	size_t i;
 	t_env_node *node;
 
 	if (!env || !key)
 		return (0);
-	i = 0;
-	while (env->buffer_env[i])
-		++i;
-	node = env->buffer_env[--i];
+	node = env->env_head;
 	while (node)
 	{
 		if (ft_strcmp(key, node->key) == 0)
 		{
 			free(node->value);
-			node->value = ft_strdup(value);
+			node->value = value;
 			return (1);
 		}
 		node = node->next;

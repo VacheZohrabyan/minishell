@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:55:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/28 14:38:24 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:32:58 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	init_env_node_value(t_env_node *tmp, char *env, size_t key_size)
 	value_size = key_size + 1;
 	while (env[value_size])
 		value_size++;
-	tmp->value = (char *)malloc(sizeof(char) * (value_size - key_size));
+	tmp->value = (char *)malloc(sizeof(char) * (value_size - key_size) + 1);
 	if (!tmp->value)
 		return (-1);
 	while (env[key_size + 1 + i])
@@ -83,53 +83,47 @@ int	push_back(t_env_node **env_node, char *env)
 	return (0);
 }
 
-int	init_env_array(t_env **env_array)
+void	free_env(t_env **env)
 {
-	size_t	i;
+	t_env_node *curr;
+    t_env_node *next;
 
-	*env_array = (t_env *)malloc(sizeof(t_env));
-	if (!*env_array)
-		return (-1);
-	(*env_array)->exit_code = 0;
-	(*env_array)->buffer_env = (t_env_node **)malloc(sizeof(t_env_node *)
-			* MAX_SIZE_ENV);
-	if (!(*env_array)->buffer_env)
-	{
-		free(*env_array);
-		*env_array = NULL;
-		return (-1);
-	}
-	i = 0;
-	while (i < MAX_SIZE_ENV)
-		(*env_array)->buffer_env[i++] = NULL;
-	return (0);
+    if (!*env)
+        return;
+
+    curr = (*env)->env_head;
+    while (curr)
+    {
+        next = curr->next;
+        free(curr->key);
+        free(curr->value);
+        free(curr);
+        curr = next;
+    }
+	free(*env);
 }
 
-void	init_env(t_env **env_array, char **env)
+void init_env(t_env **env, char **envp)
 {
-	size_t		i;
-	t_env_node	*env_node;
+    size_t      i;
+    t_env_node  *env_node;
+	
+    *env = (t_env*)malloc(sizeof(t_env));
+    if (!*env)
+        return;
 
-	env_node = NULL;
-	i = 0;
-	while (env[i])
-	{
-		if (push_back(&env_node, env[i++]) == -1)
-			free_env(*env_array);
-	}
-	if (!*env_array)
-	{
-		init_env_array(env_array);
-		if (!*env_array)
-			return ;
-		(*env_array)->buffer_env[0] = env_node;
-		return ;
-	}
-	i = 0;
-	while ((*env_array)->buffer_env[i])
-		++i;
-	if (i < MAX_SIZE_ENV)
-		(*env_array)->buffer_env[i] = env_node;
-	else
-		free_env(*env_array);
+    env_node = NULL;
+    i = 0;
+    while (envp[i])
+    {
+        if (push_back(&env_node, envp[i]) == -1)
+        {
+			free_env(env);	
+            return;
+        }
+        i++;
+    }
+
+    (*env)->env_head = env_node;
+    (*env)->exit_code = 0;
 }

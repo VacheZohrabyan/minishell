@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/12 10:42:38 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:30:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_token_type	check_token_type(char *buffer)
 
 char* check_prompt(t_shell* shell, char* buffer)
 {
-	t_env_node* tmp = shell->env_list->buffer_env[0];
+	t_env_node* tmp = shell->env_list->env_head;
 	
 	if (buffer[0] == '$' && (buffer[1] == '"' || buffer[1] == '\''))
 		return ft_strdup(buffer + 1);
