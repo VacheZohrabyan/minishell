@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 17:45:00 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/15 20:05:50 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	absolute_path(char *cmd)
 	return (0);
 }
 
-char	*find_command_path(char *cmd)
+char	*find_command_path(t_env *env, char *cmd)
 {
 	char	*path_env;
 	char	**paths;
@@ -121,7 +121,7 @@ char	*find_command_path(char *cmd)
 
 	if (absolute_path(cmd))
 		return (ft_strdup(cmd));
-	path_env = getenv("PATH");
+	path_env = get_env_param(env, "PATH", 1);
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':');
@@ -197,7 +197,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	else if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
-		str = find_command_path(com->argv[0]);
+		str = find_command_path(shell->env_list, com->argv[0]);
 		if (com->redirect)
 		{
 			if (any(com->redirect) == -1)
@@ -318,7 +318,7 @@ void	command_many_proc(t_shell *shell, int count)
 				close(red->fd);
 				red = red->next;
 			}
-			str = find_command_path(tmp->argv[0]);
+			str = find_command_path(shell->env_list, tmp->argv[0]);
 			if (execv(str, tmp->argv) == -1)
 			{
 				write(2, "minishell: ", ft_strlen("minishell: "));
