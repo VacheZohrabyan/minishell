@@ -34,6 +34,13 @@ int		history_c(t_shell *shell);
 int		load_history(t_shell *shell);
 int		cmd_history(t_shell *shell, t_command *command);
 
+//export
+int is_valid_identifier(const char *str);
+char	*get_key(char *arg);
+void	print_export(t_env_node *head);
+void	sort_export(t_env_node *head);
+void	swap_env_nodes(t_env_node *a, t_env_node *b);
+
 int		check_builtin(t_shell *shell, t_command *command);
 void	free_shell(t_shell *shell);
 #endif

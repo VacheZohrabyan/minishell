@@ -21,13 +21,13 @@ int	init_env_node_value(t_env_node *tmp, char *env, size_t key_size)
 	value_size = key_size + 1;
 	while (env[value_size])
 		value_size++;
-	tmp->value = (char *)malloc(sizeof(char) * (value_size - key_size) + 1);
+	tmp->value = malloc(value_size - key_size);
 	if (!tmp->value)
 		return (-1);
 	while (env[key_size + 1 + i])
 	{
 		tmp->value[i] = env[key_size + 1 + i];
-		++i;
+		i++;
 	}
 	tmp->value[i] = '\0';
 	tmp->is_equal = 1;
@@ -38,26 +38,30 @@ int	init_env_node_member(t_env_node *tmp, char *env)
 {
 	size_t	key_size;
 	size_t	i;
+	char	*equal_sign;
 
 	key_size = 0;
 	i = 0;
-	if (*env == '\0')
-	{
-		tmp->is_equal = 0;
-		return (0);
-	}
+	equal_sign = ft_strchr(env, '=');
 	while (env[key_size] && env[key_size] != '=')
-		++key_size;
-	tmp->key = (char *)malloc(sizeof(char) * (key_size + 1));
+		key_size++;
+	tmp->key = malloc(key_size + 1);
 	if (!tmp->key)
 		return (-1);
 	while (i < key_size)
 	{
 		tmp->key[i] = env[i];
-		++i;
+		i++;
 	}
 	tmp->key[i] = '\0';
-	return (init_env_node_value(tmp, env, key_size));
+	if (equal_sign)
+		return (init_env_node_value(tmp, env, key_size));
+	else
+	{
+		tmp->value = NULL;
+		tmp->is_equal = 0;
+		return (0);
+	}
 }
 
 int	push_back(t_env_node **env_node, char *env)

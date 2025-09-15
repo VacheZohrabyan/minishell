@@ -14,10 +14,8 @@
 
 int	cmd_env(t_env *env)
 {
-	size_t		i;
 	t_env_node	*current;
 
-	i = 0;
 	if (!env)
 		return (0);
 	current = env->env_head;

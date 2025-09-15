@@ -14,12 +14,10 @@
 
 char	*get_env_param(t_env *env, char *key, int flag)
 {
-	size_t		i;
 	t_env_node	*node;
 
 	if (!env || !key)
 		return (NULL);
-	i = 0;
 	node = env->env_head;
 	while (node)
 	{

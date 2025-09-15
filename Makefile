@@ -1,6 +1,6 @@
 NAME    := minishell
 CC      := cc
-CFLAGS  := -g3 -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS  := -Wall -Wextra -Werror #-fsanitize=address
 
 SRCDIR  := src
 OBJDIR  := obj
@@ -32,6 +32,7 @@ SRC     := \
 	$(SRCDIR)/builtin/cmd_cd.c \
 	$(SRCDIR)/builtin/cmd_echo.c \
 	$(SRCDIR)/builtin/cmd_export.c \
+	$(SRCDIR)/builtin/export_utils.c \
 	$(SRCDIR)/builtin/cmd_unset.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 	$(SRCDIR)/run.c \
