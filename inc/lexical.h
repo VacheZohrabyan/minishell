@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/12 10:37:13 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:48:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int				dispatch_special_handler(const char *buffer, char *result,
 char			*add_spaces_around_specials(const char *buffer);
 
 void			token_node_free(t_token **token);
-
+char **my_split(const char *s, t_env_node* env, char delim);
 // from free folder
 void			split_free(char ***buffer);
 

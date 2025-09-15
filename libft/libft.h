@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:42:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/09 16:36:31 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:44:20 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
 char				**ft_split(char const *s, char c);
-
-char				**my_split(char const *s, char c);
 
 t_list				*ft_lstnew(void *content);
 

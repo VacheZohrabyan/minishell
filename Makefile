@@ -18,6 +18,7 @@ SRC     := \
 	$(SRCDIR)/free/free_shell.c \
 	$(SRCDIR)/my_signal/sig.c \
 	$(SRCDIR)/lexical/lexical.c \
+	$(SRCDIR)/lexical/my_split.c \
 	$(SRCDIR)/lexical/lexical_util.c \
 	$(SRCDIR)/lexical/hendle_token.c \
 	$(SRCDIR)/parsing/syntax_checker.c \
