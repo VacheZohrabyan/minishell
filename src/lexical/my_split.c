@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/15 18:01:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/15 18:52:56 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,76 +120,102 @@ static char *extract_word(const char **ps, char delim)
 	return (acc);
 }
 
-char* find_env(char* res, t_env_node* env, int i)
-{
-    t_env_node* tmp = env;
-	char* temp = NULL;
-	char* word = NULL;
-	size_t j = 0;
-	int flag = 0;
-	int count;
-    while (tmp)
-    {
-		if (!flag)
-		{
-			while (temp[i] && temp[i] == ' ')
-				++i;
-			while (temp[j] && temp[j] != ' ')
-				++j;
-			word = (char*)malloc(sizeof(char) * (j + 1));
-			while (temp[count] && temp[count])
-			{
-				word[count] = temp[count];
-				count++;	
-			}
-			flag = 1;
-		}
-		if (ft_strcmp(tmp->key, word) == 0)
-		{
+// char* find_env(char* res, t_env_node* env, int i)
+// {
+//     t_env_node* tmp = env;
+// 	char* temp = res;
+// 	char* word = NULL;
+// 	// size_t j = 0;
+// 	int flag = 0;
+// 	int count;
+//     while (tmp)
+//     {
+// 		// if (!flag)
+// 		// {
+// 		// 	while (temp[i] && temp[i] == ' ')
+// 		// 		++i;
+// 		// 	while (temp[j] && temp[j] != ' ')
+// 		// 		++j;
+// 		// 	word = (char*)malloc(sizeof(char) * (j + 1));
+// 		// 	while (temp[count] && temp[count])
+// 		// 	{
+// 		// 		word[count] = temp[count];
+// 		// 		count++;	
+// 		// 	}
+// 		// 	if (word[0] != '$')
+// 		// 		temp = ft_strjoin_gnl(temp, word);
+// 		// 	flag = 1;
+// 		// }
+// 		if (ft_strcmp(tmp->key, word) == 0)
+// 		{
 			
-			if (i > 1)
-			{
-				while (i-- != 0)
-					temp = ft_strjoin_gnl(temp, " ");
-			}
-			temp = ft_strjoin_gnl(temp, tmp->value);
-			flag = 0;
-			free(word);
-			word = NULL;
-			count = 0;	
-		}
-		tmp = tmp->next;
+// 			if (i > 1)
+// 			{
+// 				while (i-- != 0)
+// 					temp = ft_strjoin_gnl(temp, " ");
+// 			}
+// 			temp = ft_strjoin_gnl(temp, tmp->value);
+// 			flag = 0;
+// 			free(word);
+// 			word = NULL;
+// 			count = 0;	
+// 		}
+// 		tmp = tmp->next;
+//     }
+// 	return ft_strdup("");
+// }
+
+char *find_env(char *res, t_env_node *env)
+{
+    char    *out = NULL;
+    char    *name;
+    char    *val;
+    int     i = 0;
+    int     start;
+
+    while (res[i])
+    {
+        if (res[i] == '$')
+        {
+            i++;
+            start = i;
+            while (res[i] && (ft_isalnum(res[i])))
+                i++;
+            name = ft_substr(res, start, i - start);
+			printf("name = %s\n", name);
+            val = NULL;
+            t_env_node *tmp = env;
+            while (tmp)
+            {
+                if (ft_strcmp(tmp->key, name) == 0)
+                {
+                    val = tmp->value;
+                    break;
+                }
+                tmp = tmp->next;
+            }
+            if (!val)
+                val = "";
+            out = append_and_free(out, ft_strdup(val));
+            free(name);
+        }
+        else
+        {
+            char c[2] = {res[i], '\0'};
+            out = append_and_free(out, ft_strdup(c));
+            i++;
+        }
     }
-	return ft_strdup("");
+    return (out ? out : ft_strdup(""));
 }
+
 
 char* extract_quotes(char* res, t_env_node* env)
 {
-    int i = 1;
+    // int i = 1;
     (void)env;
     if (res[0] == '"')
-    {
-		while (res[i] && res[i] == ' ')
-			++i;
-		char* tmp = res + i;
-        if (res[i] == '$' && res[i + 1] != ' ')
-        {
-			tmp[ft_strlen(tmp) - 1] = '\0';
-            tmp = find_env(tmp + 1, env, i);
-			free(res);
-			res = NULL;
-            return tmp;
-        }
-		else 
-		{
-			tmp = res + 1;
-			tmp[ft_strlen(tmp) - 1] = '\0';
-			tmp = ft_strdup(tmp);
-			free(res);
-			res = NULL;
-			return tmp;
-		}
-    }
+		return find_env(res, env);
 	if (res[0] == '$')
 	{
 		if (res[1] == '\'' || res[1] == '"')
