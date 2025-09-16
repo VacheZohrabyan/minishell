@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/15 20:05:50 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:32:24 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,24 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	pid = fork();
 	if (pid < 0)
 		return (-1);
-	if (pid == 0) // child
+	if (pid == 0)
 	{
 		close(pipefd[0]);
-		signal(SIGINT, handle_sigint); // custom
+		signal(SIGINT, handle_sigint);
 		while (1)
 		{
 			buffer = readline(">");
-			if (!buffer) // EOF (Ctrl+D)
+			if (!buffer)
 			{
-				fprintf(stderr,
-					"minishell: warning: here-document delimited by EOF (wanted `%s`)\n",
-					redirect->file_name);
+				fprintf(stderr, "minishell: warning: here-document delimited by EOF (wanted `%s`)\n", redirect->file_name);
 				close(pipefd[1]);
 				exit(0);
 			}
-			if (ft_strcmp(redirect->file_name, buffer) == 0) // delimiter match
+			if (ft_strcmp(redirect->file_name, buffer) == 0)
 			{
 				free(buffer);
 				close(pipefd[1]);
+				g_exit_status = 0;
 				exit(0);
 			}
 			write(pipefd[1], buffer, ft_strlen(buffer));
@@ -50,11 +49,12 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 			free(buffer);
 		}
 	}
-	else // parent
+	else
 	{
 		close(pipefd[1]);
 		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		g_exit_status = status % 255;
 		signal(SIGINT, handle_sigher);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
@@ -63,7 +63,7 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 		}
 		redirect->fd = pipefd[0];
 	}
-	return (0);
+	return 0;
 }
 
 int	any(t_redirect *redirect)
@@ -77,6 +77,7 @@ int	any(t_redirect *redirect)
 		{
 			if ((tmp->fd = open(tmp->file_name, O_RDONLY)) == -1)
 			{
+				write (2, "minishell: ", ft_strlen("minishell: "));
 				perror(tmp->file_name);
 				return (-1);
 			}
@@ -153,31 +154,6 @@ char	*find_command_path(t_env *env, char *cmd)
 	return (NULL);
 }
 
-// void shlvl_increment(t_shell* shell, char *str)
-// {
-// 	printf("ha\n");
-// 	size_t i = 0;
-// 	if (str[0] == '.' && str[1] == '/')
-// 	{
-// 		while (shell->env_list->buffer_env[i])
-// 			++i;
-// 		t_env_node* env = shell->env_list->buffer_env[i - 1];
-// 		while (env)
-// 		{
-// 			if (ft_strcmp(env->key, "SHLVL") == 0)
-// 			{
-// 				int value = ft_atoi(env->value);
-// 				++value;
-// 				free(env->value);
-// 				printf("value = %d\n", value);
-// 				env->value = ft_strdup(ft_itoa(value));
-// 				break ;
-// 			}
-// 			env = env->next;
-// 		}
-// 	}
-// }
-
 void	command_proc(t_shell *shell, t_command *com)
 {
 	pid_t	pid;
@@ -201,45 +177,33 @@ void	command_proc(t_shell *shell, t_command *com)
 		if (com->redirect)
 		{
 			if (any(com->redirect) == -1)
+				exit(1); /* обязательно завершиться */
+			t_redirect *r = com->redirect;
+			while (r)
 			{
-				destroy_one_waitpid(pid, status);
-				return ;
+				if (r->fd >= 0)
+				{
+					if (dup2(r->fd, r->to) == -1)
+						perror("dup2");
+					close(r->fd);
+				}
+				r = r->next;
 			}
 		}
-		// if (str[0] == '.' && str[1] == '/')
-		// {
-		// 	size_t i = 0;
-		// 	while (shell->env_list->buffer_env[i])
-		// 		++i;
-		// 	t_env_node* env = shell->env_list->buffer_env[i];
-		// 	while (env)
-		// 	{
-		// 		if (ft_strcmp(env->key, "SHLVL"))
-		// 		{
-		// 			int str = ft_atoi(env->value);
-		// 			set_env_param(shell->env_list, "SHLVL", ft_itoa(++str));
-		// 			break ;
-		// 		}
-		// 		env = env->next;
-		// 	}
-		// }
+
 		if (execv(str, com->argv) == -1)
 		{
 			free(str);
 			write(2, "minishell: ", ft_strlen("minishell: "));
 			write(2, com->argv[0], ft_strlen(com->argv[0]));
-			write(2, ": command not found\n",
-				ft_strlen(": command not found\n"));
-			// destroy_one_waitpid(pid, status);
+			write(2, ": command not found\n", ft_strlen(": command not found\n"));
 			return ;
 		}
 		close(com->redirect->fd);
 		free(str);
 	}
 	else
-	{
 		destroy_one_waitpid(pid, status);
-	}
 }
 
 void	command_many_proc(t_shell *shell, int count)
@@ -284,10 +248,8 @@ void	command_many_proc(t_shell *shell, int count)
 	i = 0;
 	while (tmp && i < count)
 	{
-		if (check_builtin(shell, tmp))
-		{
+		if (count == 1 && check_builtin(shell, tmp))
 			return;
-		}
 		pid = fork();
 		if (pid < 0)
 			return ;
@@ -307,16 +269,21 @@ void	command_many_proc(t_shell *shell, int count)
 				++j;
 			}
 			red = tmp->redirect;
-			while (red)
+			if (red)
 			{
-				if (red->token_type != TOKEN_HEREDOC && any(red) == -1)
+				if (any(red) == -1)
+					exit(1);
+				t_redirect *r = red;
+				while (r)
 				{
-					destroy_many_waitpid(pids, status, count);
-					exit(0);
+					if (r->fd >= 0)
+					{
+						if (dup2(r->fd, r->to) == -1)
+							perror("dup2");
+						close(r->fd);
+					}
+					r = r->next;
 				}
-				dup2(red->fd, red->to);
-				close(red->fd);
-				red = red->next;
 			}
 			str = find_command_path(shell->env_list, tmp->argv[0]);
 			if (execv(str, tmp->argv) == -1)
@@ -352,7 +319,6 @@ int	gnacinq(t_shell *shell)
 {
 	t_command *tmp = shell->command;
 	int count = 0;
-
 	t_command *cmd = tmp;
 	while (cmd)
 	{
@@ -362,7 +328,7 @@ int	gnacinq(t_shell *shell)
 			if (red->token_type == TOKEN_HEREDOC)
 			{
 				if (heredoc_file_open_wr(red) == -1)
-					return -1;
+					exit(0);
 				else if (shell->env_list->exit_code)
 					return -1;
 			}
@@ -371,19 +337,16 @@ int	gnacinq(t_shell *shell)
 		cmd = cmd->next;
 	}
 
-	if (!shell->env_list->exit_code)
+	cmd = tmp;
+	while (cmd)
 	{
-		cmd = tmp;
-		while (cmd)
-		{
-			count++;
-			cmd = cmd->next;
-		}
-
-		if (count == 1)
-			command_proc(shell, shell->command);
-		else if (count > 1)
-			command_many_proc(shell, count);
+		count++;
+		cmd = cmd->next;
 	}
+
+	if (count == 1)
+		command_proc(shell, shell->command);
+	else if (count > 1)
+		command_many_proc(shell, count);
 	return 0;
 }

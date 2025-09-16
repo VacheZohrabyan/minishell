@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 17:40:07 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:13:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/include.h"
+
+int g_exit_status = 0;
 
 void shlvl(t_shell* shell)
 {

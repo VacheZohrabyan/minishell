@@ -6,18 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/15 18:52:56 by vzohraby         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   my_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/10 23:50:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:06:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,118 +109,106 @@ static char *extract_word(const char **ps, char delim)
 	return (acc);
 }
 
-// char* find_env(char* res, t_env_node* env, int i)
-// {
-//     t_env_node* tmp = env;
-// 	char* temp = res;
-// 	char* word = NULL;
-// 	// size_t j = 0;
-// 	int flag = 0;
-// 	int count;
-//     while (tmp)
-//     {
-// 		// if (!flag)
-// 		// {
-// 		// 	while (temp[i] && temp[i] == ' ')
-// 		// 		++i;
-// 		// 	while (temp[j] && temp[j] != ' ')
-// 		// 		++j;
-// 		// 	word = (char*)malloc(sizeof(char) * (j + 1));
-// 		// 	while (temp[count] && temp[count])
-// 		// 	{
-// 		// 		word[count] = temp[count];
-// 		// 		count++;	
-// 		// 	}
-// 		// 	if (word[0] != '$')
-// 		// 		temp = ft_strjoin_gnl(temp, word);
-// 		// 	flag = 1;
-// 		// }
-// 		if (ft_strcmp(tmp->key, word) == 0)
-// 		{
-			
-// 			if (i > 1)
-// 			{
-// 				while (i-- != 0)
-// 					temp = ft_strjoin_gnl(temp, " ");
-// 			}
-// 			temp = ft_strjoin_gnl(temp, tmp->value);
-// 			flag = 0;
-// 			free(word);
-// 			word = NULL;
-// 			count = 0;	
-// 		}
-// 		tmp = tmp->next;
-//     }
-// 	return ft_strdup("");
-// }
+char *remove_quotes(const char *str)
+{
+    char *out = ft_strdup("");
+    int i = 0;
+
+    while (str[i])
+    {
+        if (str[i] == '\'' || str[i] == '"')
+        {
+            char q = str[i++];
+            while (str[i] && str[i] != q)
+            {
+                char c[2] = {str[i], '\0'};
+                out = ft_strjoin_gnl(out, ft_strdup(c));
+                i++;
+            }
+            if (str[i] == q)
+                i++;
+        }
+        else
+        {
+            char c[2] = {str[i], '\0'};
+            out = ft_strjoin_gnl(out, ft_strdup(c));
+            i++;
+        }
+    }
+    return out;
+}
 
 char *find_env(char *res, t_env_node *env)
 {
-    char    *out = NULL;
-    char    *name;
-    char    *val;
-    int     i = 0;
-    int     start;
+    t_env_node* tmp = env;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, res) == 0)
+		{
+			free(res);
+			res = NULL;
+			return ft_strdup(tmp->value);
+		}
+		tmp = tmp->next;
+	}
+	free(res);
+	res = NULL;
+	return ft_strdup("");
+}
 
-    while (res[i])
+char *expand_env(const char *str, t_env_node *env)
+{
+    char *out = ft_strdup("");
+    int i = 0;
+
+    while (str[i])
     {
-        if (res[i] == '$')
+        if (str[i] == '$')
         {
             i++;
-            start = i;
-            while (res[i] && (ft_isalnum(res[i])))
+            int start = i;
+            while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
                 i++;
-            name = ft_substr(res, start, i - start);
-			printf("name = %s\n", name);
-            val = NULL;
-            t_env_node *tmp = env;
-            while (tmp)
-            {
-                if (ft_strcmp(tmp->key, name) == 0)
-                {
-                    val = tmp->value;
-                    break;
-                }
-                tmp = tmp->next;
-            }
-            if (!val)
-                val = "";
-            out = append_and_free(out, ft_strdup(val));
+            char *name = ft_substr(str, start, i - start);
+            char *val = find_env(ft_strdup(name), env);
+            out = ft_strjoin_gnl(out, val);
             free(name);
         }
         else
         {
-            char c[2] = {res[i], '\0'};
-            out = append_and_free(out, ft_strdup(c));
+            char c[2] = {str[i], '\0'};
+            out = ft_strjoin_gnl(out, ft_strdup(c));
             i++;
         }
     }
-    return (out ? out : ft_strdup(""));
+    return out;
 }
 
-
-char* extract_quotes(char* res, t_env_node* env)
+char *extract_quotes(char *res, t_env_node *env)
 {
-    // int i = 1;
-    (void)env;
-    if (res[0] == '"')
-		return find_env(res, env);
-	if (res[0] == '$')
-	{
-		if (res[1] == '\'' || res[1] == '"')
-		{
-			char* tmp = res + 2;
-			printf("res = %s\n", tmp);
-			tmp[ft_strlen(tmp) - 1] = '\0';
-			tmp = ft_strdup(tmp);
-			free(res);
-			res = NULL;
-			return tmp;
-		}
-	}        
-	return res;
-}
+    size_t len = ft_strlen(res);
 
+    if (len >= 2 && res[0] == '"' && res[len - 1] == '"')
+    {
+        char *inside = ft_substr(res, 1, len - 2);
+        char *expanded = expand_env(inside, env);
+        free(inside);
+        free(res);
+        return remove_quotes(expanded);
+    }
+    else if (len >= 2 && res[0] == '\'' && res[len - 1] == '\'')
+    {
+        char *inside = ft_substr(res, 1, len - 2);
+        free(res);
+        return remove_quotes(inside);
+    }
+    else
+    {
+        char *expanded = expand_env(res, env);
+        free(res);
+        return remove_quotes(expanded);
+    }
+}
 char **my_split(const char *s, t_env_node* env, char delim)
 {
 	char **res;

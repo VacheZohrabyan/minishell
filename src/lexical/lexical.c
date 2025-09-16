@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/15 17:49:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:10:04 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,6 @@ t_token	*lexical_push_back(t_shell* shell, char *buffer)
 	tmp->prev = current;
 	return (shell->token);
 }
-// static char *str_join_free(char *s1, char *s2)
-// {
-//     char *res;
-//     size_t len = strlen(s1) + strlen(s2);
-
-//     res = malloc(len + 1);
-//     if (!res)
-//         return NULL;
-//     strcpy(res, s1);
-//     strcat(res, s2);
-//     free(s1);
-//     return res;
-// }
 
 t_token	*lexical(t_shell *shell)
 {
