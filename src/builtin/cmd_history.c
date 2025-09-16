@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/02 12:54:03 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 19:56:18 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	load_history(t_shell *shell)
 int	init_shell_history(t_shell *shell)
 {
 	if (!shell || !shell->history)
-		return (-1);
+		exit(1);
 	shell->history_fd = open(shell->history, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (shell->history_fd == -1)
 	{

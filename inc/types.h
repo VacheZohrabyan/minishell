@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 16:19:51 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:28:30 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_env_node
 typedef struct s_env
 {
 	t_env_node			*env_head;
-	int					exit_code;
 }						t_env;
 
 typedef struct s_redirect

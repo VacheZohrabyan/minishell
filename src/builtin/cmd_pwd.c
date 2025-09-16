@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:45:00 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 15:55:10 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:55:03 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	cmd_pwd(void)
 		perror("pwd");
 		return (0);
 	}
-	printf("builtyin %s\n", cwd);
+	printf("%s\n", cwd);
 	return (1);
 }

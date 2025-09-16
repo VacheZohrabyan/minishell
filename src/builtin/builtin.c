@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 16:06:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:55:13 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ int	check_builtin(t_shell *shell, t_command *command)
 {
 	if (!command->argv)
 		return (0);
+	if (ft_strcmp(command->argv[0], "$?") == 0)
+	{
+		write(2, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
+		write(2, "command not found\n", 19);
+		return (1);
+	}
 	else if (!ft_strcmp("pwd", command->argv[0]))
 		return (cmd_pwd(), 1);
 	else if (!ft_strcmp("exit", command->argv[0]))

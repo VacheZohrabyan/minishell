@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 17:50:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:05:54 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-char	**init_argv(t_redirect **redirect, t_token *end,
-	t_token *start, int *flag)
+char	**init_argv(t_redirect **redirect, t_token *end, t_token *start,
+		int *flag)
 {
 	char	**argv;
 	int		count;
@@ -75,16 +75,17 @@ int	parsing(t_command **command, t_token *token)
 			if (push_back_command(command, start, tmp) == -1)
 			{
 				free_command(command);
-				printf("-21\n");
+				g_exit_status = 1;
 				return (-1);
 			}
 			start = tmp->next;
 		}
 		tmp = tmp->next;
 	}
-	if (start)
+	if (start && push_back_command(command, start, NULL) == -1)
 	{
-		push_back_command(command, start, NULL);
+		g_exit_status = 1;
+		return (-1);
 	}
 	return (0);
 }

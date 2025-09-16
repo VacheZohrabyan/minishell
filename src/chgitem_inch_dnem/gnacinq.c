@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 10:32:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:54:01 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	char	*buffer;
 	int		pipefd[2];
 	pid_t	pid;
-		int status;
+	int		status;
 
 	if (pipe(pipefd) == -1)
 		return (-1);
@@ -30,10 +30,12 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 		signal(SIGINT, handle_sigint);
 		while (1)
 		{
-			buffer = readline(">");
+			buffer = readline("> ");
 			if (!buffer)
 			{
-				fprintf(stderr, "minishell: warning: here-document delimited by EOF (wanted `%s`)\n", redirect->file_name);
+				fprintf(stderr,
+					"minishell: warning: here-document delimited by EOF (wanted `%s`)\n",
+					redirect->file_name);
 				close(pipefd[1]);
 				exit(0);
 			}
@@ -58,12 +60,13 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 		signal(SIGINT, handle_sigher);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
+			g_exit_status = WEXITSTATUS(status);
 			close(pipefd[0]);
 			return (-1);
 		}
 		redirect->fd = pipefd[0];
 	}
-	return 0;
+	return (0);
 }
 
 int	any(t_redirect *redirect)
@@ -73,28 +76,50 @@ int	any(t_redirect *redirect)
 	tmp = redirect;
 	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_REDIRECT_IN) // <
+		if (tmp->token_type == TOKEN_REDIRECT_IN)
 		{
-			if ((tmp->fd = open(tmp->file_name, O_RDONLY)) == -1)
+			tmp->fd = open(tmp->file_name, O_RDONLY);
+			if (tmp->fd == -1)
 			{
-				write (2, "minishell: ", ft_strlen("minishell: "));
+				write(2, "minishell: ", 11);
 				perror(tmp->file_name);
+				g_exit_status = 1;
 				return (-1);
 			}
 			tmp->to = STDIN_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_OUT) // >
+		else if (tmp->token_type == TOKEN_REDIRECT_OUT)
 		{
-			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC,
-						0664)) < 0)
+			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			if (tmp->fd == -1)
+			{
+				if (access(tmp->file_name, W_OK) == -1)
+					write(2, "minishell: Permission denied\n", 29);
+				else
+				{
+					write(2, "minishell: ", 11);
+					perror(tmp->file_name);
+				}
+				g_exit_status = 1;
 				return (-1);
+			}
 			tmp->to = STDOUT_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_APPEND) // >>
+		else if (tmp->token_type == TOKEN_REDIRECT_APPEND)
 		{
-			if ((tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND,
-						0644)) < 0)
+			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (tmp->fd == -1)
+			{
+				if (access(tmp->file_name, W_OK) == -1)
+					write(2, "minishell: Permission denied\n", 29);
+				else
+				{
+					write(2, "minishell: ", 11);
+					perror(tmp->file_name);
+				}
+				g_exit_status = 1;
 				return (-1);
+			}
 			tmp->to = STDOUT_FILENO;
 		}
 		tmp = tmp->next;
@@ -156,9 +181,10 @@ char	*find_command_path(t_env *env, char *cmd)
 
 void	command_proc(t_shell *shell, t_command *com)
 {
-	pid_t	pid;
-	int		status;
-	char	*str;
+	pid_t		pid;
+	int			status;
+	char		*str;
+	t_redirect	*r;
 
 	if (check_builtin(shell, com))
 		return ;
@@ -178,7 +204,7 @@ void	command_proc(t_shell *shell, t_command *com)
 		{
 			if (any(com->redirect) == -1)
 				exit(1); /* обязательно завершиться */
-			t_redirect *r = com->redirect;
+			r = com->redirect;
 			while (r)
 			{
 				if (r->fd >= 0)
@@ -190,13 +216,13 @@ void	command_proc(t_shell *shell, t_command *com)
 				r = r->next;
 			}
 		}
-
 		if (execv(str, com->argv) == -1)
 		{
 			free(str);
 			write(2, "minishell: ", ft_strlen("minishell: "));
 			write(2, com->argv[0], ft_strlen(com->argv[0]));
-			write(2, ": command not found\n", ft_strlen(": command not found\n"));
+			write(2, ": command not found\n",
+				ft_strlen(": command not found\n"));
 			return ;
 		}
 		close(com->redirect->fd);
@@ -217,6 +243,7 @@ void	command_many_proc(t_shell *shell, int count)
 	t_redirect	*red;
 	char		*str;
 	int			j;
+	t_redirect	*r;
 
 	tmp = shell->command;
 	status = 0;
@@ -249,7 +276,7 @@ void	command_many_proc(t_shell *shell, int count)
 	while (tmp && i < count)
 	{
 		if (count == 1 && check_builtin(shell, tmp))
-			return;
+			return ;
 		pid = fork();
 		if (pid < 0)
 			return ;
@@ -273,7 +300,7 @@ void	command_many_proc(t_shell *shell, int count)
 			{
 				if (any(red) == -1)
 					exit(1);
-				t_redirect *r = red;
+				r = red;
 				while (r)
 				{
 					if (r->fd >= 0)
@@ -328,9 +355,7 @@ int	gnacinq(t_shell *shell)
 			if (red->token_type == TOKEN_HEREDOC)
 			{
 				if (heredoc_file_open_wr(red) == -1)
-					exit(0);
-				else if (shell->env_list->exit_code)
-					return -1;
+					return (0);
 			}
 			red = red->next;
 		}
@@ -348,5 +373,5 @@ int	gnacinq(t_shell *shell)
 		command_proc(shell, shell->command);
 	else if (count > 1)
 		command_many_proc(shell, count);
-	return 0;
+	return (0);
 }

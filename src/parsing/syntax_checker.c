@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:35:11 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 17:57:53 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:02:46 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	syntax_checker(t_token *token)
 	if (!valid_syntax_pipe_or_and(token))
 	{
 		token_node_free(&token);
+		g_exit_status = 2;
 		return (0);
 	}
 	return (1);

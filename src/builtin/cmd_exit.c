@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 17:41:43 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:40:54 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	check_argument(t_command *command, char *err_msg)
 		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(command->argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		// free all here
+		g_exit_status = 2;
 		return (0);
 	}
 	return (1);
@@ -79,24 +79,21 @@ int	check_argument(t_command *command, char *err_msg)
 
 int	cmd_exit(t_shell *shell, t_command *command)
 {
-	long	val;
-
-	val = 0;
 	ft_putendl_fd("exit", 1);
 	if (!command->argv[1])
 	{
 		free_shell(shell);
-		exit(shell->env_list->exit_code);
+		g_exit_status = 1;
+		exit(1);
 	}
 	if (command->argv[2] && !is_non_numeric(command->argv[1]))
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		shell->env_list->exit_code = 1;
+		g_exit_status = 1;
 		return (1);
 	}
 	else if (check_argument(command, "exit"))
-		exit (255);
-	shell->env_list->exit_code = (unsigned char)val;
-	// free shell/env here
-	exit(shell->env_list->exit_code);
+		exit(2);
+	g_exit_status = ft_atoi(command->argv[1]) % 256;
+	exit(g_exit_status);
 }

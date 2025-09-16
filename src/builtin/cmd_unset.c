@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 16:32:24 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 21:11:49 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,10 @@ int	delete_env_node(t_env_node **head, char *key)
 
 int	unset_env(t_env *env, char *key)
 {
-	size_t	i;
-
 	if (!env || !key)
 		return (1);
-	i = 0;
-	while (env->env_head)
-	{
-		if (!delete_env_node(&env->env_head, key))
-			return (0);
-		i++;
-	}
+	if (!delete_env_node(&env->env_head, key))
+		return (0);
 	return (1);
 }
 
@@ -65,7 +58,7 @@ int	cmd_unset(t_shell *shell, t_command *command)
 		return (0);
 	while (command->argv[i])
 	{
-		unset_env(shell->env_list, command->argv[1]);
+		unset_env(shell->env_list, command->argv[i]);
 		i++;
 	}
 	return (1);

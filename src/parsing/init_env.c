@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:55:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 16:20:13 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:28:48 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,4 @@ void	init_env(t_env **env, char **envp)
 		i++;
 	}
 	(*env)->env_head = env_node;
-	(*env)->exit_code = 0;
 }

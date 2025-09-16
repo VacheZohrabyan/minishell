@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 16:44:20 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 20:57:53 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	cmd_export(t_shell *shell, t_command *command)
 	{
 		sort_export(shell->export_list->env_head);
 		print_export(shell->export_list->env_head);
+		g_exit_status = 0;
 		return (0);
 	}
 	while (command->argv[i])
@@ -93,11 +94,13 @@ int	cmd_export(t_shell *shell, t_command *command)
 		if (!is_valid_identifier(command->argv[i]))
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", command->argv[i]);
+			g_exit_status = 1;
 		}
 		else
 		{
 			add_or_update_env(shell->env_list, command->argv[i]);
 			add_or_update_export(shell, command->argv[i]);
+			g_exit_status = 0;
 		}
 		i++;
 	}
