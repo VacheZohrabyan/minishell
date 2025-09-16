@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/15 17:48:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:07:34 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,24 @@ int				dispatch_special_handler(const char *buffer, char *result,
 char			*add_spaces_around_specials(const char *buffer);
 
 void			token_node_free(t_token **token);
+
 char **my_split(const char *s, t_env_node* env, char delim);
+char	*extract_quotes(char *res, t_env_node *env);
+char	*find_env(char *res, t_env_node *env);
+char	*append_and_free(char *acc, char *part);
+char	*extract_word_function1(const char **s);
+char	*extract_word_function2(const char **s, char delim);
+char	*extract_word(const char **ps, char delim);
+char	*remove_quotes_function1(const char *str, char *out, char *c, int *i);
+char	*remove_quotes_function2(const char *str, char *out, char *c, int *i);
+char	*remove_quotes(const char *str);
+char	**ft_free(char **res, int size);
+char	*expend_env_function1(const char *str, int *i,
+	char *out, t_env_node *env);
+char	*expand_env(const char *str, t_env_node *env);
+void	count_words_function1(const char *s, int *i, char delim);
+int	count_words(const char *s, char delim);
+
 // from free folder
 void			split_free(char ***buffer);
 

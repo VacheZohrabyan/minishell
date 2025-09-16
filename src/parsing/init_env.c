@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:55:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 17:32:58 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:20:13 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,11 @@ int	init_env_node_value(t_env_node *tmp, char *env, size_t key_size)
 int	init_env_node_member(t_env_node *tmp, char *env)
 {
 	size_t	key_size;
-	size_t	i;
 	char	*equal_sign;
 
-	key_size = 0;
-	i = 0;
-	equal_sign = ft_strchr(env, '=');
-	while (env[key_size] && env[key_size] != '=')
-		key_size++;
-	tmp->key = malloc(key_size + 1);
-	if (!tmp->key)
+	if (init_env_node_key(tmp, env, &key_size) == -1)
 		return (-1);
-	while (i < key_size)
-	{
-		tmp->key[i] = env[i];
-		i++;
-	}
-	tmp->key[i] = '\0';
+	equal_sign = ft_strchr(env, '=');
 	if (equal_sign)
 		return (init_env_node_value(tmp, env, key_size));
 	else
@@ -89,45 +77,39 @@ int	push_back(t_env_node **env_node, char *env)
 
 void	free_env(t_env **env)
 {
-	t_env_node *curr;
-    t_env_node *next;
+	t_env_node	*curr;
+	t_env_node	*next;
 
-    if (!*env)
-        return;
-
-    curr = (*env)->env_head;
-    while (curr)
-    {
-        next = curr->next;
-        free(curr->key);
-        free(curr->value);
-        free(curr);
-        curr = next;
-    }
+	if (!*env)
+		return ;
+	curr = (*env)->env_head;
+	while (curr)
+	{
+		next = curr->next;
+		free(curr->key);
+		free(curr->value);
+		free(curr);
+		curr = next;
+	}
 	free(*env);
 }
 
-void init_env(t_env **env, char **envp)
+void	init_env(t_env **env, char **envp)
 {
-    size_t      i;
-    t_env_node  *env_node;
-	
-    *env = (t_env*)malloc(sizeof(t_env));
-    if (!*env)
-        return;
+	size_t		i;
+	t_env_node	*env_node;
 
-    env_node = NULL;
-    i = 0;
-    while (envp[i])
-    {
-        if (push_back(&env_node, envp[i]) == -1)
-        {
-			free_env(env);	
-            return;
-        }
-        i++;
-    }
-
-    (*env)->env_head = env_node;
-    (*env)->exit_code = 0;
+	*env = (t_env *)malloc(sizeof(t_env));
+	if (!*env)
+		return ;
+	env_node = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		if (push_back(&env_node, envp[i]) == -1)
+			return (free_env(env));
+		i++;
+	}
+	(*env)->env_head = env_node;
+	(*env)->exit_code = 0;
 }

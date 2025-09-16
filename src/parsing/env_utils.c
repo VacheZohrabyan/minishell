@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 15:35:10 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/15 17:40:12 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:20:58 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_env_param(t_env *env, char *key, int flag)
 
 int	set_env_param(t_env *env, char *key, char *value)
 {
-	t_env_node *node;
+	t_env_node	*node;
 
 	if (!env || !key)
 		return (0);
@@ -50,5 +50,25 @@ int	set_env_param(t_env *env, char *key, char *value)
 		}
 		node = node->next;
 	}
+	return (0);
+}
+
+int	init_env_node_key(t_env_node *tmp, char *env, size_t *key_size)
+{
+	size_t	i;
+
+	i = 0;
+	*key_size = 0;
+	while (env[*key_size] && env[*key_size] != '=')
+		(*key_size)++;
+	tmp->key = malloc(*key_size + 1);
+	if (!tmp->key)
+		return (-1);
+	while (i < *key_size)
+	{
+		tmp->key[i] = env[i];
+		i++;
+	}
+	tmp->key[i] = '\0';
 	return (0);
 }

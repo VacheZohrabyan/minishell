@@ -10,15 +10,20 @@ LIBFT   := libft
 SRC     := \
 	$(SRCDIR)/main.c \
 	$(SRCDIR)/parsing/parsing.c \
+	$(SRCDIR)/parsing/parsing_utils.c \
+	$(SRCDIR)/parsing/parsing_utils2.c \
 	$(SRCDIR)/parsing/env_utils.c \
 	$(SRCDIR)/parsing/init_env.c \
 	$(SRCDIR)/free/split_free.c \
 	$(SRCDIR)/free/token_node_free.c \
 	$(SRCDIR)/free/free_command.c \
 	$(SRCDIR)/free/free_shell.c \
-	$(SRCDIR)/my_signal/sig.c \
+	$(SRCDIR)/my_signal/sig1.c \
+	$(SRCDIR)/my_signal/sig2.c \
 	$(SRCDIR)/lexical/lexical.c \
 	$(SRCDIR)/lexical/my_split.c \
+	$(SRCDIR)/lexical/my_split_utils2.c \
+	$(SRCDIR)/lexical/my_split_utils1.c \
 	$(SRCDIR)/lexical/lexical_util.c \
 	$(SRCDIR)/lexical/hendle_token.c \
 	$(SRCDIR)/parsing/syntax_checker.c \

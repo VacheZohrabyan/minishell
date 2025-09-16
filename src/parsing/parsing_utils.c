@@ -5,64 +5,49 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/27 12:50:54 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/08/29 11:05:35 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/09/16 17:48:36 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/09/16 17:51:35 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static t_redirect	*init_new_redirect(t_token *tmp)
+int	handle_first_word(char **argv, int i, t_token **tmp, int *count)
 {
-	t_redirect	*new_redirect;
-
-	new_redirect = (t_redirect *)malloc(sizeof(t_redirect));
-	new_redirect->token_type = tmp->token_type;
-	tmp = tmp->next;
-	new_redirect->file_name = ft_strdup(tmp->cmd);
-	new_redirect->next = NULL;
-	return (new_redirect);
-}
-
-static void	add_redirect(t_redirect **redirect, t_token *tmp)
-{
-	t_redirect	*new_redirect;
-	t_redirect	*cur;
-
-	new_redirect = init_new_redirect(tmp);
-	if (!*redirect)
-		*redirect = new_redirect;
-	else
+	if (*tmp && (*tmp)->token_type == TOKEN_WORD)
 	{
-		cur = *redirect;
-		while (cur->next)
-			cur = cur->next;
-		cur->next = new_redirect;
+		i = add_word(argv, i, *tmp);
+		--(*count);
+		*tmp = (*tmp)->next;
 	}
+	return (i);
 }
 
-static int	add_word(char **argv, int i, t_token *tmp)
-{
-	argv[i] = ft_strdup(tmp->cmd);
-	return (i + 1);
-}
-
-void	fill_argv_and_redirects(t_redirect **redirect,
-	char **argv, t_token *temp, t_token *token)
+int	fill_argv_and_redirects(t_redirect **redirect, char **argv,
+		t_token *start, t_token *end)
 {
 	t_token	*tmp;
 	int		i;
+	int		count;
 
+	count = validate_and_count(start, end);
 	i = 0;
-	tmp = temp;
-	
-	while (tmp != token)
+	tmp = start;
+	i = handle_first_word(argv, i, &tmp, &count);
+	while (tmp && tmp != end)
 	{
-		if (tmp->token_type == TOKEN_WORD)
+		if (tmp->token_type != TOKEN_WORD
+			&& tmp->next->token_type == TOKEN_WORD)
+			if (add_redirect(redirect, &tmp))
+				return (-1);
+		if (tmp->prev && tmp->token_type == TOKEN_WORD
+			&& tmp->prev->token_type == TOKEN_WORD && count--)
 			i = add_word(argv, i, tmp);
-		else
-			add_redirect(redirect, tmp);
 		tmp = tmp->next;
+		if (!tmp)
+			break ;
 	}
-	argv[i] = NULL;
+	if (argv)
+		argv[i] = NULL;
+	return (0);
 }
