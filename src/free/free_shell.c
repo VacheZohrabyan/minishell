@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 17:37:11 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 17:39:50 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:49:20 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-void free_shell(t_shell *shell)
+void	free_shell(t_shell *shell)
 {
 	free_command(&(shell->command));
 	token_node_free(&shell->token);

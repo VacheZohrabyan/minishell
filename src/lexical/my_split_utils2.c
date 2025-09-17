@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 16:01:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:45:25 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**ft_free(char **res, int size)
 	return (NULL);
 }
 
-char	*expend_env_function1(const char *str, int *i,
+char	*expend_env_function1(char *str, int *i,
 	char *out, t_env_node *env)
 {
 	int		start;
@@ -44,7 +44,7 @@ char	*expend_env_function1(const char *str, int *i,
 	return (out);
 }
 
-char	*expand_env(const char *str, t_env_node *env)
+char	*expand_env(char *str, t_env_node *env)
 {
 	char	*out;
 	int		i;
@@ -54,6 +54,10 @@ char	*expand_env(const char *str, t_env_node *env)
 	out = ft_strdup("");
 	while (str[i])
 	{
+		if (str[i] == '$' && str[i + 1] == '?' && str[i + 2] == '\0')
+		{
+			return (ft_strdup("$?"));
+		}
 		if (str[i] == '$')
 			out = expend_env_function1(str, &i, out, env);
 		else
@@ -69,7 +73,7 @@ char	*expand_env(const char *str, t_env_node *env)
 	return (out);
 }
 
-void	count_words_function1(const char *s, int *i, char delim)
+void	count_words_function1(char *s, int *i, char delim)
 {
 	char	q;
 
@@ -88,7 +92,7 @@ void	count_words_function1(const char *s, int *i, char delim)
 	}
 }
 
-int	count_words(const char *s, char delim)
+int	count_words(char *s, char delim)
 {
 	int	i;
 	int	count;

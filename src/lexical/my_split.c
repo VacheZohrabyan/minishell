@@ -6,13 +6,13 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/16 16:08:34 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:38:48 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-char	*remove_quotes_function2(const char *str, char *out, char *c, int *i)
+char	*remove_quotes_function2(char *str, char *out, char *c, int *i)
 {
 	char	q;
 
@@ -82,11 +82,11 @@ char	*extract_quotes(char *res, t_env_node *env)
 		expanded = expand_env(inside, env);
 		free(inside);
 		free(res);
-		return (remove_quotes(expanded));
+		return (expanded);
 	}
 	else if (len >= 2 && res[0] == '\'')
 	{
-		inside = ft_substr(res, 1, len - 3);
+		inside = ft_substr(res, 1, len - 2);
 		free(res);
 		return (inside);
 	}
@@ -98,14 +98,13 @@ char	*extract_quotes(char *res, t_env_node *env)
 	}
 }
 
-char	**my_split(const char *s, t_env_node *env, char delim)
+char	**my_split(char *s, t_env_node *env, char delim)
 {
 	char	**res;
 	int		words;
 	int		i;
 
 	i = 0;
-	(void)env;
 	if (!s)
 		return (NULL);
 	words = count_words(s, delim);
@@ -114,8 +113,7 @@ char	**my_split(const char *s, t_env_node *env, char delim)
 		return (NULL);
 	while (i < words)
 	{
-		res[i] = extract_word(&s, delim);
-		res[i] = extract_quotes(res[i], env);
+		res[i] = extract_word(&s, env, delim);
 		if (!res[i])
 			return (ft_free(res, i));
 		i++;

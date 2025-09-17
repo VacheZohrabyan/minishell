@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_node_free.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:35:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/13 16:59:24 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:51:21 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,3 @@ void	free_env_node(t_env_node *node)
 		node = tmp;
 	}
 }
-

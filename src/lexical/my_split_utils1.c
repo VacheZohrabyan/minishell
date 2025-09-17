@@ -6,31 +6,33 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:51:14 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 16:00:53 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:39:36 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-char	*extract_word_function1(const char **s)
+char	*extract_word_function1(char **s, t_env_node *env)
 {
 	char	q;
 	int		len;
 	char	*part;
 
 	q = **s;
-	len = 0;
-	(*s)++;
+	len = 1;
 	while ((*s)[len] && (*s)[len] != q)
 		len++;
-	part = ft_substr(*s, 0, len);
+	part = ft_substr(*s, 0, len + 1);
 	*s += len;
 	if (**s == q)
+	{
+		part = extract_quotes(part, env);
 		(*s)++;
+	}
 	return (part);
 }
 
-char	*extract_word_function2(const char **s, char delim)
+char	*extract_word_function2(char **s, t_env_node *env, char delim)
 {
 	int		len;
 	char	*part;
@@ -41,14 +43,15 @@ char	*extract_word_function2(const char **s, char delim)
 		len++;
 	part = ft_substr(*s, 0, len);
 	*s += len;
+	part = expand_env(part, env);
 	return (part);
 }
 
-char	*extract_word(const char **ps, char delim)
+char	*extract_word(char **ps, t_env_node *env, char delim)
 {
-	const char	*s;
-	char		*acc;
-	char		*part;
+	char	*s;
+	char	*acc;
+	char	*part;
 
 	s = *ps;
 	acc = NULL;
@@ -57,9 +60,9 @@ char	*extract_word(const char **ps, char delim)
 	while (*s && *s != delim)
 	{
 		if (*s == '\'' || *s == '"')
-			part = extract_word_function1(&s);
+			part = extract_word_function1(&s, env);
 		else
-			part = extract_word_function2(&s, delim);
+			part = extract_word_function2(&s, env, delim);
 		acc = append_and_free(acc, part);
 	}
 	*ps = s;
@@ -68,7 +71,7 @@ char	*extract_word(const char **ps, char delim)
 	return (acc);
 }
 
-char	*remove_quotes_function1(const char *str, char *out, char *c, int *i)
+char	*remove_quotes_function1(char *str, char *out, char *c, int *i)
 {
 	c = (char *)malloc(sizeof(char) * 2);
 	c[0] = str[*i];
@@ -80,7 +83,7 @@ char	*remove_quotes_function1(const char *str, char *out, char *c, int *i)
 	return (out);
 }
 
-char	*remove_quotes(const char *str)
+char	*remove_quotes(char *str)
 {
 	char	*out;
 	int		i;
@@ -96,5 +99,7 @@ char	*remove_quotes(const char *str)
 		else
 			out = remove_quotes_function1(str, out, c, &i);
 	}
+	free(str);
+	str = NULL;
 	return (out);
 }

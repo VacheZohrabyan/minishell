@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:55:13 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:45:57 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_builtin(t_shell *shell, t_command *command)
 	if (ft_strcmp(command->argv[0], "$?") == 0)
 	{
 		write(2, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
-		write(2, "command not found\n", 19);
+		write(2, " command not found\n", 20);
 		return (1);
 	}
 	else if (!ft_strcmp("pwd", command->argv[0]))

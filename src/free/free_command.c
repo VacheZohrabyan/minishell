@@ -6,47 +6,48 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 12:49:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 10:10:52 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:51:06 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-void free_redirect(t_redirect **redirect)
+void	free_redirect(t_redirect **redirect)
 {
-    t_redirect *tmp;
+	t_redirect	*tmp;
 
-    if (!redirect || !*redirect)
-        return;
-    while (*redirect)
-    {
-        tmp = *redirect;
-        *redirect = tmp->next;
-        free(tmp->file_name);
-        free(tmp);
-    }
-    *redirect = NULL;
+	if (!redirect || !*redirect)
+		return ;
+	while (*redirect)
+	{
+		tmp = *redirect;
+		*redirect = tmp->next;
+		free(tmp->file_name);
+		free(tmp);
+	}
+	*redirect = NULL;
 }
 
-void free_command(t_command **command)
+void	free_command(t_command **command)
 {
-    if (!command || !*command)
-        return;
+	t_command	*tmp;
+	int			i;
 
-    t_command *tmp;
-    int i;
-    while (*command)
-    {
-        tmp = *command;
-        *command = tmp->next;
-        free_redirect(&tmp->redirect);
-        if (tmp->argv)
-        {
-            for (i = 0; tmp->argv[i]; i++)
-                free(tmp->argv[i]);
-            free(tmp->argv);
-        }
-        free(tmp);
-    }
-    *command = NULL;
+	if (!command || !*command)
+		return ;
+	while (*command)
+	{
+		tmp = *command;
+		*command = tmp->next;
+		free_redirect(&tmp->redirect);
+		if (tmp->argv)
+		{
+			i = 0;
+			while (tmp->argv[i])
+				free(tmp->argv[i++]);
+			free(tmp->argv);
+		}
+		free(tmp);
+	}
+	*command = NULL;
 }

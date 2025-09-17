@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:11:30 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:19:29 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:49:44 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	handle_sigher(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	
 }
 
 void	handle_sigint(int sig)
@@ -38,7 +37,7 @@ void	handle_sigcat(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	write(STDOUT_FILENO, "\n", 1);
+	
 }
 
 void	ctrlc(int sig)

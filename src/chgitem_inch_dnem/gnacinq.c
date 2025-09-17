@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:54:01 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:42:11 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	any(t_redirect *redirect)
 	tmp = redirect;
 	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_REDIRECT_IN)
+		if (tmp->token_type == TOKEN_REDIRECT_IN) // <
 		{
 			tmp->fd = open(tmp->file_name, O_RDONLY);
 			if (tmp->fd == -1)
@@ -88,7 +88,7 @@ int	any(t_redirect *redirect)
 			}
 			tmp->to = STDIN_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_OUT)
+		else if (tmp->token_type == TOKEN_REDIRECT_OUT) //>
 		{
 			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 			if (tmp->fd == -1)
@@ -105,7 +105,7 @@ int	any(t_redirect *redirect)
 			}
 			tmp->to = STDOUT_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_APPEND)
+		else if (tmp->token_type == TOKEN_REDIRECT_APPEND) // >>
 		{
 			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (tmp->fd == -1)
@@ -184,8 +184,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	pid_t		pid;
 	int			status;
 	char		*str;
-	t_redirect	*r;
-
+	t_redirect* r;
 	if (check_builtin(shell, com))
 		return ;
 	pid = fork();
@@ -203,14 +202,13 @@ void	command_proc(t_shell *shell, t_command *com)
 		if (com->redirect)
 		{
 			if (any(com->redirect) == -1)
-				exit(1); /* обязательно завершиться */
+				exit(1);
 			r = com->redirect;
 			while (r)
 			{
 				if (r->fd >= 0)
 				{
-					if (dup2(r->fd, r->to) == -1)
-						perror("dup2");
+					dup2(r->fd, r->to);
 					close(r->fd);
 				}
 				r = r->next;
@@ -223,6 +221,7 @@ void	command_proc(t_shell *shell, t_command *com)
 			write(2, com->argv[0], ft_strlen(com->argv[0]));
 			write(2, ": command not found\n",
 				ft_strlen(": command not found\n"));
+			close(com->redirect->fd);
 			return ;
 		}
 		close(com->redirect->fd);
@@ -305,8 +304,7 @@ void	command_many_proc(t_shell *shell, int count)
 				{
 					if (r->fd >= 0)
 					{
-						if (dup2(r->fd, r->to) == -1)
-							perror("dup2");
+						dup2(r->fd, r->to);
 						close(r->fd);
 					}
 					r = r->next;
@@ -352,6 +350,7 @@ int	gnacinq(t_shell *shell)
 		t_redirect *red = cmd->redirect;
 		while (red)
 		{
+			printf("redirect = %d redirect_name = %s\n", red->token_type, red->file_name);
 			if (red->token_type == TOKEN_HEREDOC)
 			{
 				if (heredoc_file_open_wr(red) == -1)
