@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/17 15:42:11 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/17 20:03:19 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,113 +231,216 @@ void	command_proc(t_shell *shell, t_command *com)
 		destroy_one_waitpid(pid, status);
 }
 
-void	command_many_proc(t_shell *shell, int count)
-{
-	int			**pipe_fd;
-	t_command	*tmp;
-	pid_t		*pids;
-	int			status;
-	int			i;
-	pid_t		pid;
-	t_redirect	*red;
-	char		*str;
-	int			j;
-	t_redirect	*r;
+// void	command_many_proc(t_shell *shell, int count)
+// {
+// 	int			**pipe_fd;
+// 	t_command	*tmp;
+// 	pid_t		*pids;
+// 	int			status;
+// 	int			i;
+// 	pid_t		pid;
+// 	t_redirect	*red;
+// 	char		*str;
+// 	int			j;
+// 	t_redirect	*r;
 
-	tmp = shell->command;
-	status = 0;
-	pipe_fd = (int **)malloc(sizeof(int *) * (count - 1));
-	if (!pipe_fd)
-		return ;
-	pids = (pid_t *)malloc(sizeof(pid_t) * count);
-	i = 0;
-	if (count > 1)
-	{
-		while (i < count - 1)
-		{
-			pipe_fd[i] = (int *)malloc(sizeof(int) * 2);
-			if (!pipe_fd[i] || (pipe(pipe_fd[i]) == -1))
-			{
-				while (i)
-				{
-					--i;
-					free(pipe_fd[i]);
-					pipe_fd[i] = NULL;
-				}
-				free(pipe_fd);
-				pipe_fd = NULL;
-				return ;
-			}
-			++i;
-		}
-	}
-	i = 0;
-	while (tmp && i < count)
-	{
-		if (count == 1 && check_builtin(shell, tmp))
-			return ;
-		pid = fork();
-		if (pid < 0)
-			return ;
-		else if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			if (i > 0)
-				dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-			if (i < count - 1)
-				dup2(pipe_fd[i][1], STDOUT_FILENO);
-			j = 0;
-			while (j < count - 1)
-			{
-				close(pipe_fd[j][0]);
-				close(pipe_fd[j][1]);
-				++j;
-			}
-			red = tmp->redirect;
-			if (red)
-			{
-				if (any(red) == -1)
-					exit(1);
-				r = red;
-				while (r)
-				{
-					if (r->fd >= 0)
-					{
-						dup2(r->fd, r->to);
-						close(r->fd);
-					}
-					r = r->next;
-				}
-			}
-			str = find_command_path(shell->env_list, tmp->argv[0]);
-			if (execv(str, tmp->argv) == -1)
-			{
-				write(2, "minishell: ", ft_strlen("minishell: "));
-				write(2, tmp->argv[0], ft_strlen(tmp->argv[0]));
-				write(2, ": command not found\n",
-					ft_strlen(": command not found\n"));
-				exit(127);
-			}
-			free(str);
-		}
-		else
-			pids[i] = pid;
-		tmp = tmp->next;
-		++i;
-	}
-	j = 0;
-	while (j < count - 1)
-	{
-		close(pipe_fd[j][0]);
-		close(pipe_fd[j][1]);
-		free(pipe_fd[j]);
-		++j;
-	}
-	free(pipe_fd);
-	i = 0;
-	destroy_many_waitpid(pids, status, count);
-	free(pids);
+// 	tmp = shell->command;
+// 	status = 0;
+// 	pipe_fd = (int **)malloc(sizeof(int *) * (count - 1));
+// 	if (!pipe_fd)
+// 		return ;
+// 	pids = (pid_t *)malloc(sizeof(pid_t) * count);
+// 	i = 0;
+// 	if (count > 1)
+// 	{
+// 		while (i < count - 1)
+// 		{
+// 			pipe_fd[i] = (int *)malloc(sizeof(int) * 2);
+// 			if (!pipe_fd[i] || (pipe(pipe_fd[i]) == -1))
+// 			{
+// 				while (i)
+// 				{
+// 					--i;
+// 					free(pipe_fd[i]);
+// 					pipe_fd[i] = NULL;
+// 				}
+// 				free(pipe_fd);
+// 				pipe_fd = NULL;
+// 				return ;
+// 			}
+// 			++i;
+// 		}
+// 	}
+// 	i = 0;
+// 	while (tmp && i < count)
+// 	{
+// 		if (count == 1 && check_builtin(shell, tmp))
+// 			return ;
+// 		pid = fork();
+// 		if (pid < 0)
+// 			return ;
+// 		else if (pid == 0)
+// 		{
+// 			signal(SIGINT, SIG_DFL);
+// 			signal(SIGQUIT, SIG_DFL);
+// 			if (i > 0)
+// 				dup2(pipe_fd[i - 1][0], STDIN_FILENO);
+// 			if (i < count - 1)
+// 				dup2(pipe_fd[i][1], STDOUT_FILENO);
+// 			j = 0;
+// 			while (j < count - 1)
+// 			{
+// 				close(pipe_fd[j][0]);
+// 				close(pipe_fd[j][1]);
+// 				++j;
+// 			}
+// 			red = tmp->redirect;
+// 			if (red)
+// 			{
+// 				if (any(red) == -1)
+// 					exit(1);
+// 				r = red;
+// 				while (r)
+// 				{
+// 					if (r->fd >= 0)
+// 					{
+// 						dup2(r->fd, r->to);
+// 						close(r->fd);
+// 					}
+// 					r = r->next;
+// 				}
+// 			}
+// 			str = find_command_path(shell->env_list, tmp->argv[0]);
+// 			if (execv(str, tmp->argv) == -1)
+// 			{
+// 				write(2, "minishell: ", ft_strlen("minishell: "));
+// 				write(2, tmp->argv[0], ft_strlen(tmp->argv[0]));
+// 				write(2, ": command not found\n",
+// 					ft_strlen(": command not found\n"));
+// 				exit(127);
+// 			}
+// 			free(str);
+// 		}
+// 		else
+// 			pids[i] = pid;
+// 		tmp = tmp->next;
+// 		++i;
+// 	}
+// 	j = 0;
+// 	while (j < count - 1)
+// 	{
+// 		close(pipe_fd[j][0]);
+// 		close(pipe_fd[j][1]);
+// 		free(pipe_fd[j]);
+// 		++j;
+// 	}
+// 	free(pipe_fd);
+// 	i = 0;
+// 	destroy_many_waitpid(pids, status, count);
+// 	free(pids);
+// }
+
+void command_many_proc(t_shell *shell, int count)
+{
+    int         **pipe_fd;
+    t_command   *tmp;
+    pid_t       *pids;
+    int         i;
+    pid_t       pid;
+    t_redirect  *red;
+    char        *str;
+    int         j;
+    t_redirect  *r;
+	int status = 0;
+
+    tmp = shell->command;
+    pipe_fd = (int **)malloc(sizeof(int *) * (count - 1));
+    if (!pipe_fd)
+        return ;
+    pids = (pid_t *)malloc(sizeof(pid_t) * count);
+    if (!pids)
+        return ;
+    i = 0;
+    if (count > 1)
+    {
+        while (i < count - 1)
+        {
+            pipe_fd[i] = (int *)malloc(sizeof(int) * 2);
+            if (!pipe_fd[i] || (pipe(pipe_fd[i]) == -1))
+                return ;
+            ++i;
+        }
+    }
+    i = 0;
+    while (tmp && i < count)
+    {
+        if (count == 1 && !check_builtin(shell, tmp))
+        {
+            free(pids);
+            free(pipe_fd);
+            return ;
+        }
+        pid = fork();
+        if (pid < 0)
+            return ;
+        else if (pid == 0)
+        {
+            signal(SIGINT, SIG_DFL);
+            signal(SIGQUIT, SIG_DFL);
+            if (i > 0)
+                dup2(pipe_fd[i - 1][0], STDIN_FILENO);
+            if (i < count - 1)
+                dup2(pipe_fd[i][1], STDOUT_FILENO);
+            j = 0;
+            while (j < count - 1)
+            {
+                close(pipe_fd[j][0]);
+                close(pipe_fd[j][1]);
+                ++j;
+            }
+            red = tmp->redirect;
+            if (red)
+            {
+                if (any(red) == -1)
+                    exit(1);
+                r = red;
+                while (r)
+                {
+                    if (r->fd >= 0)
+                    {
+                        dup2(r->fd, r->to);
+                        close(r->fd);
+                    }
+                    r = r->next;
+                }
+            }
+            str = find_command_path(shell->env_list, tmp->argv[0]);
+            if (!str || execv(str, tmp->argv) == -1)
+            {
+                write(2, "minishell: ", 11);
+                write(2, tmp->argv[0], ft_strlen(tmp->argv[0]));
+                write(2, ": command not found\n", 20);
+                exit(127);
+            }
+            free(str);
+        }
+        else
+            pids[i] = pid;
+
+        tmp = tmp->next;
+        ++i;
+    }
+    j = 0;
+    while (j < count - 1)
+    {
+        close(pipe_fd[j][0]);
+        close(pipe_fd[j][1]);
+        free(pipe_fd[j]);
+        ++j;
+    }
+    free(pipe_fd);
+    destroy_many_waitpid(pids, status, count);
+    free(pids);
 }
 
 int	gnacinq(t_shell *shell)
@@ -350,7 +453,6 @@ int	gnacinq(t_shell *shell)
 		t_redirect *red = cmd->redirect;
 		while (red)
 		{
-			printf("redirect = %d redirect_name = %s\n", red->token_type, red->file_name);
 			if (red->token_type == TOKEN_HEREDOC)
 			{
 				if (heredoc_file_open_wr(red) == -1)
