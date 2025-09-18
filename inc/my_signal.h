@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:58:23 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 10:08:17 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:33:48 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void handle_sigint(int sig);
 void handle_sigcat(int sig);
 void destroy_many_waitpid(pid_t* pids, int status, int count);
 void destroy_one_waitpid(pid_t pid, int status);
+void handle_sig_quit(int sig);
 
 #endif

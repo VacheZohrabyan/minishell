@@ -49,9 +49,19 @@ void	print_export(t_env_node *head)
 	while (head)
 	{
 		if (head->is_equal && head->value != NULL)
-			printf("declare -x %s=\"%s\"\n", head->key, head->value);
+		{
+			write(2, "declare -x ", ft_strlen("declare -x"));
+			write(2, head->key, ft_strlen(head->key));
+			write(2, "=\"", ft_strlen("=\""));
+			write(2, head->value, ft_strlen(head->value));
+			write(2, "\"\n", ft_strlen("\"\n"));
+		}
 		else
-			printf("declare -x %s\n", head->key);
+		{
+			write (2, "declare -x ", ft_strlen("declare -x "));
+			write (2, head->key, ft_strlen(head->key));
+			write (2, "\n", ft_strlen("\n"));
+		}
 		head = head->next;
 	}
 }

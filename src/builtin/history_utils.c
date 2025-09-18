@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:04:24 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/30 19:08:06 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:01:29 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,11 @@ int	print_history(t_shell *shell)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		printf("   %d  %s", n++, line);
+		write (2, "   ", ft_strlen("   "));
+		write (2, ft_itoa(n), ft_strlen(ft_itoa(n)));
+		n++;
+		write (2, "  ", ft_strlen("  "));
+		write (2, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(fd);
 	}

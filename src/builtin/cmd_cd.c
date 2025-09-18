@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:22:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/17 19:56:45 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:54:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static char	*resolve_path(t_shell *shell, t_command *cmd)
 			g_exit_status = 1;
 			return (NULL);
 		}
-		ft_putendl_fd(get_env_param(shell->env_list, "OLDPWD", 1), 1);
+		ft_putendl_fd(get_env_param(shell->env_list, "OLDPWD", 2), 1);
 		return (get_env_param(shell->env_list, "OLDPWD", 1));
 	}
 	return (cmd->argv[1]);

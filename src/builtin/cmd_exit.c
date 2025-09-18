@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:40:54 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:55:05 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_argument(t_command *command, char *err_msg)
 
 int	cmd_exit(t_shell *shell, t_command *command)
 {
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", 2);
 	if (!command->argv[1])
 	{
 		free_shell(shell);

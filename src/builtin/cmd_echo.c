@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/17 19:33:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:02:20 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	cmd_echo(t_command *command)
 		i++;
 	}
 	if (newline)
-		ft_putstr_fd(str, 1);
+		ft_putstr_fd(str, 2);
 	else
-		ft_putendl_fd(str, 1);
+		ft_putendl_fd(str, 2);
 	free(str);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:35:11 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:02:46 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:59:58 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,14 @@ int	check_double_operator(t_token *token, t_token_type token_type,
 	{
 		if (tmp->token_type == token_type)
 			if (!tmp->next)
-				return (printf("minishell: syntax error "
-						"near unexpected token `%s'\n", str), 0);
+			{
+				write(2, "minishell: syntax error "
+					"near unexpected token `", ft_strlen("minishell: syntax error "
+						"near unexpected token `"));
+				write(2, str, ft_strlen(str));
+				write(2, "'\n", ft_strlen("'\n"));
+				return (0);
+			}
 		tmp = tmp->next;
 	}
 	return (1);
@@ -39,11 +45,14 @@ int	urish_check_double_operator(t_token *token, t_token_type token_type)
 		if (tmp->token_type == token_type)
 		{
 			if (!tmp->next)
-				return (printf("minishell: syntax error "
-						"near unexpected token `newline'\n"), 0);
+				return (write(2, "minishell: syntax error near unexpected token `\n", ft_strlen("minishell: syntax error near unexpected token `\n")), 0);
 			if (tmp->next->token_type != TOKEN_WORD)
-				return (printf("minishell: syntax error "
-						"near unexpected token `%s'\n", tmp->next->cmd), 0);
+			{
+				write(2, "minishell: syntax error near unexpected token `", ft_strlen("minishell: syntax error near unexpected token `"));
+				write(2, tmp->next->cmd, ft_strlen(tmp->next->cmd));
+				write(2, "'\n", ft_strlen("'\n"));
+				return (0);
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -58,15 +67,14 @@ int	valid_syntax_pipe_or_and(t_token *token)
 	if (!tmp)
 		return (0);
 	if (tmp->token_type == TOKEN_PIPE)
-		return (printf("minishell: syntax error "
-				"near unexpected token `|'\n"), 0);
+		return (write(2, "minishell: syntax error near unexpected token `|'\n", ft_strlen("minishell: syntax error near unexpected token `|'\n")), 0);
 	if ((tmp->token_type == TOKEN_REDIRECT_APPEND
 			|| tmp->token_type == TOKEN_REDIRECT_IN
 			|| tmp->token_type == TOKEN_REDIRECT_OUT
 			|| tmp->token_type == TOKEN_HEREDOC)
 		&& !tmp->next)
-		return (printf("minishell: syntax error "
-				"near unexpected token `newline'\n"), 0);
+				return (write(2, "minishell: syntax error near unexpected token `newline'\n", ft_strlen("minishell: syntax error near unexpected token `newline'\n")), 0);
+
 	if (!chlp1(token))
 		return (0);
 	return (1);

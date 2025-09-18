@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 17:47:00 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/15 17:47:02 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:00:08 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ int	cmd_env(t_env *env)
 	while (current)
 	{
 		if (current->is_equal && current->value)
-			printf("%s=%s\n", current->key, current->value);
+		{
+			write (2, current->key, ft_strlen(current->key));
+			write (2, "=", ft_strlen("="));
+			write (2, current->value, ft_strlen(current->value));
+			write (2, "\n", ft_strlen("\n"));
+		}
 		current = current->next;
 	}
 	return (1);
