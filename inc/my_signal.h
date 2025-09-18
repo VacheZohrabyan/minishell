@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:58:23 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/11 11:34:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 10:08:17 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 void	ctrlc(int sig);
 void  sig();
+void	sig_handler_prompt(int sig);
 void handle_sigher(int sig);
 void handle_sigint(int sig);
 void handle_sigcat(int sig);

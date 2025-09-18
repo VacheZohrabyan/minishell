@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/17 20:03:19 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 11:36:53 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	char	*buffer;
 	int		pipefd[2];
 	pid_t	pid;
-	int		status;
+	int		status = 0;
 
 	if (pipe(pipefd) == -1)
 		return (-1);
@@ -26,8 +26,9 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 		return (-1);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		close(pipefd[0]);
-		signal(SIGINT, handle_sigint);
 		while (1)
 		{
 			buffer = readline("> ");
@@ -53,11 +54,12 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	}
 	else
 	{
-		close(pipefd[1]);
 		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
-		g_exit_status = status % 255;
+		g_exit_status = status % 256;
 		signal(SIGINT, handle_sigher);
+		signal(SIGQUIT, SIG_IGN);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
 			g_exit_status = WEXITSTATUS(status);
@@ -189,7 +191,6 @@ void	command_proc(t_shell *shell, t_command *com)
 		return ;
 	pid = fork();
 	status = 0;
-	signal(SIGINT, handle_sigcat);
 	if (pid < 0)
 	{
 		printf("error fork()\n");
@@ -197,6 +198,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	}
 	else if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		str = find_command_path(shell->env_list, com->argv[0]);
 		if (com->redirect)
@@ -229,6 +231,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	}
 	else
 		destroy_one_waitpid(pid, status);
+		
 }
 
 // void	command_many_proc(t_shell *shell, int count)
