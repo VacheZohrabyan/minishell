@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/17 14:56:34 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:20:06 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,6 @@ t_token_type	check_token_type(char *buffer)
 	else
 		return (TOKEN_WORD);
 }
-
-// char	*check_prompt(t_shell *shell, char *buffer)
-// {
-// 	t_env_node	*tmp;
-
-// 	tmp = shell->env_list->env_head;
-// 	if (buffer[0] == '$' && (buffer[1] == '"' || buffer[1] == '\''))
-// 		return (ft_strdup(buffer + 1));
-// 	else if (buffer[0] == '$' && buffer[1] != '\0')
-// 	{
-// 		while (tmp)
-// 		{
-// 			if (ft_strcmp(tmp->key, buffer + 1) == 0)
-// 				return (ft_strdup(tmp->value));
-// 			tmp = tmp->next;
-// 		}
-// 	}
-// 	else if (buffer[0] == '\'' && buffer[0] != '\0')
-// 		return (ft_strdup(buffer));
-// 	return (ft_strdup(buffer));
-// }
 
 t_token	*lexical_push_back(t_shell *shell, char *buffer)
 {

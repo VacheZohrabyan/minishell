@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:02:20 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:22:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	cmd_echo(t_command *command)
 	str = ft_strdup("");
 	if (ft_strcmp(command->argv[i], "$?") == 0)
 	{
-		write (2, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
-		write (2, "\n", 1);
+		write (STDOUT_FILENO, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
+		write (STDOUT_FILENO, "\n", 1);
 		return 0;
 	}
 	while (command->argv[i] && !ft_strcmp(command->argv[i], "-n"))

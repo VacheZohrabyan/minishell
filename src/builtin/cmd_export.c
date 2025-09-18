@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:02:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:23:02 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ int	cmd_export(t_shell *shell, t_command *command)
 	{
 		if (!is_valid_identifier(command->argv[i]))
 		{
-			write(2, "minishell: export: `", ft_strlen("minishell: export: "));
-			write(2, command->argv[i], ft_strlen(command->argv[i]));
-			write(2, "': not a valid identifier\n", ft_strlen("': not a valid identifier\n"));
+			write(STDOUT_FILENO, "minishell: export: `", ft_strlen("minishell: export: "));
+			write(STDOUT_FILENO, command->argv[i], ft_strlen(command->argv[i]));
+			write(STDOUT_FILENO, "': not a valid identifier\n", ft_strlen("': not a valid identifier\n"));
 			g_exit_status = 1;
 		}
 		else

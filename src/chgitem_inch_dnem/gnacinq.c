@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:02:44 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:25:48 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 			buffer = readline("> ");
 			if (!buffer)
 			{
-				write (1, "minishell: warning: here-document delimited by EOF (wanted `" , ft_strlen("minishell: warning: here-document delimited by EOF (wanted `"));
-				write (1, redirect->file_name, ft_strlen(redirect->file_name));
-				write (1, "`)\n", ft_strlen("`)\n"));
+				write (STDOUT_FILENO, "minishell: warning: here-document delimited by EOF (wanted `" , ft_strlen("minishell: warning: here-document delimited by EOF (wanted `"));
+				write (STDOUT_FILENO, redirect->file_name, ft_strlen(redirect->file_name));
+				write (STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
 				close(pipefd[1]);
 				exit(0);
 			}
@@ -80,7 +80,7 @@ int	any(t_redirect *redirect)
 			tmp->fd = open(tmp->file_name, O_RDONLY);
 			if (tmp->fd == -1)
 			{
-				write(1, "minishell: ", 11);
+				write(STDOUT_FILENO, "minishell: ", 11);
 				perror(tmp->file_name);
 				g_exit_status = 1;
 				return (-1);
@@ -93,10 +93,10 @@ int	any(t_redirect *redirect)
 			if (tmp->fd == -1)
 			{
 				if (access(tmp->file_name, W_OK) == -1)
-					write(1, "minishell: Permission denied\n", 29);
+					write(STDOUT_FILENO, "minishell: Permission denied\n", 29);
 				else
 				{
-					write(1, "minishell: ", 11);
+					write(STDOUT_FILENO, "minishell: ", 11);
 					perror(tmp->file_name);
 				}
 				g_exit_status = 1;
@@ -110,10 +110,10 @@ int	any(t_redirect *redirect)
 			if (tmp->fd == -1)
 			{
 				if (access(tmp->file_name, W_OK) == -1)
-					write(1, "minishell: Permission denied\n", 29);
+					write(STDOUT_FILENO, "minishell: Permission denied\n", 29);
 				else
 				{
-					write(1, "minishell: ", 11);
+					write(STDOUT_FILENO, "minishell: ", 11);
 					perror(tmp->file_name);
 				}
 				g_exit_status = 1;
@@ -181,7 +181,7 @@ char	*find_command_path(t_env *env, char *cmd)
 void handle_sig_quit(int sig)
 {
 	(void)sig;
-	write (1, "Quit (core dumped)\n", ft_strlen("Quit (core dumped)\n"));
+	write (STDOUT_FILENO, "Quit (core dumped)\n", ft_strlen("Quit (core dumped)\n"));
 }
 
 void	command_proc(t_shell *shell, t_command *com)
@@ -196,7 +196,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	status = 0;
 	if (pid < 0)
 	{
-		write (2, "error fork()\n", ft_strlen("error fork()\n"));
+		write (STDOUT_FILENO, "error fork()\n", ft_strlen("error fork()\n"));
 		return ;
 	}
 	else if (pid == 0)
@@ -206,9 +206,9 @@ void	command_proc(t_shell *shell, t_command *com)
 		str = find_command_path(shell->env_list, com->argv[0]);
 		if (!str)
 		{
-			write(2, "minishell: \n", ft_strlen("minishell: "));
-			write(2, com->argv[0], ft_strlen(com->argv[0]));
-			write(2, ": command not found\n", ft_strlen(": command not found\n"));
+			write(STDOUT_FILENO, "minishell: \n", ft_strlen("minishell: "));
+			write(STDOUT_FILENO, com->argv[0], ft_strlen(com->argv[0]));
+			write(STDOUT_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
 			g_exit_status = 127;
 			exit(127);
 		}
@@ -230,9 +230,9 @@ void	command_proc(t_shell *shell, t_command *com)
 		if (execv(str, com->argv) == -1)
 		{
 			free(str);
-			write(2, "minishell: ", ft_strlen("minishell: "));
-			write(2, com->argv[0], ft_strlen(com->argv[0]));
-			write(2, ": command not found\n", ft_strlen(": command not found\n"));
+			write(STDOUT_FILENO, "minishell: ", ft_strlen("minishell: "));
+			write(STDOUT_FILENO, com->argv[0], ft_strlen(com->argv[0]));
+			write(STDOUT_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
 			close(com->redirect->fd);
 			return ;
 		}
@@ -321,9 +321,9 @@ void command_many_proc(t_shell *shell, int count)
             str = find_command_path(shell->env_list, tmp->argv[0]);
             if (!str || execv(str, tmp->argv) == -1)
             {
-                write(2, "minishell: ", 11);
-                write(2, tmp->argv[0], ft_strlen(tmp->argv[0]));
-                write(2, ": command not found\n", 20);
+                write(STDOUT_FILENO, "minishell: ", 11);
+                write(STDOUT_FILENO, tmp->argv[0], ft_strlen(tmp->argv[0]));
+                write(STDOUT_FILENO, ": command not found\n", 20);
                 exit(127);
             }
             free(str);

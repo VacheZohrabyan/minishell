@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 17:47:00 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:00:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:22:53 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ int	cmd_env(t_env *env)
 	{
 		if (current->is_equal && current->value)
 		{
-			write (2, current->key, ft_strlen(current->key));
-			write (2, "=", ft_strlen("="));
-			write (2, current->value, ft_strlen(current->value));
-			write (2, "\n", ft_strlen("\n"));
+			write (STDOUT_FILENO, current->key, ft_strlen(current->key));
+			write (STDOUT_FILENO, "=", ft_strlen("="));
+			write (STDOUT_FILENO, current->value, ft_strlen(current->value));
+			write (STDOUT_FILENO, "\n", ft_strlen("\n"));
 		}
 		current = current->next;
 	}

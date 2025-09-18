@@ -50,17 +50,17 @@ void	print_export(t_env_node *head)
 	{
 		if (head->is_equal && head->value != NULL)
 		{
-			write(2, "declare -x ", ft_strlen("declare -x"));
-			write(2, head->key, ft_strlen(head->key));
-			write(2, "=\"", ft_strlen("=\""));
-			write(2, head->value, ft_strlen(head->value));
-			write(2, "\"\n", ft_strlen("\"\n"));
+			write(STDOUT_FILENO, "declare -x ", ft_strlen("declare -x"));
+			write(STDOUT_FILENO, head->key, ft_strlen(head->key));
+			write(STDOUT_FILENO, "=\"", ft_strlen("=\""));
+			write(STDOUT_FILENO, head->value, ft_strlen(head->value));
+			write(STDOUT_FILENO, "\"\n", ft_strlen("\"\n"));
 		}
 		else
 		{
-			write (2, "declare -x ", ft_strlen("declare -x "));
-			write (2, head->key, ft_strlen(head->key));
-			write (2, "\n", ft_strlen("\n"));
+			write (STDOUT_FILENO, "declare -x ", ft_strlen("declare -x "));
+			write (STDOUT_FILENO, head->key, ft_strlen(head->key));
+			write (STDOUT_FILENO, "\n", ft_strlen("\n"));
 		}
 		head = head->next;
 	}

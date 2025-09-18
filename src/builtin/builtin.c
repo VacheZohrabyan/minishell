@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:02:25 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:22:31 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	check_builtin(t_shell *shell, t_command *command)
 		return (0);
 	if (ft_strcmp(command->argv[0], "$?") == 0)
 	{
-		write(2, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
-		write(2, " command not found\n", 20);
+		write(STDOUT_FILENO, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
+		write(STDOUT_FILENO, " command not found\n", 20);
 		return (1);
 	}
 	else if (!ft_strcmp("pwd", command->argv[0]))
