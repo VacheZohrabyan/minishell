@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 14:11:54 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:42:15 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,64 +361,72 @@ void command_many_proc(t_shell *shell, int count)
 					r = r->next;
 				}
 			}
-			builtin_with_forks(shell, tmp);
 			builtin_without_forks(shell, tmp);
+			builtin_with_forks(shell, tmp);
 			dup2(saved_stdout, STDOUT_FILENO);
-			// dup2(saved_stdin, STDIN_FILENO);
 			close(saved_stdout);
-            free(pids);
-            free(pipe_fd);
-            return ;
+			
+			// free(pipe_fd);
+			tmp = tmp->next;
+			i++;
         }
-        pid = fork();
-        if (pid < 0)
-            return ;
-        else if (pid == 0)
-        {
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
-            if (i > 0)
-                dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-            if (i < count - 1)
-                dup2(pipe_fd[i][1], STDOUT_FILENO);
-            j = 0;
-            while (j < count - 1)
-            {
-                close(pipe_fd[j][0]);
-                close(pipe_fd[j][1]);
-                ++j;
-            }
-            red = tmp->redirect;
-            if (red)
-            {
-                if (any(red) == -1)
-                    exit(1);
-                r = red;
-                while (r)
-                {
-                    if (r->fd >= 0)
-                    {
-                        dup2(r->fd, r->to);
-                        close(r->fd);
-                    }
-                    r = r->next;
-                }
-            }
-            str = find_command_path(shell->env_list, tmp->argv[0]);
-            if (!str || execv(str, tmp->argv) == -1)
-            {
-                write(STDOUT_FILENO, "minishell: ", 11);
-                write(STDOUT_FILENO, tmp->argv[0], ft_strlen(tmp->argv[0]));
-                write(STDOUT_FILENO, ": command not found\n", 20);
-                exit(127);
-            }
-            free(str);
-        }
-        else
-            pids[i] = pid;
-
-        tmp = tmp->next;
-        ++i;
+		else
+		{
+			pid = fork();
+			if (pid < 0)
+				return ;
+			else if (pid == 0)
+			{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
+				if (i > 0)
+					dup2(pipe_fd[i - 1][0], STDIN_FILENO);
+				if (i < count - 1)
+					dup2(pipe_fd[i][1], STDOUT_FILENO);
+				j = 0;
+				while (j < count - 1)
+				{
+					close(pipe_fd[j][0]);
+					close(pipe_fd[j][1]);
+					++j;
+				}
+				red = tmp->redirect;
+				if (red)
+				{
+					if (any(red) == -1)
+						exit(1);
+					r = red;
+					while (r)
+					{
+						if (r->fd >= 0)
+						{
+							dup2(r->fd, r->to);
+							close(r->fd);
+						}
+						r = r->next;
+					}
+				}
+				str = find_command_path(shell->env_list, tmp->argv[0]);
+				if (check_builtin(shell, tmp))
+				{
+					builtin_with_forks(shell, tmp);
+					builtin_without_forks(shell, tmp);
+					exit (0);
+				}
+				if (!str || execv(str, tmp->argv) == -1)
+				{
+					write(STDOUT_FILENO, "minishell: ", 11);
+					write(STDOUT_FILENO, tmp->argv[0], ft_strlen(tmp->argv[0]));
+					write(STDOUT_FILENO, ": command not found\n", 20);
+					exit(127);
+				}
+				free(str);
+			}
+			else
+				pids[i] = pid;
+		}
+		tmp = tmp->next;
+		++i;
     }
     j = 0;
     while (j < count - 1)

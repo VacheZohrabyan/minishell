@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 13:20:21 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 13:20:48 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:26:49 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	print_export(t_env_node *head)
 	{
 		if (head->is_equal && head->value != NULL)
 		{
-			write(STDOUT_FILENO, "declare -x ", ft_strlen("declare -x"));
+			write(STDOUT_FILENO, "declare -x ", ft_strlen("declare -x "));
 			write(STDOUT_FILENO, head->key, ft_strlen(head->key));
 			write(STDOUT_FILENO, "=\"", ft_strlen("=\""));
 			write(STDOUT_FILENO, head->value, ft_strlen(head->value));
