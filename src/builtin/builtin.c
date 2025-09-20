@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 12:03:35 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:13:39 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	check_builtin(t_shell *shell, t_command *command)
 	(void)shell;
 	if (!command->argv)
 		return (0);
+	else if (ft_strcmp(command->argv[0], "$?") == 0)
+		return (1);
 	else if (!ft_strcmp("pwd", command->argv[0]))
 		return (1);
 	else if (!ft_strcmp("exit", command->argv[0]))

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 12:22:01 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:11:54 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -344,8 +344,28 @@ void command_many_proc(t_shell *shell, int count)
     i = 0;
     while (tmp && i < count)
     {
-        if (count == 1 && !check_builtin(shell, tmp))
-        {
+        if (count == 1 && check_builtin(shell, tmp))
+		{
+			int saved_stdout = dup(STDOUT_FILENO);
+			// int saved_stdin = dup(STDIN_FILENO);
+			if (tmp->redirect && any(tmp->redirect) != -1)
+			{
+				t_redirect *r = tmp->redirect;
+				while (r)
+				{
+					if (r->fd >= 0)
+					{
+						dup2(r->fd, r->to);
+						close(r->fd);
+					}
+					r = r->next;
+				}
+			}
+			builtin_with_forks(shell, tmp);
+			builtin_without_forks(shell, tmp);
+			dup2(saved_stdout, STDOUT_FILENO);
+			// dup2(saved_stdin, STDIN_FILENO);
+			close(saved_stdout);
             free(pids);
             free(pipe_fd);
             return ;
