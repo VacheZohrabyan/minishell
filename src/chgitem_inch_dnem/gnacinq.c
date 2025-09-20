@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 16:11:49 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:00:52 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	any(t_redirect *redirect)
 	tmp = redirect;
 	while (tmp)
 	{
-		if (tmp->token_type == TOKEN_REDIRECT_IN) // <
+		if (tmp->token_type == TOKEN_REDIRECT_IN)
 		{
 			tmp->fd = open(tmp->file_name, O_RDONLY);
 			if (tmp->fd == -1)
@@ -89,7 +89,7 @@ int	any(t_redirect *redirect)
 			}
 			tmp->to = STDIN_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_OUT) //>
+		else if (tmp->token_type == TOKEN_REDIRECT_OUT)
 		{
 			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 			if (tmp->fd == -1)
@@ -106,7 +106,7 @@ int	any(t_redirect *redirect)
 			}
 			tmp->to = STDOUT_FILENO;
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_APPEND) // >>
+		else if (tmp->token_type == TOKEN_REDIRECT_APPEND)
 		{
 			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (tmp->fd == -1)
@@ -184,6 +184,7 @@ void handle_sig_quit(int sig)
 {
 	(void)sig;
 	write (STDOUT_FILENO, "Quit (core dumped)", ft_strlen("Quit (core dumped)"));
+	g_exit_status = 131;
 }
 
 void	command_proc(t_shell *shell, t_command *com)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 16:12:32 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 16:17:22 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 void	sig_handler_prompt(int sig)
 {
 	(void)sig;
-	// write(STDOUT_FILENO, "^C\n", 2);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	//rl_redisplay();
 	g_exit_status = 130;
 }
 
@@ -39,10 +37,8 @@ void	destroy_one_waitpid(pid_t pid, int status)
     if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
     {
         g_exit_status = WEXITSTATUS(status);
-        // close(pipefd[0]);
         return ;
     }
-    // redirect->fd = pipefd[0];
 }
 
 void destroy_many_waitpid(pid_t *pids, int status, int count)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/17 14:45:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 16:18:42 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ char	*expend_env_function1(char *str, int *i, char *out, t_env_node *env);
 char	*expand_env(char *str, t_env_node *env);
 void	count_words_function1(char *s, int *i, char delim);
 int	count_words(char *s, char delim);
-
-// from free folder
 void			split_free(char ***buffer);
 
 #endif
