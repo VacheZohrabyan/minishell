@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:11:30 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 16:17:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 19:09:22 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ void	handle_sigint(int sig)
 	rl_replace_line("", 0);
 	rl_redisplay();
 	g_exit_status = 130;
+}
+
+void handle_sig_quit(int sig)
+{
+	(void)sig;
+	write (STDOUT_FILENO, "Quit (core dumped)", ft_strlen("Quit (core dumped)"));
+	g_exit_status = 131;
 }
 
 void	handle_sigcat(int sig)

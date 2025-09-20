@@ -1,0 +1,13 @@
+inc
+libft
+ls
+Makefile
+minishell
+obj
+src
+USER=vzohraby
+USER_ZDOTDIR=/home/vzohraby
+USER=vzohraby
+USER_ZDOTDIR=/home/vzohraby
+USER=vzohraby
+USER_ZDOTDIR=/home/vzohraby

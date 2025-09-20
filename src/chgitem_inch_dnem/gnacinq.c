@@ -3,188 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 17:00:52 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 19:29:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-int	heredoc_file_open_wr(t_redirect *redirect)
+void execv_function(char* str, t_command* com, int flag)
 {
-	char	*buffer;
-	int		pipefd[2];
-	pid_t	pid;
-	int		status = 0;
-
-	if (pipe(pipefd) == -1)
-		return (-1);
-	pid = fork();
-	if (pid < 0)
-		return (-1);
-	if (pid == 0)
+	if (execv(str, com->argv) == -1)
 	{
-		signal(SIGINT, SIG_DFL);
-		close(pipefd[0]);
-		while (1)
-		{
-			buffer = readline("> ");
-			if (!buffer)
-			{
-				write (STDOUT_FILENO, "minishell: warning: here-document delimited by EOF (wanted `" , ft_strlen("minishell: warning: here-document delimited by EOF (wanted `"));
-				write (STDOUT_FILENO, redirect->file_name, ft_strlen(redirect->file_name));
-				write (STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
-				close(pipefd[1]);
-				exit(0);
-			}
-			if (ft_strcmp(redirect->file_name, buffer) == 0)
-			{
-				free(buffer);
-				close(pipefd[1]);
-				g_exit_status = 0;
-				exit(0);
-			}
-			write(pipefd[1], buffer, ft_strlen(buffer));
-			write(pipefd[1], "\n", 1);
-			free(buffer);
-		}
+		free(str);
+		write(STDOUT_FILENO, "minishell: ", ft_strlen("minishell: "));
+		write(STDOUT_FILENO, com->argv[0], ft_strlen(com->argv[0]));
+		write(STDOUT_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
+		close(com->redirect->fd);
+		g_exit_status = 127;
+		if (flag)
+			return;
+		else
+			exit(127);
 	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		g_exit_status = status % 256;
-		signal(SIGINT, handle_sigher);
-		signal(SIGQUIT, SIG_IGN);
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		{
-			g_exit_status = WEXITSTATUS(status);
-			close(pipefd[0]);
-			return (-1);
-		}
-		redirect->fd = pipefd[0];
-	}
-	return (0);
 }
 
-int	any(t_redirect *redirect)
+void check_redirect(t_command* com)
 {
-	t_redirect	*tmp;
+	t_redirect* r;
 
-	tmp = redirect;
-	while (tmp)
+	r = com->redirect;
+	while (r)
 	{
-		if (tmp->token_type == TOKEN_REDIRECT_IN)
+		if (r->fd >= 0)
 		{
-			tmp->fd = open(tmp->file_name, O_RDONLY);
-			if (tmp->fd == -1)
-			{
-				write(STDOUT_FILENO, "minishell: ", 11);
-				perror(tmp->file_name);
-				g_exit_status = 1;
-				return (-1);
-			}
-			tmp->to = STDIN_FILENO;
+			dup2(r->fd, r->to);
+			close(r->fd);
 		}
-		else if (tmp->token_type == TOKEN_REDIRECT_OUT)
-		{
-			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			if (tmp->fd == -1)
-			{
-				if (access(tmp->file_name, W_OK) == -1)
-					write(STDOUT_FILENO, "minishell: Permission denied\n", 29);
-				else
-				{
-					write(STDOUT_FILENO, "minishell: ", 11);
-					perror(tmp->file_name);
-				}
-				g_exit_status = 1;
-				return (-1);
-			}
-			tmp->to = STDOUT_FILENO;
-		}
-		else if (tmp->token_type == TOKEN_REDIRECT_APPEND)
-		{
-			tmp->fd = open(tmp->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (tmp->fd == -1)
-			{
-				if (access(tmp->file_name, W_OK) == -1)
-					write(STDOUT_FILENO, "minishell: Permission denied\n", 29);
-				else
-				{
-					write(STDOUT_FILENO, "minishell: ", 11);
-					perror(tmp->file_name);
-				}
-				g_exit_status = 1;
-				return (-1);
-			}
-			tmp->to = STDOUT_FILENO;
-		}
-		tmp = tmp->next;
+		r = r->next;
 	}
-	return (0);
 }
 
-int	absolute_path(char *cmd)
+void esel_chgitem(t_shell* shell, t_command* com)
 {
-	if (cmd[0] == '/')
-		return (1);
-	else if (cmd[0] == '.' && cmd[1] == '/')
-		return (1);
-	return (0);
-}
-
-char	*find_command_path(t_env *env, char *cmd)
-{
-	char	*path_env;
-	char	**paths;
-	char	*full_path;
-	int		i;
-	char	*tmp;
-	int		j;
-
-	if (absolute_path(cmd))
-		return (ft_strdup(cmd));
-	path_env = get_env_param(env, "PATH", 1);
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (NULL);
-	full_path = NULL;
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(full_path, X_OK) == 0)
-		{
-			j = 0;
-			while (paths[j])
-				free(paths[j++]);
-			free(paths);
-			return (full_path);
-		}
-		free(full_path);
-		full_path = NULL;
-		i++;
-	}
-	j = 0;
-	while (paths[j])
-		free(paths[j++]);
-	free(paths);
-	return (NULL);
-}
-
-void handle_sig_quit(int sig)
-{
-	(void)sig;
-	write (STDOUT_FILENO, "Quit (core dumped)", ft_strlen("Quit (core dumped)"));
-	g_exit_status = 131;
+	int saved_stdout = dup(STDOUT_FILENO);
+	if (com->redirect && any(com->redirect) != -1)
+		check_redirect(com);
+	builtin_with_forks(shell, com);
+	builtin_without_forks(shell, com);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdout);
+	return ;
 }
 
 void	command_proc(t_shell *shell, t_command *com)
@@ -197,18 +67,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	{
 		int saved_stdout = dup(STDOUT_FILENO);
 		if (com->redirect && any(com->redirect) != -1)
-		{
-			t_redirect *r = com->redirect;
-			while (r)
-			{
-				if (r->fd >= 0)
-				{
-					dup2(r->fd, r->to);
-					close(r->fd);
-				}
-				r = r->next;
-			}
-		}
+			check_redirect(com);
 		builtin_with_forks(shell, com);
 		builtin_without_forks(shell, com);
 		dup2(saved_stdout, STDOUT_FILENO);
@@ -227,38 +86,8 @@ void	command_proc(t_shell *shell, t_command *com)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		str = find_command_path(shell->env_list, com->argv[0]);
-		if (!str)
-		{
-			write(STDOUT_FILENO, "minishell: \n", ft_strlen("minishell: "));
-			write(STDOUT_FILENO, com->argv[0], ft_strlen(com->argv[0]));
-			write(STDOUT_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
-			g_exit_status = 127;
-			exit(127);
-		}
-		if (com->redirect)
-		{
-			if (any(com->redirect) == -1)
-				exit(1);
-			r = com->redirect;
-			while (r)
-			{
-				if (r->fd >= 0)
-				{
-					dup2(r->fd, r->to);
-					close(r->fd);
-				}
-				r = r->next;
-			}
-		}
-		if (execv(str, com->argv) == -1)
-		{
-			free(str);
-			write(STDOUT_FILENO, "minishell: ", ft_strlen("minishell: "));
-			write(STDOUT_FILENO, com->argv[0], ft_strlen(com->argv[0]));
-			write(STDOUT_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
-			close(com->redirect->fd);
-			return ;
-		}
+		check_redirect(com);
+		execv_function(str, com, 1);
 		close(com->redirect->fd);
 		free(str);
 	}
@@ -305,18 +134,7 @@ void command_many_proc(t_shell *shell, int count)
 		{
 			int saved_stdout = dup(STDOUT_FILENO);
 			if (tmp->redirect && any(tmp->redirect) != -1)
-			{
-				t_redirect *r = tmp->redirect;
-				while (r)
-				{
-					if (r->fd >= 0)
-					{
-						dup2(r->fd, r->to);
-						close(r->fd);
-					}
-					r = r->next;
-				}
-			}
+				check_redirect(tmp);
 			builtin_without_forks(shell, tmp);
 			builtin_with_forks(shell, tmp);
 			dup2(saved_stdout, STDOUT_FILENO);
@@ -349,32 +167,16 @@ void command_many_proc(t_shell *shell, int count)
 				{
 					if (any(red) == -1)
 						exit(1);
-					r = red;
-					while (r)
-					{
-						if (r->fd >= 0)
-						{
-							dup2(r->fd, r->to);
-							close(r->fd);
-						}
-						r = r->next;
-					}
+					check_redirect(tmp);
 				}
 				str = find_command_path(shell->env_list, tmp->argv[0]);
 				if (check_builtin(shell, tmp))
 				{
 					builtin_with_forks(shell, tmp);
 					builtin_without_forks(shell, tmp);
-					exit (c_exit_status);
+					exit(g_exit_status);
 				}
-				if (!str || execv(str, tmp->argv) == -1)
-				{
-					write(STDOUT_FILENO, "minishell: ", 11);
-					write(STDOUT_FILENO, tmp->argv[0], ft_strlen(tmp->argv[0]));
-					write(STDOUT_FILENO, ": command not found\n", 20);
-					exit(127);
-				}
-				free(str);
+				execv_function(str, tmp, 0);
 			}
 			else
 				pids[i] = pid;
@@ -390,8 +192,8 @@ void command_many_proc(t_shell *shell, int count)
         free(pipe_fd[j]);
         ++j;
     }
-    free(pipe_fd);
     destroy_many_waitpid(pids, status, count);
+    free(pipe_fd);
     free(pids);
 }
 
