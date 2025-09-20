@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 15:46:32 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 15:59:40 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,19 @@ void	sig(void)
 
 void	destroy_one_waitpid(pid_t pid, int status)
 {
-	signal(SIGQUIT, handle_sig_quit);
 	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &status, 0);
-	g_exit_status = status % 256;
-	sig();
+	signal(SIGQUIT, SIG_IGN);
+    waitpid(pid, &status, 0);
+    signal(SIGINT, ctrlc);
+    g_exit_status = status % 256;
+    write (1, "\n", 1);
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+    {
+        g_exit_status = WEXITSTATUS(status);
+        // close(pipefd[0]);
+        return ;
+    }
+    // redirect->fd = pipefd[0];
 }
 
 void destroy_many_waitpid(pid_t *pids, int status, int count)

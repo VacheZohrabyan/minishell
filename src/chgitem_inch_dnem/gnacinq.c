@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 15:39:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 16:02:01 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	}
 	else
 	{
-		signal(SIGINT, handle_sigint);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
-		signal(SIGINT, handle_sigher);
 		g_exit_status = status % 256;
+		signal(SIGINT, handle_sigher);
+		signal(SIGQUIT, SIG_IGN);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
 			g_exit_status = WEXITSTATUS(status);
