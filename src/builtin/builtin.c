@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:22:31 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 11:34:34 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,20 @@ int	check_builtin(t_shell *shell, t_command *command)
 {
 	if (!command->argv)
 		return (0);
+	if (builtin_with_forks(shell, command))
+		return (1);
+	else if (builtin_without_forks(shell, command))
+		return (1);
+	return (0);
+}
+
+int	builtin_with_forks(t_shell *shell, t_command *command)
+{
 	if (ft_strcmp(command->argv[0], "$?") == 0)
 	{
-		write(STDOUT_FILENO, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
-		write(STDOUT_FILENO, " command not found\n", 20);
+		write(STDOUT_FILENO, ft_itoa(g_exit_status),
+			ft_strlen(ft_itoa(g_exit_status)));
+		write(STDOUT_FILENO, ": command not found\n", 20);
 		return (1);
 	}
 	else if (!ft_strcmp("pwd", command->argv[0]))
@@ -30,7 +40,12 @@ int	check_builtin(t_shell *shell, t_command *command)
 		return (cmd_env(shell->env_list), 1);
 	else if (!ft_strcmp("history", command->argv[0]))
 		return (cmd_history(shell, command), 1);
-	else if (!ft_strcmp("cd", command->argv[0]))
+	return (0);
+}
+
+int	builtin_without_forks(t_shell *shell, t_command *command)
+{
+	if (!ft_strcmp("cd", command->argv[0]))
 		return (cmd_cd(shell, command), 1);
 	else if (!ft_strcmp("echo", command->argv[0]))
 		return (cmd_echo(command), 1);
