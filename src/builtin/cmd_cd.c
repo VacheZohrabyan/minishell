@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:22:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 15:54:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 12:23:40 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	update_pwd_vars(t_shell *shell, char *old_pwd, char *path)
 		ft_putendl_fd("cd: error retrieving current directory: "
 						"getcwd: cannot access parent directories: "
 						"No such file or directory",
-						2);
+						1);
 		set_env_param(shell->env_list, "PWD", ft_strjoin_gnl(old_path, path));
 		g_exit_status = 0;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/13 17:40:48 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 11:52:04 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	print_export(t_env_node *head);
 void	sort_export(t_env_node *head);
 void	swap_env_nodes(t_env_node *a, t_env_node *b);
 
-int		check_builtin(t_shell *shell, t_command *command);
+int	builtin_with_forks(t_shell *shell, t_command *command);
+int	builtin_without_forks(t_shell *shell, t_command *command);
+int		check_builtin(t_shell * shell, t_command *command);
 void	free_shell(t_shell *shell);
 #endif

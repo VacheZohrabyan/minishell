@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 11:34:34 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 12:03:35 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,24 @@
 
 int	check_builtin(t_shell *shell, t_command *command)
 {
+	(void)shell;
 	if (!command->argv)
 		return (0);
-	if (builtin_with_forks(shell, command))
+	else if (!ft_strcmp("pwd", command->argv[0]))
 		return (1);
-	else if (builtin_without_forks(shell, command))
+	else if (!ft_strcmp("exit", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("env", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("history", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("cd", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("echo", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("export", command->argv[0]))
+		return (1);
+	else if (!ft_strcmp("unset", command->argv[0]))
 		return (1);
 	return (0);
 }
