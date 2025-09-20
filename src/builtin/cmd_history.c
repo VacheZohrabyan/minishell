@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_history.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:23:12 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:19:50 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,30 @@ int	record_history(t_shell *shell, const char *line)
 	return (0);
 }
 
+int	check_argument(t_command *command)
+{
+	if (is_non_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
+	{
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(command->argv[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		g_exit_status = 2;
+		return (0);
+	}
+	return (1);
+}
+
 int	cmd_history(t_shell *shell, t_command *command)
 {
 	if (!shell || !shell->history)
 	{
-		write(STDOUT_FILENO, "minishell: history file not set\n", ft_strlen("minishell: history file not set\n"));
+		write(STDOUT_FILENO, "minishell: history file not set\n",
+			ft_strlen("minishell: history file not set\n"));
 		return (-1);
 	}
 	if (!command->argv[1])
 		return (print_history(shell), 1);
-	if (history_c(shell) || check_argument(command, "history"))
+	if (history_c(shell) || check_argument(command))
 		return (-1);
 	return (1);
 }

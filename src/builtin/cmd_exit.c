@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 15:55:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 15:21:30 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ long	ft_atol(const char *str)
 {
 	long	result;
 	int		sign;
-	int		digit;
 	int		i;
 
 	result = 0;
 	sign = 1;
-	digit = 0;
 	i = 0;
 	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
@@ -33,10 +31,9 @@ long	ft_atol(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		digit = str[i] - '0';
-		if (result > (LONG_MAX - digit) / 10)
+		if (result > (LONG_MAX - (str[i] - '0')) / 10)
 			return (0);
-		result = result * 10 + digit;
+		result = result * 10 + (str[i] - '0');
 		i++;
 	}
 	return (result * sign);
@@ -62,38 +59,28 @@ int	is_non_numeric(char *status)
 	return (0);
 }
 
-int	check_argument(t_command *command, char *err_msg)
-{
-	if (is_non_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(err_msg, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(command->argv[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-		g_exit_status = 2;
-		return (0);
-	}
-	return (1);
-}
-
 int	cmd_exit(t_shell *shell, t_command *command)
 {
-	ft_putendl_fd("exit", 2);
+	ft_putendl_fd("exit", STDERR_FILENO);
 	if (!command->argv[1])
 	{
 		free_shell(shell);
-		g_exit_status = 1;
-		exit(1);
+		exit(g_exit_status);
 	}
-	if (command->argv[2] && !is_non_numeric(command->argv[1]))
+	if (is_non_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
 	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(command->argv[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		free_shell(shell);
+		exit(2);
+	}
+	if (command->argv[2])
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		g_exit_status = 1;
 		return (1);
 	}
-	else if (check_argument(command, "exit"))
-		exit(2);
 	g_exit_status = ft_atoi(command->argv[1]) % 256;
 	exit(g_exit_status);
 }

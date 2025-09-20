@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 13:19:12 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 15:36:17 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,11 @@ void	add_or_update_env(t_env *env, char *arg)
 	push_back(&env->env_head, arg);
 }
 
-void	add_or_update_export(t_shell *shell, char *arg)
+int	update_node(t_env_node *node, char *arg, char *key)
 {
-	t_env_node	*node;
-	char		*equal_sign;
-	char		*key;
+	char	*equal_sign;
 
-	if (!shell->export_list || !arg)
-		return ;
 	equal_sign = ft_strchr(arg, '=');
-	key = get_key(arg);
-	node = shell->export_list->env_head;
 	while (node)
 	{
 		if (ft_strcmp(key, node->key) == 0)
@@ -68,12 +62,34 @@ void	add_or_update_export(t_shell *shell, char *arg)
 				node->is_equal = 0;
 			}
 			free(key);
-			return ;
+			return (1);
 		}
 		node = node->next;
 	}
+	return (0);
+}
+
+void	add_or_update_export(t_shell *shell, char *arg)
+{
+	t_env_node	*node;
+	char		*key;
+
+	key = get_key(arg);
+	if (!shell->export_list || !arg)
+		return ;
+	node = shell->export_list->env_head;
+	if (update_node(node, arg, key))
+		return ;
 	push_back(&(shell->export_list)->env_head, arg);
 	free(key);
+}
+
+void	print_error(t_command *command, int i)
+{
+	write(STDOUT_FILENO, "minishell: export: `", 21);
+	write(STDOUT_FILENO, command->argv[i], ft_strlen(command->argv[i]));
+	write(STDOUT_FILENO, "': not a valid identifier\n", 27);
+	g_exit_status = 1;
 }
 
 int	cmd_export(t_shell *shell, t_command *command)
@@ -91,14 +107,7 @@ int	cmd_export(t_shell *shell, t_command *command)
 	while (command->argv[i])
 	{
 		if (!is_valid_identifier(command->argv[i]))
-		{
-			write(STDOUT_FILENO, "minishell: export: `",
-				ft_strlen("minishell: export: "));
-			write(STDOUT_FILENO, command->argv[i], ft_strlen(command->argv[i]));
-			write(STDOUT_FILENO, "': not a valid identifier\n",
-				ft_strlen("': not a valid identifier\n"));
-			g_exit_status = 1;
-		}
+			print_error(command, i);
 		else
 		{
 			add_or_update_env(shell->env_list, command->argv[i]);
