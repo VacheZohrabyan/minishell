@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:45:00 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:23:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:14:42 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ int	cmd_pwd(void)
 		return (0);
 	}
 	write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+	write(1, "\n", 1);
 	return (1);
 }

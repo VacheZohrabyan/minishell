@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:23:02 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:19:12 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,40 +41,39 @@ void	add_or_update_env(t_env *env, char *arg)
 	push_back(&env->env_head, arg);
 }
 
-
-void add_or_update_export(t_shell *shell, char *arg)
+void	add_or_update_export(t_shell *shell, char *arg)
 {
-    t_env_node	*node;
-    char		*equal_sign;
-    char		*key;
+	t_env_node	*node;
+	char		*equal_sign;
+	char		*key;
 
-    if (!shell->export_list || !arg)
-        return ;
-    equal_sign = ft_strchr(arg, '=');
-    key = get_key(arg);
-    node = shell->export_list->env_head;
-    while (node)
-    {
-        if (ft_strcmp(key, node->key) == 0)
-        {
-            free(node->value);
-            if (equal_sign)
-            {
-                node->value = ft_strdup(equal_sign + 1);
-                node->is_equal = 1;
-            }
-            else
-            {
-                node->value = NULL;
-                node->is_equal = 0;
-            }
-            free(key);
-            return;
-        }
-        node = node->next;
-    }
-    push_back(&(shell->export_list)->env_head, arg);
-    free(key);
+	if (!shell->export_list || !arg)
+		return ;
+	equal_sign = ft_strchr(arg, '=');
+	key = get_key(arg);
+	node = shell->export_list->env_head;
+	while (node)
+	{
+		if (ft_strcmp(key, node->key) == 0)
+		{
+			free(node->value);
+			if (equal_sign)
+			{
+				node->value = ft_strdup(equal_sign + 1);
+				node->is_equal = 1;
+			}
+			else
+			{
+				node->value = NULL;
+				node->is_equal = 0;
+			}
+			free(key);
+			return ;
+		}
+		node = node->next;
+	}
+	push_back(&(shell->export_list)->env_head, arg);
+	free(key);
 }
 
 int	cmd_export(t_shell *shell, t_command *command)
@@ -93,9 +92,11 @@ int	cmd_export(t_shell *shell, t_command *command)
 	{
 		if (!is_valid_identifier(command->argv[i]))
 		{
-			write(STDOUT_FILENO, "minishell: export: `", ft_strlen("minishell: export: "));
+			write(STDOUT_FILENO, "minishell: export: `",
+				ft_strlen("minishell: export: "));
 			write(STDOUT_FILENO, command->argv[i], ft_strlen(command->argv[i]));
-			write(STDOUT_FILENO, "': not a valid identifier\n", ft_strlen("': not a valid identifier\n"));
+			write(STDOUT_FILENO, "': not a valid identifier\n",
+				ft_strlen("': not a valid identifier\n"));
 			g_exit_status = 1;
 		}
 		else

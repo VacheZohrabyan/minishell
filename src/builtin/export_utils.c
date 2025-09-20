@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/20 13:20:21 by zaleksan          #+#    #+#             */
+/*   Updated: 2025/09/20 13:20:48 by zaleksan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/builtin.h"
 
 void	swap_env_nodes(t_env_node *a, t_env_node *b)
@@ -58,9 +70,9 @@ void	print_export(t_env_node *head)
 		}
 		else
 		{
-			write (STDOUT_FILENO, "declare -x ", ft_strlen("declare -x "));
-			write (STDOUT_FILENO, head->key, ft_strlen(head->key));
-			write (STDOUT_FILENO, "\n", ft_strlen("\n"));
+			write(STDOUT_FILENO, "declare -x ", ft_strlen("declare -x "));
+			write(STDOUT_FILENO, head->key, ft_strlen(head->key));
+			write(STDOUT_FILENO, "\n", ft_strlen("\n"));
 		}
 		head = head->next;
 	}
@@ -88,20 +100,20 @@ char	*get_key(char *arg)
 	return (key);
 }
 
-int is_valid_identifier(const char *str)
+int	is_valid_identifier(const char *str)
 {
-    int i;
+	int	i;
 
-    if (!str || !str[0])
-        return (0);
-    if (!(ft_isalpha(str[0]) || str[0] == '_'))
-        return (0);
-    i = 1;
-    while (str[i] && str[i] != '=')
-    {
-        if (!(ft_isalnum(str[i]) || str[i] == '_'))
-            return (0);
-        i++;
-    }
-    return (1);
+	if (!str || !str[0])
+		return (0);
+	if (!(ft_isalpha(str[0]) || str[0] == '_'))
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!(ft_isalnum(str[i]) || str[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
 }

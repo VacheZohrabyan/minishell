@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/16 21:11:49 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:20:00 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	unset_env(t_env *env, char *key)
 
 int	cmd_unset(t_shell *shell, t_command *command)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!command->argv[1])

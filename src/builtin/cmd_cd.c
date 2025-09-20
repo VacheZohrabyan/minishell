@@ -3,20 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:22:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 12:23:40 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:18:22 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/builtin.h"
 
+static void	handle_oldpwd(t_shell *shell, char *old_pwd, char *path)
+{
+	char	*old_path;
+	int		i;
+
+	i = ft_strlen(old_pwd);
+	if (ft_strcmp(&old_pwd[i - 1], "/") == 0)
+		old_pwd[i - 1] = '\0';
+	old_path = ft_strjoin_gnl(ft_strdup(old_pwd), "/");
+	ft_putendl_fd("cd: error retrieving current directory: "
+		"getcwd: cannot access parent directories: "
+		"No such file or directory", 1);
+	set_env_param(shell->env_list, "PWD", ft_strjoin_gnl(old_path, path));
+	g_exit_status = 0;
+}
+
 static void	update_pwd_vars(t_shell *shell, char *old_pwd, char *path)
 {
 	char	cwd[PATH_MAX];
 	char	*new_pwd;
-	char	*old_path;
 
 	if (old_pwd)
 		set_env_param(shell->env_list, "OLDPWD", ft_strdup(old_pwd));
@@ -32,15 +47,7 @@ static void	update_pwd_vars(t_shell *shell, char *old_pwd, char *path)
 		}
 	}
 	else
-	{
-		old_path = ft_strjoin_gnl(ft_strdup(old_pwd), "/");
-		ft_putendl_fd("cd: error retrieving current directory: "
-						"getcwd: cannot access parent directories: "
-						"No such file or directory",
-						1);
-		set_env_param(shell->env_list, "PWD", ft_strjoin_gnl(old_path, path));
-		g_exit_status = 0;
-	}
+		handle_oldpwd(shell, old_pwd, path);
 }
 
 int	change_dir(t_shell *shell, char *path)
@@ -88,7 +95,7 @@ static char	*resolve_path(t_shell *shell, t_command *cmd)
 
 int	cmd_cd(t_shell *shell, t_command *cmd)
 {
-	char *path;
+	char	*path;
 
 	if (!ft_strcmp(cmd->argv[0], "cd.."))
 	{
