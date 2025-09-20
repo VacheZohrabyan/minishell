@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 16:02:01 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 16:11:49 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char	*find_command_path(t_env *env, char *cmd)
 void handle_sig_quit(int sig)
 {
 	(void)sig;
-	write (STDOUT_FILENO, "Quit (core dumped)\n", ft_strlen("Quit (core dumped)\n"));
+	write (STDOUT_FILENO, "Quit (core dumped)", ft_strlen("Quit (core dumped)"));
 }
 
 void	command_proc(t_shell *shell, t_command *com)
