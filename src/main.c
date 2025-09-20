@@ -6,14 +6,14 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 11:26:52 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 15:06:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/include.h"
 
 int		g_exit_status = 0;
-
+unsigned char c_exit_status = 0;
 void	shlvl(t_shell *shell)
 {
 	t_env_node	*env;

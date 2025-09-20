@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 14:42:15 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/20 15:39:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	}
 	else
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
 		waitpid(pid, &status, 0);
-		g_exit_status = status % 256;
 		signal(SIGINT, handle_sigher);
+		g_exit_status = status % 256;
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
 			g_exit_status = WEXITSTATUS(status);
@@ -184,50 +184,6 @@ void handle_sig_quit(int sig)
 	write (STDOUT_FILENO, "Quit (core dumped)\n", ft_strlen("Quit (core dumped)\n"));
 }
 
-// int is_state_changing_builtin(char *cmd)
-// {
-//     if (!cmd) return 0;
-//     return (ft_strcmp(cmd, "cd") == 0
-//          || ft_strcmp(cmd, "export") == 0
-//          || ft_strcmp(cmd, "unset") == 0
-//          || ft_strcmp(cmd, "exit") == 0);
-// }
-
-// /* apply all redirects (open or dup2 depending on context). 
-//    Here we assume any() sets tmp->fd and tmp->to already.
-//    save_fds[] should be provided with enough room for STDIN/STDOUT (2 ints) */
-// int apply_redirections_and_save(t_redirect *r, int save_fds[2])
-// {
-//     int idx = 0;
-//     if (save_fds)
-//     {
-//         save_fds[0] = dup(STDIN_FILENO);
-//         save_fds[1] = dup(STDOUT_FILENO);
-//     }
-//     while (r)
-//     {
-//         if (r->fd >= 0)
-//         {
-//             if (dup2(r->fd, r->to) == -1)
-//                 return -1;
-//             close(r->fd);
-//         }
-//         r = r->next;
-//     }
-//     return 0;
-// }
-
-// void restore_saved_fds(int save_fds[2])
-// {
-//     if (save_fds)
-//     {
-//         dup2(save_fds[0], STDIN_FILENO);
-//         dup2(save_fds[1], STDOUT_FILENO);
-//         close(save_fds[0]);
-//         close(save_fds[1]);
-//     }
-// }
-
 void	command_proc(t_shell *shell, t_command *com)
 {
 	pid_t		pid;
@@ -236,9 +192,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	t_redirect* r;
 	if (check_builtin(shell, com))
 	{
-		// int saved_stdin = dup(STDIN_FILENO);
 		int saved_stdout = dup(STDOUT_FILENO);
-		
 		if (com->redirect && any(com->redirect) != -1)
 		{
 			t_redirect *r = com->redirect;
@@ -256,7 +210,7 @@ void	command_proc(t_shell *shell, t_command *com)
 		builtin_without_forks(shell, com);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdout);
-		return;
+		return ;
 	}
 	pid = fork();
 	status = 0;
@@ -347,7 +301,6 @@ void command_many_proc(t_shell *shell, int count)
         if (count == 1 && check_builtin(shell, tmp))
 		{
 			int saved_stdout = dup(STDOUT_FILENO);
-			// int saved_stdin = dup(STDIN_FILENO);
 			if (tmp->redirect && any(tmp->redirect) != -1)
 			{
 				t_redirect *r = tmp->redirect;
@@ -365,8 +318,6 @@ void command_many_proc(t_shell *shell, int count)
 			builtin_with_forks(shell, tmp);
 			dup2(saved_stdout, STDOUT_FILENO);
 			close(saved_stdout);
-			
-			// free(pipe_fd);
 			tmp = tmp->next;
 			i++;
         }
@@ -411,7 +362,7 @@ void command_many_proc(t_shell *shell, int count)
 				{
 					builtin_with_forks(shell, tmp);
 					builtin_without_forks(shell, tmp);
-					exit (0);
+					exit (c_exit_status);
 				}
 				if (!str || execv(str, tmp->argv) == -1)
 				{
@@ -460,14 +411,12 @@ int	gnacinq(t_shell *shell)
 		}
 		cmd = cmd->next;
 	}
-
 	cmd = tmp;
 	while (cmd)
 	{
 		count++;
 		cmd = cmd->next;
 	}
-
 	if (count == 1)
 		command_proc(shell, shell->command);
 	else if (count > 1)
