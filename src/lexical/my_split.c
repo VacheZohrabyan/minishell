@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/17 14:38:48 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:03:42 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ char	*extract_quotes(char *res, t_env_node *env)
 	{
 		inside = ft_substr(res, 1, len - 2);
 		expanded = expand_env(inside, env);
-		free(inside);
 		free(res);
 		return (expanded);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/16 20:05:54 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:56:58 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ t_shell	*init_shell(char **env)
 	shell->env = env;
 	shell->command = NULL;
 	shell->history_fd = -1;
+	shell->cmd_count = 0;
+	shell->pipe_fd = NULL;
 	init_env(&(shell->env_list), shell->env);
 	init_env(&(shell->export_list), shell->env);
 	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME", 1),

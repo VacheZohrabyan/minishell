@@ -6,13 +6,13 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:39:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 18:55:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:44:31 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static int any_utils_in(t_redirect* tmp)
+static int	any_utils_in(t_redirect *tmp)
 {
 	if (tmp->token_type == TOKEN_REDIRECT_IN)
 	{
@@ -26,10 +26,10 @@ static int any_utils_in(t_redirect* tmp)
 		}
 		tmp->to = STDIN_FILENO;
 	}
-	return 0;
+	return (0);
 }
 
-static int any_utils_out(t_redirect* tmp)
+static int	any_utils_out(t_redirect *tmp)
 {
 	if (tmp->token_type == TOKEN_REDIRECT_OUT)
 	{
@@ -51,7 +51,7 @@ static int any_utils_out(t_redirect* tmp)
 	return (0);
 }
 
-static int any_utils_append(t_redirect* tmp)
+static int	any_utils_append(t_redirect *tmp)
 {
 	if (tmp->token_type == TOKEN_REDIRECT_APPEND)
 	{
@@ -81,20 +81,20 @@ int	any(t_redirect *redirect)
 	while (tmp)
 	{
 		if (tmp->token_type == TOKEN_REDIRECT_IN)
-        {
+		{
 			if (any_utils_in(tmp) == -1)
 				return (-1);
-        }
+		}
 		else if (tmp->token_type == TOKEN_REDIRECT_OUT)
 		{
-            if (any_utils_out(tmp) == -1)
-                    return (-1);         
-        }
+			if (any_utils_out(tmp) == -1)
+				return (-1);
+		}
 		else if (tmp->token_type == TOKEN_REDIRECT_APPEND)
 		{
-            if (any_utils_append(tmp) == -1)
-                    return (-1);         
-        }	
+			if (any_utils_append(tmp) == -1)
+				return (-1);
+		}
 		tmp = tmp->next;
 	}
 	return (0);

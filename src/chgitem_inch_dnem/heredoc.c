@@ -6,21 +6,24 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 19:06:54 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:49:29 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static void heredoc_loop(t_redirect* redirect, int* pipefd, char* buffer)
+static void	heredoc_loop(t_redirect *redirect, int *pipefd, char *buffer)
 {
 	while (1)
 	{
 		buffer = readline("> ");
 		if (!buffer)
 		{
-			write (STDOUT_FILENO, "minishell: warning: here-document delimited by EOF (wanted `" , ft_strlen("minishell: warning: here-document delimited by EOF (wanted `"));
-			write (STDOUT_FILENO, redirect->file_name, ft_strlen(redirect->file_name));
+			write (STDOUT_FILENO, "minishell: warning: here-document"
+				" delimited by EOF (wanted `", ft_strlen("minishell:"
+					" warning: here-document delimited by EOF (wanted `"));
+			write (STDOUT_FILENO, redirect->file_name,
+				ft_strlen(redirect->file_name));
 			write (STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
 			close(pipefd[1]);
 			exit(0);
@@ -43,8 +46,9 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	char	*buffer;
 	int		pipefd[2];
 	pid_t	pid;
-	int		status = 0;
+	int		status;
 
+	status = 0;
 	if (pipe(pipefd) == -1)
 		return (-1);
 	pid = fork();
@@ -54,7 +58,7 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	{
 		signal(SIGINT, SIG_DFL);
 		close(pipefd[0]);
-        buffer = NULL;
+		buffer = NULL;
 		heredoc_loop(redirect, pipefd, buffer);
 	}
 	else
