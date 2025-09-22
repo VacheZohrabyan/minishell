@@ -1,1 +1,0 @@
-/home/zaleksan/Desktop/shell
