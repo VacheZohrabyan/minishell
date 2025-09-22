@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:11:35 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/30 14:46:33 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:00:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	if (!s)
-		return 0;
+		return (0);
 	len = 0;
 	while (s[len] != '\0')
 		len++;

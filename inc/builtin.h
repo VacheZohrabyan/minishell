@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 17:01:09 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:07:24 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		cmd_pwd(void);
 int		cmd_exit(t_shell *shell, t_command *command);
 int		check_argument(t_command *command);
 long	ft_atol(const char *str);
-int	is_non_numeric(char *status);
+int		is_non_numeric(char *status);
 int		cmd_env(t_env *env);
 int		cmd_cd(t_shell *shell, t_command *command);
 int		cmd_echo(t_command *command);

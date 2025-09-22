@@ -6,11 +6,9 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 20:07:41 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/08/30 14:47:59 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:00:40 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libft.h"
 
 #include "libft.h"
 
@@ -25,7 +23,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	res = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!res)
 		return (0);
-	
 	if (s1)
 	{
 		while (s1[i] != 0)

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:58:23 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 19:01:39 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:08:28 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 # include "include.h"
 
 void	ctrlc(int sig);
-void	sig();
+void	sig(void);
 void	sig_handler_prompt(int sig);
 void	handle_sigher(int sig);
 void	handle_sigint(int sig);
 void	handle_sigcat(int sig);
-void	destroy_many_waitpid(pid_t* pids, int status, int count);
-void	destroy_one_waitpid(pid_t pid, int status);
-int		destroy_heredoc(pid_t pid, int status, int* pipefd, t_redirect* redirect);
+void	destroy_many_waitpid(t_shell *shell);
+void	destroy_one_waitpid(pid_t pid, t_shell *shell);
+int		destroy_heredoc(pid_t pid, int status, int *pipefd,
+			t_redirect *redirect);
 void	handle_sig_quit(int sig);
 
 #endif

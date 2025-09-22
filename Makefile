@@ -46,6 +46,7 @@ SRC     := \
 	$(SRCDIR)/chgitem_inch_dnem/heredoc.c \
 	$(SRCDIR)/chgitem_inch_dnem/command_proc.c \
 	$(SRCDIR)/chgitem_inch_dnem/command_many_proc.c \
+	$(SRCDIR)/chgitem_inch_dnem/command_many_proc_utils.c \
 	$(SRCDIR)/run.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)

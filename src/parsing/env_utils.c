@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 15:35:10 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/16 16:20:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:14:03 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,22 @@ int	init_env_node_key(t_env_node *tmp, char *env, size_t *key_size)
 	}
 	tmp->key[i] = '\0';
 	return (0);
+}
+
+void	shlvl(t_shell *shell)
+{
+	t_env_node	*env;
+
+	env = shell->env_list->env_head;
+	while (env)
+	{
+		if (ft_strcmp(env->key, "SHLVL") == 0)
+		{
+			free(env->value);
+			env->value = ft_strdup("1");
+			return ;
+		}
+		env = env->next;
+	}
+	return ;
 }

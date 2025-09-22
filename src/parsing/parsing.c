@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/21 15:56:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:43:35 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,7 @@ int	parsing(t_command **command, t_token *token)
 		tmp = tmp->next;
 	}
 	if (start && push_back_command(command, start, NULL) == -1)
-	{
-		g_exit_status = 1;
-		return (-1);
-	}
+		return (g_exit_status = 1, -1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 18:40:26 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:07:42 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include "gnacinq.h"
 
 extern int g_exit_status;
-extern unsigned char c_exit_status;
+
 void	run(t_shell *shell);
 
 #endif

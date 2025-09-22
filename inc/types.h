@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/21 16:00:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:01:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,6 @@ typedef struct s_command
 	struct s_command	*next;
 }						t_command;
 
-typedef struct s_execinfo
-{
-    int index;
-    int total;
-}   t_execinfo;
-
 typedef struct s_shell
 {
 	char				**env;
@@ -85,6 +79,7 @@ typedef struct s_shell
 	char				*buffer;
 	t_command			*command;
 	int					cmd_count;
+	int					status;
 	int					**pipe_fd;
 	pid_t				*pids;
 }						t_shell;

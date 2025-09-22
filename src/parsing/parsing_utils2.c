@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:00:02 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:44:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ t_redirect	*init_new_redirect(t_token **tmp)
 	if ((*tmp)->cmd == NULL)
 	{
 		free(new_redirect);
-		return (write(2, "minishell: syntax error "
-				"near unexpected token `newline'\n", ft_strlen("minishell: syntax error "
-				"near unexpected token `newline'\n")), NULL);
+		return (write(2, "minishell: syntax error near unexpected "
+				"token `newline'\n", ft_strlen("minishell: syntax error "
+					"near unexpected token `newline'\n")), NULL);
 	}
 	new_redirect->file_name = ft_strdup((*tmp)->cmd);
 	new_redirect->next = NULL;
