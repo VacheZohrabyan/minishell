@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:22:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 13:18:22 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:39:15 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static char	*resolve_path(t_shell *shell, t_command *cmd)
 			g_exit_status = 1;
 			return (NULL);
 		}
-		ft_putendl_fd(get_env_param(shell->env_list, "OLDPWD", 2), 1);
+		ft_putendl_fd(get_env_param(shell->env_list, "OLDPWD", 1), 1);
 		return (get_env_param(shell->env_list, "OLDPWD", 1));
 	}
 	return (cmd->argv[1]);
@@ -103,7 +103,7 @@ int	cmd_cd(t_shell *shell, t_command *cmd)
 		g_exit_status = 127;
 		return (1);
 	}
-	if (cmd->argv[2])
+	if (cmd->argv[1] && cmd->argv[2])
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		g_exit_status = 1;

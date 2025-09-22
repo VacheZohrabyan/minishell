@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:11:30 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 17:39:14 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:08:33 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	handle_sig_quit(int sig)
 {
 	(void)sig;
-	write (STDERR_FILENO, "Quit (core dumped)\n",
-		ft_strlen("Quit (core dumped)\n"));
+	write (STDERR_FILENO, "Quit (core dumped1)\n",
+		ft_strlen("Quit (core dumped1)\n"));
 	g_exit_status = 131;
 }
 

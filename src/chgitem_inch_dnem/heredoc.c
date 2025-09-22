@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 18:56:36 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/22 19:54:16 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ static void	heredoc_loop(t_redirect *redirect, int *pipefd, char *buffer)
 		write(pipefd[1], buffer, ft_strlen(buffer));
 		write(pipefd[1], "\n", 1);
 		free(buffer);
+		close(pipefd[1]);
 	}
 }
 

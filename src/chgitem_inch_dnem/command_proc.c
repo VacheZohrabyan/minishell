@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   command_proc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 17:38:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 19:32:55 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-
-// static void	handle_sigint(int sig)
-// {
-// 	(void)sig;
-// 	rl_on_new_line();
-// 	rl_replace_line("\n", 0);
-// 	// write (2, "\n", 1);
-// 	rl_redisplay();
-// 	g_exit_status = 130;
-// }
 
 void	pid_equal_zero(t_shell *shell, t_command *com)
 {
@@ -28,6 +18,8 @@ void	pid_equal_zero(t_shell *shell, t_command *com)
 
 	signal(SIGQUIT, SIG_DFL);
 	str = find_command_path(shell->env_list, com->argv[0]);
+	if (com->redirect && any(com->redirect) == -1)
+		return ;
 	check_redirect(com);
 	execv_function(str, com, 1);
 	close(com->redirect->fd);
@@ -42,8 +34,9 @@ void	command_proc(t_shell *shell, t_command *com)
 	if (check_builtin(shell, com))
 	{
 		saved_stdout = dup(STDOUT_FILENO);
-		if (com->redirect && any(com->redirect) != -1)
-			check_redirect(com);
+		if (com->redirect && any(com->redirect) == -1)
+			return ;
+		check_redirect(com);
 		builtin_with_forks(shell, com);
 		builtin_without_forks(shell, com);
 		dup2(saved_stdout, STDOUT_FILENO);

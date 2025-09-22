@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/21 15:52:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 19:34:17 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,14 @@ void	check_redirect(t_command *com)
 	r = com->redirect;
 	while (r)
 	{
-		if (r->fd >= 0)
+		if (r->fd != -1)
 		{
-			dup2(r->fd, r->to);
+			if (dup2(r->fd, r->to) == -1)
+			{
+				g_exit_status = 1;
+				return ;
+			}
 			close(r->fd);
 		}
-		r = r->next;
 	}
 }
