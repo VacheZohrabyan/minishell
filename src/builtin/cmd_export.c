@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 15:36:17 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/22 13:14:10 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ void	add_or_update_export(t_shell *shell, char *arg)
 
 void	print_error(t_command *command, int i)
 {
-	write(STDOUT_FILENO, "minishell: export: `", 21);
-	write(STDOUT_FILENO, command->argv[i], ft_strlen(command->argv[i]));
-	write(STDOUT_FILENO, "': not a valid identifier\n", 27);
+	write(STDERR_FILENO, "minishell: export: `", 21);
+	write(STDERR_FILENO, command->argv[i], ft_strlen(command->argv[i]));
+	write(STDERR_FILENO, "': not a valid identifier\n", 27);
 	g_exit_status = 1;
 }
 
