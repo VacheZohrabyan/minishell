@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 12:13:07 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 18:54:42 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/include.h"
 
-int		g_exit_status = 0;
+int			g_exit_status = 0;
 
 static void	init_minishell(t_shell **shell, char **env)
 {
@@ -54,6 +54,8 @@ static int	shell_loop(t_shell *shell)
 {
 	while (1)
 	{
+		signal(SIGINT, handle_sigcat);
+		signal(SIGQUIT, SIG_IGN);
 		shell->buffer = readline("minishell> ");
 		if (!shell->buffer)
 		{

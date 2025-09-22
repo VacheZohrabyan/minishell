@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 17:33:47 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 18:54:32 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,36 +37,23 @@ void	sig(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-// static void	set_signal(int sig, void (*handler)(int))
-// {
-// 	struct sigaction sa;
-
-// 	sa.sa_handler = handler;
-// 	sigemptyset(&sa.sa_mask);
-// 	sa.sa_flags = SA_RESTART;
-// 	sigaction(sig, &sa, NULL);
-// }
-
-// void	handle_sigint(int sig)
-// {
-// 	(void)sig;
-// 	g_exit_status = 130;
-// 	write(STDOUT_FILENO, "\n", 1);
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);   // clear current input
-// 	rl_redisplay();
-// }
-
 void	destroy_one_waitpid(pid_t pid, t_shell *shell)
 {
+	int	status;
+
+	(void)shell;
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, handle_sig_quit);
-	waitpid(pid, &shell->status, 0);
-	g_exit_status = 130;
-	if (WIFEXITED(shell->status) && WEXITSTATUS(shell->status) != 0)
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
 	{
-		g_exit_status = WEXITSTATUS(shell->status);
-		return ;
+		g_exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+		else if (WTERMSIG(status) == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 	}
 	signal(SIGINT, handle_sigcat);
 	signal(SIGQUIT, SIG_IGN);

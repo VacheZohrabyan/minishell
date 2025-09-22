@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 16:40:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 18:56:36 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,24 @@ static void	handle_sigher(int sig)
 	g_exit_status = 130;
 }
 
-static int	destroy_heredoc(pid_t pid, int status, int *pipefd, t_redirect *redirect)
+static int	destroy_heredoc(pid_t pid, int status, int *pipefd,
+		t_redirect *redirect)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	g_exit_status = status % 256;
+	if (WIFEXITED(status))
+		g_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		g_exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+	}
 	signal(SIGINT, handle_sigher);
 	signal(SIGQUIT, SIG_IGN);
-	write(2, "\n", 1);
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+	if (g_exit_status != 0)
 	{
-		g_exit_status = WEXITSTATUS(status);
 		close(pipefd[0]);
 		return (-1);
 	}
@@ -48,12 +54,12 @@ static void	heredoc_loop(t_redirect *redirect, int *pipefd, char *buffer)
 		buffer = readline("> ");
 		if (!buffer)
 		{
-			write (STDOUT_FILENO, "minishell: warning: here-document"
+			write(STDOUT_FILENO, "minishell: warning: here-document"
 				" delimited by EOF (wanted `", ft_strlen("minishell:"
 					" warning: here-document delimited by EOF (wanted `"));
-			write (STDOUT_FILENO, redirect->file_name,
+			write(STDOUT_FILENO, redirect->file_name,
 				ft_strlen(redirect->file_name));
-			write (STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
+			write(STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
 			close(pipefd[1]);
 			exit(0);
 		}
@@ -86,6 +92,7 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		close(pipefd[0]);
 		buffer = NULL;
 		heredoc_loop(redirect, pipefd, buffer);
