@@ -6,17 +6,26 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 11:31:07 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 17:38:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
+// static void	handle_sigint(int sig)
+// {
+// 	(void)sig;
+// 	rl_on_new_line();
+// 	rl_replace_line("\n", 0);
+// 	// write (2, "\n", 1);
+// 	rl_redisplay();
+// 	g_exit_status = 130;
+// }
+
 void	pid_equal_zero(t_shell *shell, t_command *com)
 {
 	char	*str;
 
-	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	str = find_command_path(shell->env_list, com->argv[0]);
 	check_redirect(com);
@@ -41,6 +50,7 @@ void	command_proc(t_shell *shell, t_command *com)
 		close(saved_stdout);
 		return ;
 	}
+	sig();
 	pid = fork();
 	if (pid < 0)
 		return (write (STDOUT_FILENO, "error fork()\n",

@@ -6,34 +6,17 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:11:30 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 11:58:37 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 17:39:14 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-void	handle_sigher(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	g_exit_status = 130;
-}
-
-void	handle_sigint(int sig)
-{
-	(void)sig;
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_exit_status = 130;
-}
-
 void	handle_sig_quit(int sig)
 {
 	(void)sig;
-	write (STDOUT_FILENO, "Quit (core dumped)",
-		ft_strlen("Quit (core dumped)"));
+	write (STDERR_FILENO, "Quit (core dumped)\n",
+		ft_strlen("Quit (core dumped)\n"));
 	g_exit_status = 131;
 }
 
@@ -41,13 +24,7 @@ void	handle_sigcat(int sig)
 {
 	(void)sig;
 	g_exit_status = 130;
-}
-
-void	ctrlc(int sig)
-{
-	(void)sig;
-	g_exit_status = 130;
-	write(2, "\n", 1);
+	write (2, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();

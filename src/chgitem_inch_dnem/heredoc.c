@@ -6,11 +6,40 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/21 15:49:29 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/22 16:40:08 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
+
+static void	handle_sigher(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	g_exit_status = 130;
+}
+
+static int	destroy_heredoc(pid_t pid, int status, int *pipefd, t_redirect *redirect)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	g_exit_status = status % 256;
+	signal(SIGINT, handle_sigher);
+	signal(SIGQUIT, SIG_IGN);
+	write(2, "\n", 1);
+	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+	{
+		g_exit_status = WEXITSTATUS(status);
+		close(pipefd[0]);
+		return (-1);
+	}
+	redirect->fd = pipefd[0];
+	return (0);
+}
 
 static void	heredoc_loop(t_redirect *redirect, int *pipefd, char *buffer)
 {
