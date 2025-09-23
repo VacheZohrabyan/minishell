@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 12:07:42 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:04:35 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "builtin.h"
 # include "gnacinq.h"
 
-extern int g_exit_status;
+extern int	g_exit_status;
 
 void	run(t_shell *shell);
 

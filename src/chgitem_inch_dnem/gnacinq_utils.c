@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 17:19:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:32:15 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	execv_function(char *str, t_command *com, int flag)
 		exit(127);
 		(void)flag;
 	}
+	g_exit_status = 0;
 }
 
 void	check_redirect(t_command *com)

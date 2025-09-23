@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_split_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 18:53:09 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:02:45 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ char	**ft_free(char **res, int size)
 	return (NULL);
 }
 
-char	*expend_env_function1(char *str, int *i,
-	char *out, t_env_node *env)
+char	*expend_env_function1(char *str, int *i, char *out, t_env_node *env)
 {
 	int		start;
 	char	*name;
@@ -48,7 +47,6 @@ char	*expand_env(char *str, t_env_node *env)
 {
 	char	*out;
 	int		i;
-	char	*c;
 
 	i = 0;
 	out = ft_strdup("");
@@ -58,21 +56,13 @@ char	*expand_env(char *str, t_env_node *env)
 	{
 		if (str[i] == '$' && str[i + 1] == '?')
 		{
-			int flag = i;
-			while (str[i] && str[i] != '"' && str[i] != '\'')
-				++i;
-			return ft_substr(str, flag, i);
+			out = ft_strjoin(out, ft_itoa(g_exit_status));
+			i += 2;
 		}
-		if (str[i] == '$')
+		else if (str[i] == '$')
 			out = expend_env_function1(str, &i, out, env);
 		else
-		{
-			c = (char *)malloc(sizeof(char) * 2);
-			c[0] = str[i++];
-			c[1] = '\0';
-			out = ft_strjoin_gnl(out, c);
-			free(c);
-		}
+			out = append_char(out, str[i++]);
 	}
 	free(str);
 	return (out);

@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 13:18:09 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:49:32 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ static char	*print_echo(t_command *command, int start)
 		return (NULL);
 	while (command->argv[i])
 	{
-		if (ft_strcmp(command->argv[i], "$?") == 0)
-			tmp = ft_itoa(g_exit_status);
-		else
-			tmp = ft_strdup(command->argv[i]);
+		tmp = ft_strdup(command->argv[i]);
 		if (!tmp)
 			return (free(str), NULL);
 		str = ft_strjoin_gnl(str, tmp);
@@ -77,5 +74,6 @@ int	cmd_echo(t_command *command)
 	else
 		ft_putstr_fd(str, STDOUT_FILENO);
 	free(str);
+	g_exit_status = 0;
 	return (0);
 }

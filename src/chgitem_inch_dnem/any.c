@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   any.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:39:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 17:20:22 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:45:33 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	any_utils_append(t_redirect *tmp)
 		if (tmp->fd == -1)
 		{
 			if (access(tmp->file_name, W_OK) == -1)
-				write(STDOUT_FILENO, "minishell: Permission denied\n", 29);
+				write(STDERR_FILENO, "minishell: Permission denied\n", 29);
 			else
 			{
 				write(STDOUT_FILENO, "minishell: ", 11);
