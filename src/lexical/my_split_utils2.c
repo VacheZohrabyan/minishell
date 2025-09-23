@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 13:19:59 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:53:09 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,17 @@ char	*expand_env(char *str, t_env_node *env)
 
 	i = 0;
 	out = ft_strdup("");
+	if (str[0] == '$' && str[1] == '\0')
+		return (ft_strdup("$"));
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] == '?' && str[i + 2] == '\0')
-			return (ft_strjoin(out, "$?"));
+		if (str[i] == '$' && str[i + 1] == '?')
+		{
+			int flag = i;
+			while (str[i] && str[i] != '"' && str[i] != '\'')
+				++i;
+			return ft_substr(str, flag, i);
+		}
 		if (str[i] == '$')
 			out = expend_env_function1(str, &i, out, env);
 		else
