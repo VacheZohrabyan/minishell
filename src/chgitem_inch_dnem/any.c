@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   any.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:39:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 19:29:50 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:20:22 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static int any_utils_in(t_redirect *tmp)
+static int	any_utils_in(t_redirect *tmp)
 {
-    if (tmp->token_type == TOKEN_REDIRECT_IN) // <
-    {
-        tmp->fd = open(tmp->file_name, O_RDONLY);
+	if (tmp->token_type == TOKEN_REDIRECT_IN)
+	{
+		tmp->fd = open(tmp->file_name, O_RDONLY);
 		if (tmp->fd == -1)
-        {
-            write(STDERR_FILENO, "minishell: ", 11);
-            perror(tmp->file_name);
-            g_exit_status = 1;
-            return (-1);
-        }
-        tmp->to = STDIN_FILENO;
-    }
-    return (0);
+		{
+			write(STDERR_FILENO, "minishell: ", 11);
+			perror(tmp->file_name);
+			g_exit_status = 1;
+			return (-1);
+		}
+		tmp->to = STDIN_FILENO;
+	}
+	return (0);
 }
 
 static int	any_utils_out(t_redirect *tmp)
@@ -76,6 +76,7 @@ static int	any_utils_append(t_redirect *tmp)
 int	any(t_redirect *redirect)
 {
 	t_redirect	*tmp;
+
 	tmp = redirect;
 	while (tmp)
 	{

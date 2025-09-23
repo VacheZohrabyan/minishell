@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 20:13:51 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:16:34 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,11 @@ void	destroy_one_waitpid(pid_t pid, t_shell *shell)
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	g_exit_status = 0;
 	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
-		g_exit_status = WTERMSIG(status);
+		g_exit_status = WTERMSIG(status) + 116;
 		if (WTERMSIG(status) == SIGINT)
 			write(STDERR_FILENO, "\n", 1);
 		else if (WTERMSIG(status) == SIGQUIT)

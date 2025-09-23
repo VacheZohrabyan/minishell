@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/20 14:42:23 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:20:41 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	check_builtin(t_shell *shell, t_command *command)
 	if (!command->argv)
 		return (0);
 	else if (ft_strcmp(command->argv[0], "$?") == 0)
-		return (1);
+		return (write(STDERR_FILENO, ft_itoa(g_exit_status),
+				ft_strlen(ft_itoa(g_exit_status))), 0);
 	else if (!ft_strcmp("pwd", command->argv[0]))
 		return (1);
 	else if (!ft_strcmp("exit", command->argv[0]))
@@ -40,14 +41,7 @@ int	check_builtin(t_shell *shell, t_command *command)
 
 int	builtin_with_forks(t_shell *shell, t_command *command)
 {
-	if (ft_strcmp(command->argv[0], "$?") == 0)
-	{
-		write(STDOUT_FILENO, ft_itoa(g_exit_status),
-			ft_strlen(ft_itoa(g_exit_status)));
-		write(STDOUT_FILENO, ": command not found\n", 20);
-		return (1);
-	}
-	else if (!ft_strcmp("pwd", command->argv[0]))
+	if (!ft_strcmp("pwd", command->argv[0]))
 		return (cmd_pwd(), 1);
 	else if (!ft_strcmp("exit", command->argv[0]))
 		return (cmd_exit(shell, command), 1);

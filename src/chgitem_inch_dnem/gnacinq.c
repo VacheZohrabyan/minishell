@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 23:51:20 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:19:49 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	heredoc(t_command *cmd)
 {
 	t_redirect	*red;
+	int			fd;
 
 	while (cmd)
 	{
@@ -23,16 +24,11 @@ int	heredoc(t_command *cmd)
 		{
 			if (red->token_type == TOKEN_HEREDOC)
 			{
-				if (heredoc_file_open_wr(red) == -1)
-				{
-					// close(red->fd);
+				fd = heredoc_file_open_wr(red);
+				if (fd < 0)
 					return (1);
-				}
-			}
-			if (red->fd > 0)
-			{
-				dup2(red->fd, STDIN_FILENO);	
-				close(red->fd);
+				else
+					red->fd = fd;
 			}
 			red = red->next;
 		}
@@ -49,13 +45,9 @@ int	gnacinq(t_shell *shell)
 	tmp = shell->command;
 	cmd = tmp;
 	shell->cmd_count = 0;
-	if (heredoc(cmd) == -1)
+	if (heredoc(cmd))
 	{
-		// heredoc canceled, reset prompt state
-		rl_clear_history();
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		return 1; // skip command execution
+		return (0);
 	}
 	cmd = tmp;
 	while (cmd)
