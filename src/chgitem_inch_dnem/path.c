@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:56:36 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/21 15:45:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/23 21:00:46 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	*find_command_path(t_env *env, char *cmd)
 	if (!paths)
 		return (NULL);
 	full_path = join_path(paths, cmd);
+	if (!full_path)
+		return (ft_strdup(cmd)); // petq e free_split
 	j = 0;
 	while (paths[j])
 		free(paths[j++]);

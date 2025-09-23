@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 19:32:15 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 21:03:24 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	execv_function(char *str, t_command *com, int flag)
 {
 	if (com->redirect && com->redirect->fd >= 0)
 		close(com->redirect->fd);
-	if (execv(str, com->argv) == -1)
+	if (execve(str, com->argv, NULL) == -1)
 	{
 		if (ft_strcmp(com->argv[0], "$?") == 0)
 		{

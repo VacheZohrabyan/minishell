@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 20:03:25 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:51:31 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	init_minishell(t_shell **shell, char **env)
 {
 	*shell = init_shell(env);
 	init_shell_history(*shell);
-	load_history(*shell);
+	// load_history(*shell);
 	shlvl(*shell);
 }
 
