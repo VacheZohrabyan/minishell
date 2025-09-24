@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 20:51:31 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:42:59 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void	init_minishell(t_shell **shell, char **env)
 {
 	*shell = init_shell(env);
 	init_shell_history(*shell);
-	// load_history(*shell);
 	shlvl(*shell);
 }
 
@@ -49,10 +48,13 @@ static int	process_input(t_shell *shell)
 	return (0);
 }
 
-static int	shell_loop(t_shell *shell)
+static int	shell_loop(struct termios orig_term,
+		struct termios new_term, t_shell *shell)
 {
+	enable_raw_mode(&orig_term, &new_term);
 	while (1)
 	{
+		disable_raw_mode(&orig_term);
 		signal(SIGINT, handle_sigcat);
 		signal(SIGQUIT, SIG_IGN);
 		shell->buffer = readline("minishell> ");
@@ -76,12 +78,14 @@ static int	shell_loop(t_shell *shell)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_shell	*shell;
+	t_shell			*shell;
+	struct termios	orig_term;
+	struct termios	new_term;
 
 	if (argc != 1 || !argv[0])
 		return (0);
 	init_minishell(&shell, env);
-	shell_loop(shell);
+	shell_loop(orig_term, new_term, shell);
 	close_shell_history(shell);
 	free_shell(shell);
 	return (0);

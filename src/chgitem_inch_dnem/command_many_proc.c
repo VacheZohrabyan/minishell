@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:04:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 11:39:23 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:04:58 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	execute_child(t_shell *shell, t_command *cmd, int i)
 		builtin_without_forks(shell, cmd);
 		exit(g_exit_status);
 	}
-	execv_function(str, cmd, 0);
+	execv_function(shell, str, cmd, 0);
 }
 
 void	cleanup_and_wait(t_shell *shell)

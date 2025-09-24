@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 20:41:42 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/24 09:57:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	pid_equal_zero(t_shell *shell, t_command *com)
 	if (com->redirect && any(com->redirect) == -1)
 		return ;
 	check_redirect(com);
-	execv_function(str, com, 1);
+	execv_function(shell, str, com, 1);
 	close(com->redirect->fd);
 	free(str);
 }

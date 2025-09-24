@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/22 12:07:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:32:10 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,6 @@ int		builtin_with_forks(t_shell *shell, t_command *command);
 int		builtin_without_forks(t_shell *shell, t_command *command);
 int		check_builtin(t_shell *shell, t_command *command);
 void	free_shell(t_shell *shell);
+void	free_split(char **str);
+
 #endif

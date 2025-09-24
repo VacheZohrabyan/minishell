@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 20:04:35 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:45:15 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <termios.h>
 # include "types.h"
 # include "parser.h"
 # include "lexical.h"
@@ -34,5 +35,7 @@
 extern int	g_exit_status;
 
 void	run(t_shell *shell);
+void	disable_raw_mode(struct termios *orig_term);
+void	enable_raw_mode(struct termios *orig_term, struct termios *new_term);
 
 #endif

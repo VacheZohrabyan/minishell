@@ -9,6 +9,7 @@ LIBFT   := libft
 
 SRC     := \
 	$(SRCDIR)/main.c \
+	$(SRCDIR)/main_utils.c \
 	$(SRCDIR)/parsing/parsing.c \
 	$(SRCDIR)/parsing/parsing_utils.c \
 	$(SRCDIR)/parsing/parsing_utils2.c \
@@ -18,6 +19,7 @@ SRC     := \
 	$(SRCDIR)/free/token_node_free.c \
 	$(SRCDIR)/free/free_command.c \
 	$(SRCDIR)/free/free_shell.c \
+	$(SRCDIR)/free/free_split.c \
 	$(SRCDIR)/my_signal/sig1.c \
 	$(SRCDIR)/my_signal/sig2.c \
 	$(SRCDIR)/lexical/lexical.c \
