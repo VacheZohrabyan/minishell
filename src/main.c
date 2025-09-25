@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 16:45:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:58:11 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ static int	shell_loop(struct termios orig_term,
 	while (1)
 	{
 		disable_raw_mode(&orig_term);
-		// signal(SIGINT, handle_sigcat);
-		// signal(SIGQUIT, SIG_IGN);
-		sig();
+		signal(SIGINT, handle_sigcat);
+		signal(SIGQUIT, SIG_IGN);
+		// sig();
 		shell->buffer = readline("minishell> ");
 		if (!shell->buffer)
 		{

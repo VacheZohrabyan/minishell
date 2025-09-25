@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:56:36 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 14:43:22 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:10:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ char	*find_command_path(t_env *env, char *cmd)
 	if (!paths)
 		return (NULL);
 	full_path = join_path(paths, cmd);
+	if (!full_path)
+		return (free_split(paths), ft_strdup(cmd));
 	free_split(paths);
 	return (full_path);
 }

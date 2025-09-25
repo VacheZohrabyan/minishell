@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 16:34:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:05:57 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	handle_execve_error(t_command *com, char **env_array)
 {
 	if (com->argv && com->argv[0])
 	{
+		g_exit_status = 127;
 		free_split(env_array);
 		write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
 		write(STDERR_FILENO, com->argv[0], ft_strlen(com->argv[0]));
@@ -64,7 +65,6 @@ static void	handle_execve_error(t_command *com, char **env_array)
 		if (com->redirect && com->redirect->fd >= 0)
 			close(com->redirect->fd);
 	}
-	g_exit_status = 127;
 	exit(127);
 }
 
@@ -78,7 +78,6 @@ void	execv_function(t_shell *shell, char *str, t_command *com, int flag)
 	if (execve(str, com->argv, env_array) == -1)
 		handle_execve_error(com, env_array);
 	free_split(env_array);
-	g_exit_status = 0;
 	(void)flag;
 }
 
