@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/25 16:43:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 19:05:03 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static char	*print_echo(t_command *command, int start)
 	int		i;
 	char	*str;
 	char	*tmp;
+	char	*ex_status;
 
 	i = start;
 	str = ft_strdup("");
@@ -30,9 +31,11 @@ static char	*print_echo(t_command *command, int start)
 		else if (ft_strcmp(tmp, "$?") == 0)
 		{
 			free(tmp);
-			tmp = ft_strdup(ft_itoa(g_exit_status));
+			ex_status = ft_itoa(g_exit_status);
+			tmp = ft_strdup(ex_status);
 		}
 		str = ft_strjoin_gnl(str, tmp);
+		free(tmp);
 		if (command->argv[i + 1])
 			str = ft_strjoin_gnl(str, " ");
 		i++;

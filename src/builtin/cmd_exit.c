@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 15:49:56 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/25 14:57:17 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 19:15:50 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	is_non_numeric(char *status)
 
 int	cmd_exit(t_shell *shell, t_command *command)
 {
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!command->argv[1])
 	{
 		free_shell(shell);

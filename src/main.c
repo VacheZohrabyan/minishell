@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 16:58:11 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:55:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ static int	process_input(t_shell *shell)
 	return (0);
 }
 
-static int	shell_loop(struct termios orig_term,
-		struct termios new_term, t_shell *shell)
+static int	shell_loop(struct termios* orig_term,
+		struct termios* new_term, t_shell *shell)
 {
-	enable_raw_mode(&orig_term, &new_term);
+	enable_raw_mode(orig_term, new_term);
 	while (1)
 	{
-		disable_raw_mode(&orig_term);
+		disable_raw_mode(orig_term);
 		signal(SIGINT, handle_sigcat);
 		signal(SIGQUIT, SIG_IGN);
 		// sig();
@@ -86,7 +86,7 @@ int	main(int argc, char **argv, char **env)
 	if (argc != 1 || !argv[0])
 		return (0);
 	init_minishell(&shell, env);
-	shell_loop(orig_term, new_term, shell);
+	shell_loop(&orig_term, &new_term, shell);
 	close_shell_history(shell);
 	free_shell(shell);
 	return (0);
