@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/24 10:43:56 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:34:01 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,25 @@ char	**env_in_array(t_shell *shell)
 
 static void	handle_execve_error(t_command *com, char *str, char **env_array)
 {
-	if (ft_strcmp(com->argv[0], "$?") == 0)
+	(void)str;
+	if (com->argv && com->argv[0] && ft_strcmp(com->argv[0], "$?") == 0)
 	{
 		if (com->redirect && com->redirect->fd >= 0)
 			close(com->redirect->fd);
-		free(str);
 		free_split(env_array);
 		write(STDERR_FILENO, ": command not found\n",
 			ft_strlen(": command not found\n"));
-		exit(127);
 	}
-	free(str);
-	free_split(env_array);
-	write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
-	write(STDERR_FILENO, com->argv[0], ft_strlen(com->argv[0]));
-	write(STDERR_FILENO, ": command not found\n",
-		ft_strlen(": command not found\n"));
-	if (com->redirect && com->redirect->fd >= 0)
-		close(com->redirect->fd);
+	else if (com->argv && com->argv[0])
+	{
+		free_split(env_array);
+		write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
+		write(STDERR_FILENO, com->argv[0], ft_strlen(com->argv[0]));
+		write(STDERR_FILENO, ": command not found\n",
+			ft_strlen(": command not found\n"));
+		if (com->redirect && com->redirect->fd >= 0)
+			close(com->redirect->fd);
+	}
 	g_exit_status = 127;
 	exit(127);
 }

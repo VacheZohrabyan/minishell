@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:56:36 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/24 10:12:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:43:22 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ char	*find_command_path(t_env *env, char *cmd)
 	char	**paths;
 	char	*path_env;
 	char	*full_path;
-	int		j;
 
+	path_env = "";
+	if (!cmd)
+		return (NULL);
 	if (absolute_path(cmd))
 		return (ft_strdup(cmd));
 	path_env = get_env_param(env, "PATH", 1);
@@ -61,11 +63,6 @@ char	*find_command_path(t_env *env, char *cmd)
 	if (!paths)
 		return (NULL);
 	full_path = join_path(paths, cmd);
-	if (!full_path)
-		return (free_split(paths), ft_strdup(cmd));
-	j = 0;
-	while (paths[j])
-		free(paths[j++]);
-	free(paths);
+	free_split(paths);
 	return (full_path);
 }
