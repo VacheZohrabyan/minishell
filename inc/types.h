@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:43:16 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 12:01:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:16:11 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_shell
 	int					status;
 	int					**pipe_fd;
 	pid_t				*pids;
+	int					flag;
 }						t_shell;
 
 #endif

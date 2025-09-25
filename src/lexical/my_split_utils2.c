@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_split_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 20:02:45 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:36:06 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*expand_env(char *str, t_env_node *env)
 	{
 		if (str[i] == '$' && str[i + 1] == '?')
 		{
-			out = ft_strjoin(out, ft_itoa(g_exit_status));
+			out = ft_strjoin(out, "$?");
 			i += 2;
 		}
 		else if (str[i] == '$')

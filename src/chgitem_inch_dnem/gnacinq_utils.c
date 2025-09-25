@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 14:34:01 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:34:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,9 @@ char	**env_in_array(t_shell *shell)
 	return (env_array);
 }
 
-static void	handle_execve_error(t_command *com, char *str, char **env_array)
+static void	handle_execve_error(t_command *com, char **env_array)
 {
-	(void)str;
-	if (com->argv && com->argv[0] && ft_strcmp(com->argv[0], "$?") == 0)
-	{
-		if (com->redirect && com->redirect->fd >= 0)
-			close(com->redirect->fd);
-		free_split(env_array);
-		write(STDERR_FILENO, ": command not found\n",
-			ft_strlen(": command not found\n"));
-	}
-	else if (com->argv && com->argv[0])
+	if (com->argv && com->argv[0])
 	{
 		free_split(env_array);
 		write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
@@ -85,7 +76,7 @@ void	execv_function(t_shell *shell, char *str, t_command *com, int flag)
 		close(com->redirect->fd);
 	env_array = env_in_array(shell);
 	if (execve(str, com->argv, env_array) == -1)
-		handle_execve_error(com, str, env_array);
+		handle_execve_error(com, env_array);
 	free_split(env_array);
 	g_exit_status = 0;
 	(void)flag;

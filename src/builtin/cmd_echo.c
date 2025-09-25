@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/23 19:49:32 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:43:43 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ static char	*print_echo(t_command *command, int start)
 		tmp = ft_strdup(command->argv[i]);
 		if (!tmp)
 			return (free(str), NULL);
+		else if (ft_strcmp(tmp, "$?") == 0)
+		{
+			free(tmp);
+			tmp = ft_strdup(ft_itoa(g_exit_status));
+		}
 		str = ft_strjoin_gnl(str, tmp);
 		if (command->argv[i + 1])
 			str = ft_strjoin_gnl(str, " ");

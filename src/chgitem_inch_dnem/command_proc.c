@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 14:41:08 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:19:18 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	command_proc(t_shell *shell, t_command *com)
 	sig();
 	pid = fork();
 	if (pid < 0)
-		return (write (STDOUT_FILENO, "error fork()\n",
+		return (write (STDERR_FILENO, "error fork()\n",
 				ft_strlen("error fork()\n")), (void)0);
 	else if (pid == 0)
 		pid_equal_zero(shell, com);
