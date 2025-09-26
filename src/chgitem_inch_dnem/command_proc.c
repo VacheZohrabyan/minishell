@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 17:10:59 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/25 19:00:52 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,19 @@ void	pid_equal_zero(t_shell *shell, t_command *com)
 		str = find_command_path(shell->env_list, com->argv[0]);
 	if (com->redirect && any(com->redirect) == -1)
 	{
-		free(str);
+		if (str)
+			free(str);
 		return ;
 	}
 	check_redirect(com);
 	if (str)
+	{
 		execv_function(shell, str, com, 1);
+		free(str);
+		str = NULL;
+	}
 	if (com->redirect && com->redirect->fd >= 0)
 		close(com->redirect->fd);
-	free(str);
 }
 
 void	command_proc(t_shell *shell, t_command *com)
