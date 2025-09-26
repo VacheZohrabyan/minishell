@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 11:18:34 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:28:00 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	process_input(t_shell *shell)
 	return (0);
 }
 
-static int	shell_loop(struct termios* orig_term,
-		struct termios* new_term, t_shell *shell)
+static int	shell_loop(struct termios *orig_term,
+		struct termios *new_term, t_shell *shell)
 {
 	enable_raw_mode(orig_term, new_term);
 	while (1)

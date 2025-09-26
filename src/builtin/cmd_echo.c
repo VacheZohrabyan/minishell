@@ -6,44 +6,50 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 11:18:12 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 13:07:24 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/builtin.h"
 
-static char	*print_echo(t_command *command, int start)
+static char	*join_args(t_command *command, int start, char *str, char *tmp)
 {
-	int		i;
-	char	*str;
-	char	*tmp;
-	char	*ex_status;
+	char	*temp;
 
-	i = start;
-	str = ft_strdup("");
-	if (!str)
-		return (NULL);
-	while (command->argv[i])
+	temp = NULL;
+	while (command->argv && command->argv[start])
 	{
-		tmp = ft_strdup(command->argv[i]);
+		tmp = ft_strdup(command->argv[start]);
 		if (!tmp)
 			return (free(str), NULL);
 		else if (ft_strcmp(tmp, "$?") == 0)
 		{
 			free(tmp);
-			char* temp = ft_itoa(g_exit_status);
+			tmp = NULL;
+			temp = ft_itoa(g_exit_status);
 			tmp = ft_strdup(temp);
 			free(temp);
 		}
 		str = ft_strjoin_gnl(str, tmp);
 		free(tmp);
-		if (command->argv[i + 1])
+		if (command->argv[start + 1])
 			str = ft_strjoin_gnl(str, " ");
-		i++;
+		start++;
 	}
-	if (tmp)
-		free(tmp);
 	return (str);
+}
+
+static char	*print_echo(t_command *command, int start)
+{
+	char	*str;
+	char	*tmp;
+
+	str = NULL;
+	tmp = NULL;
+	str = ft_strdup("");
+	if (!str)
+		return (NULL);
+	return (join_args(command, start, str, tmp));
 }
 
 static int	check_for_newline(t_command *command, int *start)

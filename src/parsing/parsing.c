@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:56:33 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 11:43:35 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 11:53:40 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_shell	*init_shell(char **env)
 	shell->history_fd = -1;
 	shell->cmd_count = 0;
 	shell->pipe_fd = NULL;
+	shell->pids = NULL;
 	init_env(&(shell->env_list), shell->env);
 	init_env(&(shell->export_list), shell->env);
 	shell->history = ft_strjoin(get_env_param(shell->env_list, "HOME", 1),

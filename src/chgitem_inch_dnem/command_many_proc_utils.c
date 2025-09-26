@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:16:59 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/22 11:30:01 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:00:46 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ int	allocate_pipes(t_shell *shell)
 	i = 0;
 	while (i < shell->cmd_count - 1)
 	{
+		shell->pipe_fd[i] = NULL;
 		shell->pipe_fd[i] = (int *)malloc(sizeof(int) * 2);
 		if (!shell->pipe_fd[i])
 		{
 			while (i != 0)
 				free(shell->pipe_fd[i--]);
+			free(shell->pipe_fd);
 			return (shell->pipe_fd = NULL, 1);
 		}
 		i++;
@@ -68,7 +70,9 @@ int	create_pipes(t_shell *shell)
 
 int	allocate_pids(t_shell *shell)
 {
-	shell->pids = (pid_t *)malloc(sizeof(pid_t) * shell->cmd_count);
+	if (shell->pids)
+		free(shell->pids);
+	shell->pids = (pid_t *)malloc(sizeof(pid_t) * (shell->cmd_count));
 	if (!shell->pids)
 		return (shell->pids = NULL, 1);
 	return (0);

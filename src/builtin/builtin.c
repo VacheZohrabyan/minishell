@@ -3,27 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:46:05 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 19:08:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:30:24 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/builtin.h"
+
+static int	chlp(t_command *command)
+{
+	char	*tmp;
+
+	if (ft_strcmp(command->argv[0], "$?") == 0)
+	{
+		tmp = ft_itoa(g_exit_status);
+		write(STDERR_FILENO, tmp, ft_strlen(tmp));
+		free(tmp);
+		tmp = NULL;
+		write(STDERR_FILENO, ": command not found\n",
+			ft_strlen(": command not found\n"));
+		g_exit_status = 127;
+		return (1);
+	}
+	return (0);
+}
 
 int	check_builtin(t_shell *shell, t_command *command)
 {
 	(void)shell;
 	if (!command->argv)
 		return (0);
-	else if (ft_strcmp(command->argv[0], "$?") == 0)
-	{
-		write(STDERR_FILENO, ft_itoa(g_exit_status), ft_strlen(ft_itoa(g_exit_status)));
-		write(STDERR_FILENO, ": command not found\n", ft_strlen(": command not found\n"));
-		g_exit_status = 127;
+	else if (chlp(command))
 		return (1);
-	}
 	else if (!ft_strcmp("pwd", command->argv[0]))
 		return (1);
 	else if (!ft_strcmp("exit", command->argv[0]))
