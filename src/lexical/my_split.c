@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 15:58:28 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:25:27 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_env(char *res, t_env_node *env)
 	return (ft_strdup(""));
 }
 
-char	*extract_quotes(char *res, t_env_node *env)
+char	*extract_quotes(char *res, t_env_node *env, int *status)
 {
 	size_t	len;
 	char	*expanded;
@@ -79,25 +79,25 @@ char	*extract_quotes(char *res, t_env_node *env)
 	if (len >= 2 && res[0] == '"')
 	{
 		inside = ft_substr(res, 1, len - 2);
-		expanded = expand_env(inside, env);
+		expanded = expand_env(inside, env, status);
 		free(res);
-		return (expanded);
+		return (*status = 0, expanded);
 	}
 	else if (len >= 2 && res[0] == '\'')
 	{
 		inside = ft_substr(res, 1, len - 2);
 		free(res);
-		return (inside);
+		return (*status = 1, inside);
 	}
 	else
 	{
-		expanded = expand_env(res, env);
+		expanded = expand_env(res, env, status);
 		free(res);
 		return (remove_quotes(expanded));
 	}
 }
 
-char	**my_split(char *s, t_env_node *env, char delim)
+char	**my_split(char *s, t_env_node *env, char delim, int *status)
 {
 	char	**res;
 	int		words;
@@ -112,7 +112,7 @@ char	**my_split(char *s, t_env_node *env, char delim)
 		return (NULL);
 	while (i < words)
 	{
-		res[i] = extract_word(&s, env, delim);
+		res[i] = extract_word(&s, env, delim, status);
 		if (!res[i])
 			return (ft_free(res, i));
 		i++;

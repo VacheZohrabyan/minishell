@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 16:00:34 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:25:46 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ t_token	*lexical(t_shell *shell)
 	buf_malloc = add_spaces_around_specials(shell->buffer);
 	i = 0;
 	shell->token = NULL;
-	buffer = my_split(buf_malloc, shell->env_list->env_head, ' ');
+	buffer = my_split(buf_malloc, shell->env_list->env_head,
+			' ', &(shell->status));
 	while (buffer[i])
 		shell->token = lexical_push_back(shell, buffer[i++]);
 	split_free(&buffer);
@@ -75,7 +76,7 @@ t_token	*lexical(t_shell *shell)
 	return (shell->token);
 }
 
-static char	*expend_env_function2(char *str, char *out, int *i)
+char	*expend_env_function2(char *str, char *out, int *i)
 {
 	char	*tmp;
 

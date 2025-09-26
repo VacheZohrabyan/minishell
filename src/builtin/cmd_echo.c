@@ -6,23 +6,25 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 13:07:24 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:27:25 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/builtin.h"
 
-static char	*join_args(t_command *command, int start, char *str, char *tmp)
+static char	*join_args(t_command *command, int start, char *str, int *status)
 {
 	char	*temp;
+	char	*tmp;
 
+	tmp = NULL;
 	temp = NULL;
 	while (command->argv && command->argv[start])
 	{
 		tmp = ft_strdup(command->argv[start]);
 		if (!tmp)
 			return (free(str), NULL);
-		else if (ft_strcmp(tmp, "$?") == 0)
+		else if (ft_strcmp(tmp, "$?") == 0 && !(*status))
 		{
 			free(tmp);
 			tmp = NULL;
@@ -39,17 +41,15 @@ static char	*join_args(t_command *command, int start, char *str, char *tmp)
 	return (str);
 }
 
-static char	*print_echo(t_command *command, int start)
+static char	*print_echo(t_command *command, int start, int *status)
 {
 	char	*str;
-	char	*tmp;
 
 	str = NULL;
-	tmp = NULL;
 	str = ft_strdup("");
 	if (!str)
 		return (NULL);
-	return (join_args(command, start, str, tmp));
+	return (join_args(command, start, str, status));
 }
 
 static int	check_for_newline(t_command *command, int *start)
@@ -75,7 +75,7 @@ static int	check_for_newline(t_command *command, int *start)
 	return (newline);
 }
 
-int	cmd_echo(t_command *command)
+int	cmd_echo(t_command *command, int *status)
 {
 	int		start;
 	int		newline;
@@ -83,7 +83,7 @@ int	cmd_echo(t_command *command)
 
 	start = 1;
 	newline = check_for_newline(command, &start);
-	str = print_echo(command, start);
+	str = print_echo(command, start, status);
 	if (!str)
 		return (1);
 	if (newline)

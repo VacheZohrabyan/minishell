@@ -6,13 +6,13 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:51:14 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 13:03:35 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:24:36 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-char	*extract_word_function1(char **s, t_env_node *env)
+char	*extract_word_function1(char **s, t_env_node *env, int *status)
 {
 	char	q;
 	int		len;
@@ -26,13 +26,14 @@ char	*extract_word_function1(char **s, t_env_node *env)
 	*s += len;
 	if (**s == q)
 	{
-		part = extract_quotes(part, env);
+		part = extract_quotes(part, env, status);
 		(*s)++;
 	}
 	return (part);
 }
 
-char	*extract_word_function2(char **s, t_env_node *env, char delim)
+char	*extract_word_function2(char **s, t_env_node *env,
+		char delim, int *status)
 {
 	int		len;
 	char	*part;
@@ -43,11 +44,11 @@ char	*extract_word_function2(char **s, t_env_node *env, char delim)
 		len++;
 	part = ft_substr(*s, 0, len);
 	*s += len;
-	part = expand_env(part, env);
+	part = expand_env(part, env, status);
 	return (part);
 }
 
-char	*extract_word(char **ps, t_env_node *env, char delim)
+char	*extract_word(char **ps, t_env_node *env, char delim, int *status)
 {
 	char	*s;
 	char	*acc;
@@ -60,9 +61,12 @@ char	*extract_word(char **ps, t_env_node *env, char delim)
 	while (*s && *s != delim)
 	{
 		if (*s == '\'' || *s == '"')
-			part = extract_word_function1(&s, env);
+			part = extract_word_function1(&s, env, status);
 		else
-			part = extract_word_function2(&s, env, delim);
+		{
+			*status = 0;
+			part = extract_word_function2(&s, env, delim, status);
+		}
 		acc = append_and_free(acc, part);
 	}
 	*ps = s;

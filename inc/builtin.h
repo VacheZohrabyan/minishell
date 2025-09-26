@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:19:05 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/24 10:32:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:48:40 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ long	ft_atol(const char *str);
 int		is_non_numeric(char *status);
 int		cmd_env(t_env *env);
 int		cmd_cd(t_shell *shell, t_command *command);
-int		cmd_echo(t_command *command);
+int		cmd_echo(t_command *command, int *status);
 int		cmd_export(t_shell *shell, t_command *command);
 int		cmd_unset(t_shell *shell, t_command *command);
 // cmd_history.c
