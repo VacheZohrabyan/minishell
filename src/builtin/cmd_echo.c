@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:54:18 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 11:14:04 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 11:18:12 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static char	*print_echo(t_command *command, int start)
 	int		i;
 	char	*str;
 	char	*tmp;
+	char	*ex_status;
 
 	i = start;
 	str = ft_strdup("");
@@ -35,6 +36,7 @@ static char	*print_echo(t_command *command, int start)
 			free(temp);
 		}
 		str = ft_strjoin_gnl(str, tmp);
+		free(tmp);
 		if (command->argv[i + 1])
 			str = ft_strjoin_gnl(str, " ");
 		i++;
