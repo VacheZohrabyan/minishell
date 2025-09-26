@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/18 16:20:06 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:00:34 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,24 @@ t_token	*lexical(t_shell *shell)
 	if (!syntax_checker(shell->token))
 		return (NULL);
 	return (shell->token);
+}
+
+static char	*expend_env_function2(char *str, char *out, int *i)
+{
+	char	*tmp;
+
+	tmp = ft_strdup("$?");
+	if (ft_strlen(str) == 2)
+	{
+		out = ft_strdup(tmp);
+		free(tmp);
+		(*i) += 2;
+		return (out);
+	}
+	free(tmp);
+	tmp = ft_itoa(g_exit_status);
+	out = ft_strjoin(out, tmp);
+	free(tmp);
+	(*i) = (*i) + 2;
+	return (out);
 }

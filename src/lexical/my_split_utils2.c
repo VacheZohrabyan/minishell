@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_split_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 12:59:48 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:59:52 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*expand_env(char *str, t_env_node *env)
 {
 	char	*out;
 	int		i;
-	char	*tmp;
+
 	i = 0;
 	out = NULL;
 	if (str[0] == '$' && str[1] == '\0')
@@ -55,27 +55,13 @@ char	*expand_env(char *str, t_env_node *env)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '?')
-		{
-			tmp = ft_strdup("$?");
-			if (ft_strlen(str) == 2)
-			{
-				out = ft_strdup(tmp);
-				free(tmp);
-				break;
-			}
-			free(tmp);
-			tmp = ft_itoa(g_exit_status);
-			out = ft_strjoin(out, tmp);
-			free(tmp);
-			i += 2;
-		}
+			out = expend_env_function2(str, out, &i);
 		else if (str[i] == '$')
 			out = expend_env_function1(str, &i, out, env);
 		else
 			out = append_char(out, str[i++]);
 	}
-	free(str);
-	return (out);
+	return (free(str), out);
 }
 
 void	count_words_function1(char *s, int *i, char delim)

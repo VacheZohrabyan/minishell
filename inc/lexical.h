@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:53:55 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 19:55:01 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:00:48 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ void			count_words_function1(char *s, int *i, char delim);
 int				count_words(char *s, char delim);
 void			split_free(char ***buffer);
 char			*append_char(char *out, char c);
+static char		*expend_env_function2(char *str, char *out, int *i);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 17:05:57 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:26:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ static void	handle_execve_error(t_command *com, char **env_array)
 			ft_strlen(": command not found\n"));
 		if (com->redirect && com->redirect->fd >= 0)
 			close(com->redirect->fd);
+		exit(g_exit_status);
 	}
-	exit(127);
+	g_exit_status = 0;
+	exit (g_exit_status);
 }
 
 void	execv_function(t_shell *shell, char *str, t_command *com, int flag)

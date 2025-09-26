@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 17:19:49 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:25:31 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	gnacinq(t_shell *shell)
 	shell->cmd_count = 0;
 	if (heredoc(cmd))
 	{
+		g_exit_status = 0;
 		return (0);
 	}
 	cmd = tmp;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/23 17:13:05 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:28:15 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,26 @@ static int	destroy_heredoc(pid_t pid, int status, int *pipefd,
 	return (redirect->fd);
 }
 
+static void	message(t_redirect *redirect, int *pipefd)
+{
+	write(STDOUT_FILENO, "minishell: warning: here-document"
+		" delimited by EOF (wanted `", ft_strlen("minishell:"
+			" warning: here-document delimited by EOF (wanted `"));
+	write(STDOUT_FILENO, redirect->file_name,
+		ft_strlen(redirect->file_name));
+	write(STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
+	close(pipefd[1]);
+	g_exit_status = 0;
+	exit(0);
+}
+
 static void	heredoc_loop(t_redirect *redirect, int *pipefd, char *buffer)
 {
 	while (1)
 	{
 		buffer = readline("> ");
 		if (!buffer)
-		{
-			write(STDOUT_FILENO, "minishell: warning: here-document"
-				" delimited by EOF (wanted `", ft_strlen("minishell:"
-					" warning: here-document delimited by EOF (wanted `"));
-			write(STDOUT_FILENO, redirect->file_name,
-				ft_strlen(redirect->file_name));
-			write(STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
-			close(pipefd[1]);
-			exit(0);
-		}
+			message(redirect, pipefd);
 		if (ft_strcmp(redirect->file_name, buffer) == 0)
 		{
 			free(buffer);
