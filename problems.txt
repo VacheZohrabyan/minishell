@@ -1,5 +1,0 @@
-< a
-$
-$USER
-echo asdas
-echo $USER

@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 12:28:00 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 12:01:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,10 @@ static int	shell_loop(struct termios *orig_term,
 		disable_raw_mode(orig_term);
 		signal(SIGINT, handle_sigcat);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGPIPE, SIG_IGN);
 		shell->buffer = readline("minishell> ");
 		if (!shell->buffer)
-		{
-			printf("exit\n");
-			break ;
-		}
+			main_ctrl_d_body(shell);
 		if (shell->buffer[0] == '\0')
 		{
 			handle_empty_input(shell);

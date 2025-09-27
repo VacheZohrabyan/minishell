@@ -6,18 +6,18 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:56:36 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 17:10:43 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:34:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static int	absolute_path(char *cmd)
+int	absolute_path(int *status, char *cmd)
 {
 	if (cmd[0] == '/')
-		return (1);
-	if (cmd[0] == '.' && (cmd[1] == '/' || cmd[1] == '.'))
-		return (1);
+		return (*status = 2, 1);
+	if (cmd[0] == '.' && cmd[1] == '/')
+		return (*status = 1, 1);
 	return (0);
 }
 
@@ -45,20 +45,21 @@ static char	*join_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-char	*find_command_path(t_env *env, char *cmd)
+char	*find_command_path(t_env *env, char *cmd, int *status)
 {
 	char	**paths;
 	char	*path_env;
 	char	*full_path;
 
 	path_env = "";
+	*status = 0;
 	if (!cmd)
 		return (NULL);
-	if (absolute_path(cmd))
+	if (absolute_path(status, cmd))
 		return (ft_strdup(cmd));
 	path_env = get_env_param(env, "PATH", 1);
 	if (!path_env)
-		return (NULL);
+		return (*status = 1, cmd);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);

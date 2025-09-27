@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:12:20 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/25 17:01:34 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:51:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ extern int	g_exit_status;
 void	run(t_shell *shell);
 void	disable_raw_mode(struct termios *orig_term);
 void	enable_raw_mode(struct termios *orig_term, struct termios *new_term);
+void	main_ctrl_d_body(t_shell *shell);
 
 #endif

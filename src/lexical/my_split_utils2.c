@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 18:22:44 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:31:03 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*expand_env(char *str, t_env_node *env, int *status)
 			out = expend_env_function1(str, &i, out, env);
 		else
 		{
-			*status = 0;
+			*status = 1;
 			out = append_char(out, str[i++]);
 		}
 	}

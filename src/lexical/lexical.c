@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:48:25 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 18:25:46 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:52:15 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*expend_env_function2(char *str, char *out, int *i)
 	}
 	free(tmp);
 	tmp = ft_itoa(g_exit_status);
-	out = ft_strjoin(out, tmp);
+	out = ft_strjoin_gnl(out, tmp);
 	free(tmp);
 	(*i) = (*i) + 2;
 	return (out);

@@ -1,43 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexical_util.c                                     :+:      :+:    :+:   */
+/*   command_many_proc_utils1.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 15:11:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/27 11:33:44 by vzohraby         ###   ########.fr       */
+/*   Created: 2025/09/27 11:47:00 by vzohraby          #+#    #+#             */
+/*   Updated: 2025/09/27 11:50:07 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-int	is_special(char c)
+void	check_builtin_body(t_shell *shell, t_command *cmd)
 {
-	return (c == '|' || c == '<' || c == '>');
-}
-
-int	is_double_special(const char *buffer, size_t i)
-{
-	return (
-		(buffer[i] == '<' && buffer[i + 1] == '<')
-		|| (buffer[i] == '>' && buffer[i + 1] == '>')
-	);
-}
-
-char	*append_char(char *out, char c)
-{
-	char	buf[2];
-	char	*tmp;
-
-	buf[0] = c;
-	buf[1] = '\0';
-	if (out)
-	{
-		tmp = ft_strjoin(out, buf);
-		free(out);
-	}
-	else
-		tmp = ft_strjoin("", buf);
-	return (tmp);
+	builtin_with_forks(shell, cmd);
+	builtin_without_forks(shell, cmd);
+	exit(g_exit_status);
 }

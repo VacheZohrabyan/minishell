@@ -43,12 +43,14 @@ SRC     := \
 	$(SRCDIR)/builtin/cmd_unset.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq_utils.c \
+	$(SRCDIR)/chgitem_inch_dnem/gnacinq_utils1.c \
 	$(SRCDIR)/chgitem_inch_dnem/any.c \
 	$(SRCDIR)/chgitem_inch_dnem/path.c \
 	$(SRCDIR)/chgitem_inch_dnem/heredoc.c \
 	$(SRCDIR)/chgitem_inch_dnem/command_proc.c \
 	$(SRCDIR)/chgitem_inch_dnem/command_many_proc.c \
 	$(SRCDIR)/chgitem_inch_dnem/command_many_proc_utils.c \
+	$(SRCDIR)/chgitem_inch_dnem/command_many_proc_utils1.c \
 	$(SRCDIR)/run.c \
 
 OBJ     := $(SRC:%.c=$(OBJDIR)/%.o)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:00:53 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 15:26:04 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:41:12 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,15 @@ char	**env_in_array(t_shell *shell)
 	return (env_array);
 }
 
-static void	handle_execve_error(t_command *com, char **env_array)
+static void	handle_execve_error(t_shell *shell, t_command *com,
+		char **env_array)
 {
+	if (shell->status == 2)
+		message_no_such_file(com, env_array);
+	if (shell->status == 1)
+		message_permission_denied(com, env_array);
 	if (com->argv && com->argv[0])
-	{
-		g_exit_status = 127;
-		free_split(env_array);
-		write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
-		write(STDERR_FILENO, com->argv[0], ft_strlen(com->argv[0]));
-		write(STDERR_FILENO, ": command not found\n",
-			ft_strlen(": command not found\n"));
-		if (com->redirect && com->redirect->fd >= 0)
-			close(com->redirect->fd);
-		exit(g_exit_status);
-	}
+		message_command_not_fount(com, env_array);
 	g_exit_status = 0;
 	exit (g_exit_status);
 }
@@ -78,7 +73,7 @@ void	execv_function(t_shell *shell, char *str, t_command *com, int flag)
 		close(com->redirect->fd);
 	env_array = env_in_array(shell);
 	if (execve(str, com->argv, env_array) == -1)
-		handle_execve_error(com, env_array);
+		handle_execve_error(shell, com, env_array);
 	free_split(env_array);
 	(void)flag;
 }

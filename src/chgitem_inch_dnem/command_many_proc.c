@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:04:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 12:26:18 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:48:47 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,10 @@ void	execute_child(t_shell *shell, t_command *cmd, int i)
 	}
 	str = "";
 	if (cmd->argv && cmd->argv[0])
-		str = find_command_path(shell->env_list, cmd->argv[0]);
+		str = find_command_path(shell->env_list,
+				cmd->argv[0], &(shell->status));
 	if (check_builtin(shell, cmd))
-	{
-		builtin_with_forks(shell, cmd);
-		builtin_without_forks(shell, cmd);
-		exit(g_exit_status);
-	}
+		check_builtin_body(shell, cmd);
 	else if (str)
 		execv_function(shell, str, cmd, 0);
 }

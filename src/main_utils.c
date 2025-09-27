@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 10:42:22 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 11:24:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/27 11:51:05 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,13 @@ void	disable_raw_mode(struct termios *orig_term)
 		perror("tcsetattr");
 		exit(1);
 	}
+}
+
+void	main_ctrl_d_body(t_shell *shell)
+{
+	printf("exit\n");
+	close_shell_history(shell);
+	free_shell(shell);
+	g_exit_status = 130;
+	exit(130);
 }
