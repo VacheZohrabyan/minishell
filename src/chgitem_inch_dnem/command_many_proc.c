@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 15:04:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/27 11:48:47 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/28 11:15:13 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	execute_child(t_shell *shell, t_command *cmd, int i)
 				cmd->argv[0], &(shell->status));
 	if (check_builtin(shell, cmd))
 		check_builtin_body(shell, cmd);
-	else if (str)
+	else if (str && cmd->argv)
 		execv_function(shell, str, cmd, 0);
 }
 

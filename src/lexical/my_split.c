@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:30:50 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:25:27 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/28 11:22:30 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*find_env(char *res, t_env_node *env)
 		{
 			free(res);
 			res = NULL;
-			return (ft_strdup(tmp->value));
+			return (tmp->value);
 		}
 		tmp = tmp->next;
 	}
