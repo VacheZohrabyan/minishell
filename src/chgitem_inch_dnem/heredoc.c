@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 11:07:32 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:38:05 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ static int	destroy_heredoc(pid_t pid, int status, int *pipefd,
 
 static void	message(t_redirect *redirect, int *pipefd)
 {
-	write(STDOUT_FILENO, "minishell: warning: here-document"
+	write(STDERR_FILENO, "minishell: warning: here-document"
 		" delimited by EOF (wanted `", ft_strlen("minishell:"
 			" warning: here-document delimited by EOF (wanted `"));
-	write(STDOUT_FILENO, redirect->file_name,
+	write(STDERR_FILENO, redirect->file_name,
 		ft_strlen(redirect->file_name));
-	write(STDOUT_FILENO, "`)\n", ft_strlen("`)\n"));
+	write(STDERR_FILENO, "`)\n", ft_strlen("`)\n"));
 	close(pipefd[1]);
 	g_exit_status = 0;
 	exit(0);

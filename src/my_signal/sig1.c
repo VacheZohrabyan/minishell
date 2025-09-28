@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/26 11:20:07 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:28:18 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,11 @@ void	destroy_one_waitpid(pid_t pid, t_shell *shell)
 		g_exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
-		g_exit_status = WTERMSIG(status) + 116;
+		g_exit_status = WTERMSIG(status) + 128;
 		if (WTERMSIG(status) == SIGINT)
 			write(STDERR_FILENO, "\n", 1);
 		else if (WTERMSIG(status) == SIGQUIT)
-		{
 			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-			g_exit_status = 131;
-		}
 	}
 	signal(SIGINT, handle_sigcat);
 	signal(SIGQUIT, SIG_IGN);
@@ -56,17 +53,23 @@ void	destroy_one_waitpid(pid_t pid, t_shell *shell)
 void	destroy_many_waitpid(t_shell *shell)
 {
 	int	i;
-
+	int status;
 	i = 0;
 	while (i < shell->cmd_count)
 	{
-		waitpid(shell->pids[i], &shell->status, 0);
+		waitpid(shell->pids[i], &status, 0);
 		if (i == shell->cmd_count - 1)
 		{
-			if (WIFEXITED(shell->status))
-				g_exit_status = WEXITSTATUS(shell->status);
-			else if (WIFSIGNALED(shell->status))
-				g_exit_status = 128 + WTERMSIG(shell->status);
+			if (WIFEXITED(status))
+				g_exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+			{
+				g_exit_status = WTERMSIG(status) + 128;
+				if (WTERMSIG(status) == SIGINT)
+					write(STDERR_FILENO, "\n", 1);
+				else if (WTERMSIG(status) == SIGQUIT)
+					write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+			}
 		}
 		i++;
 	}

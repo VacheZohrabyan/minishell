@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnacinq_utils1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 11:36:01 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 11:01:39 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:40:50 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	message_no_such_file(t_command *com, char **env_array)
 {
-	g_exit_status = 127;
+	g_exit_status = 126;
 	free_split(env_array);
 	write(STDERR_FILENO, "minishell: ", ft_strlen("minishell: "));
 	write(STDERR_FILENO, com->argv[0], ft_strlen(com->argv[0]));

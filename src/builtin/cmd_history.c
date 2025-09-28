@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 14:19:50 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:36:31 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	cmd_history(t_shell *shell, t_command *command)
 {
 	if (!shell || !shell->history)
 	{
-		write(STDOUT_FILENO, "minishell: history file not set\n",
+		write(STDERR_FILENO, "minishell: history file not set\n",
 			ft_strlen("minishell: history file not set\n"));
 		return (-1);
 	}

@@ -40,6 +40,7 @@ SRC     := \
 	$(SRCDIR)/builtin/cmd_echo.c \
 	$(SRCDIR)/builtin/cmd_export.c \
 	$(SRCDIR)/builtin/export_utils.c \
+	$(SRCDIR)/builtin/export_utils1.c \
 	$(SRCDIR)/builtin/cmd_unset.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq.c \
 	$(SRCDIR)/chgitem_inch_dnem/gnacinq_utils.c \
@@ -63,13 +64,13 @@ HEADERS := $(INCDIR)/parser.h \
 		   $(INCDIR)/builtin.h \
 		   $(INCDIR)/types.h \
 
-$(OBJDIR)/%.o: %.c $(HEADERS)
+$(OBJDIR)/%.o: %.c $(HEADERS) Makefile
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: lib $(NAME)
 
-$(NAME): $(OBJ)  $(LIBFT)/libft.a
+$(NAME): $(OBJ) $(LIBFT)/libft.a
 	$(CC) $(CFLAGS) $(OBJ) -lreadline -o $(NAME) -L./$(LIBFT) -lft
 
 lib:

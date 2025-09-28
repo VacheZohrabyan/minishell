@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:44 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/22 13:14:10 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/28 13:56:32 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,10 @@ int	update_node(t_env_node *node, char *arg, char *key)
 		if (ft_strcmp(key, node->key) == 0)
 		{
 			free(node->value);
-			if (equal_sign)
+			if (change_node_value(&node, key, equal_sign))
 			{
-				node->value = ft_strdup(equal_sign + 1);
-				node->is_equal = 1;
-			}
-			else
-			{
-				node->value = NULL;
-				node->is_equal = 0;
+				free(key);
+				return (1);
 			}
 			free(key);
 			return (1);
