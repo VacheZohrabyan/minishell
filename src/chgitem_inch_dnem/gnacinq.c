@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 13:51:31 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 11:19:34 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:36:23 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,29 @@ int	heredoc(t_command *cmd)
 	return (1);
 }
 
+static int	counter_command(t_command *cmd, int *flag)
+{
+	int	cmd_count;
+
+	cmd_count = 0;
+	while (cmd)
+	{
+		if (cmd->argv)
+			*flag = 1;
+		cmd_count++;
+		cmd = cmd->next;
+	}
+	return (cmd_count);
+}
+
 int	gnacinq(t_shell *shell)
 {
 	t_command	*tmp;
 	t_command	*cmd;
 	int			flag;
+
 	tmp = shell->command;
 	cmd = tmp;
-	shell->cmd_count = 0;
 	if (heredoc(cmd) == -1)
 	{
 		g_exit_status = 0;
@@ -52,13 +67,7 @@ int	gnacinq(t_shell *shell)
 	}
 	cmd = tmp;
 	flag = 0;
-	while (cmd)
-	{
-		if (cmd->argv)
-			flag = 1;
-		shell->cmd_count++;
-		cmd = cmd->next;
-	}
+	shell->cmd_count = counter_command(cmd, &flag);
 	if (shell->cmd_count == 1 && flag)
 		command_proc(shell, shell->command);
 	else if (shell->cmd_count > 1 && flag)

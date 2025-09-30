@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 14:29:46 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:15:03 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static int	process_input(t_shell *shell)
 	}
 	run(shell);
 	token_node_free(&shell->token);
-	free_command(&(shell->command));
+	if (shell->command)
+		free_command(&(shell->command));
 	return (0);
 }
 
@@ -68,7 +69,8 @@ static int	shell_loop(struct termios *orig_term,
 		}
 		if (process_input(shell) == -1)
 			break ;
-		free(shell->buffer);
+		if (shell->buffer)
+			free(shell->buffer);
 		shell->buffer = NULL;
 	}
 	return (0);
@@ -85,6 +87,7 @@ int	main(int argc, char **argv, char **env)
 	init_minishell(&shell, env);
 	shell_loop(&orig_term, &new_term, shell);
 	close_shell_history(shell);
-	free_shell(shell);
+	if (shell)
+		free_shell(shell);
 	return (0);
 }

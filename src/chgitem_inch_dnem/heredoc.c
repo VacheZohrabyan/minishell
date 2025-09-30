@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 18:55:19 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 14:38:05 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:31:50 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	heredoc_file_open_wr(t_redirect *redirect)
 		close(pipefd[0]);
 		buffer = NULL;
 		heredoc_loop(redirect, pipefd, buffer);
-		// close(pipefd[1]);
 	}
 	else
 		return (destroy_heredoc(pid, status, pipefd, redirect));

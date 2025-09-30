@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 12:57:58 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 14:28:18 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:27:15 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	destroy_one_waitpid(pid_t pid, t_shell *shell)
 void	destroy_many_waitpid(t_shell *shell)
 {
 	int	i;
-	int status;
+	int	status;
+
 	i = 0;
 	while (i < shell->cmd_count)
 	{

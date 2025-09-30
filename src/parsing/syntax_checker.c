@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:35:11 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 14:38:33 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:26:51 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	urish_check_double_operator(t_token *token, t_token_type token_type)
 		if (tmp->token_type == token_type)
 		{
 			if (!tmp->next)
-				return (write(STDERR_FILENO, "minishell: syntax error near unexpected "
-						"token `\n", ft_strlen("minishell: syntax error "
-							"near unexpected token `\n")), 0);
+				return (write(STDERR_FILENO, "minishell: syntax error near "
+						"unexpected token `\n", ft_strlen("minishell: syntax "
+							"error near unexpected token `\n")), 0);
 			if (tmp->next->token_type != TOKEN_WORD)
 			{
 				write(STDERR_FILENO, "minishell: syntax error near unexpected"

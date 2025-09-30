@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_proc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/28 14:51:05 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 10:43:37 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,30 @@ void	pid_equal_zero(t_shell *shell, t_command *com)
 		close(com->redirect->fd);
 }
 
+void	check_builtin_condition_body(t_shell *shell, t_command *com)
+{
+	int	saved_stdout;
+
+	saved_stdout = dup(STDOUT_FILENO);
+	if (com->redirect && any(com->redirect) == -1)
+		return ;
+	if (com->redirect && com->redirect->token_type == TOKEN_REDIRECT_IN)
+		close(com->redirect->fd);
+	check_redirect(com);
+	builtin_with_forks(shell, com);
+	builtin_without_forks(shell, com);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdout);
+	return ;
+}
+
 void	command_proc(t_shell *shell, t_command *com)
 {
 	pid_t		pid;
-	int			saved_stdout;
 
 	if (check_builtin(shell, com))
 	{
-		saved_stdout = dup(STDOUT_FILENO);
-		if (com->redirect && any(com->redirect) == -1)
-			return ;
-		check_redirect(com);
-		builtin_with_forks(shell, com);
-		builtin_without_forks(shell, com);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdout);
+		check_builtin_condition_body(shell, com);
 		return ;
 	}
 	sig();
