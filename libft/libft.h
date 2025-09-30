@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:42:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/15 17:44:20 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:00:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char				*ft_strrchr(const char *s, int c);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 
 int					ft_atoi(const char *str);
+long				ft_atoll(const char *str);
 
 void				*ft_memchr(const void *s, int c, size_t n);
 

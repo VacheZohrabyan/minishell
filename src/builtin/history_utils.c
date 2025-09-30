@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:04:24 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/18 16:23:47 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:43:49 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	print_history(t_shell *shell)
 	int		fd;
 	char	*line;
 	int		n;
+	char	*itoa;
 
 	n = 1;
 	fd = open(shell->history, O_RDONLY);
@@ -45,16 +46,16 @@ int	print_history(t_shell *shell)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
+		itoa = ft_itoa(n++);
 		write (STDOUT_FILENO, "   ", ft_strlen("   "));
-		write (STDOUT_FILENO, ft_itoa(n), ft_strlen(ft_itoa(n)));
-		n++;
+		write (STDOUT_FILENO, itoa, ft_strlen(itoa));
 		write (STDOUT_FILENO, "  ", ft_strlen("  "));
 		write (STDOUT_FILENO, line, ft_strlen(line));
 		free(line);
+		free(itoa);
 		line = get_next_line(fd);
 	}
-	close(fd);
-	return (1);
+	return (close(fd), 1);
 }
 
 void	close_shell_history(t_shell *shell)

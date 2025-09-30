@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:53:41 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/27 11:31:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:12:46 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*expand_env(char *str, t_env_node *env, int *status)
 	i = 0;
 	out = NULL;
 	if (str[0] == '$' && str[1] == '\0')
-		return (ft_strdup("$"));
+		return (free(str), ft_strdup("$"));
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '?')

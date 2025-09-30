@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:38 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/30 11:44:10 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:44:18 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	check_builtin_condition_body(t_shell *shell, t_command *com)
 	if (com->redirect && any(com->redirect) == -1)
 		return ;
 	if (com->redirect && (com->redirect->token_type == TOKEN_REDIRECT_IN
-		|| com->redirect->token_type == TOKEN_HEREDOC))
+			|| com->redirect->token_type == TOKEN_HEREDOC))
 		close(com->redirect->fd);
 	check_redirect(com);
 	builtin_with_forks(shell, com);

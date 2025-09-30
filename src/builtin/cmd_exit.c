@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 15:49:56 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/26 11:44:58 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:58:26 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,29 +59,38 @@ int	is_non_numeric(char *status)
 	return (0);
 }
 
+static void	message_numerics(t_shell *shell, t_command *command)
+{
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(command->argv[1], STDERR_FILENO);
+	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	free_shell(shell);
+	exit(2);
+}
+
+static void	free_shell_exit(t_shell *shell, int exit_status)
+{
+	free_shell(shell);
+	exit(exit_status);
+}
+
 int	cmd_exit(t_shell *shell, t_command *command)
 {
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		ft_putendl_fd("exit", STDERR_FILENO);
-	if (!command->argv[1])
-	{
-		free_shell(shell);
-		exit(g_exit_status);
-	}
-	if (is_non_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
-	{
-		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(command->argv[1], STDERR_FILENO);
-		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		free_shell(shell);
-		exit(2);
-	}
-	if (command->argv[2])
+	if (command->argv && !(command->argv[1]))
+		free_shell_exit(shell, g_exit_status);
+	if (command->argv && (is_non_numeric(command->argv[1])
+			|| ft_atol(command->argv[1]) != ft_atoll(command->argv[1])))
+		message_numerics(shell, command);
+	if (command->argv && !ft_atoi(command->argv[1]) && !(command->argv[2]))
+		free_shell_exit(shell, 0);
+	if (command->argv && command->argv[2])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		g_exit_status = 1;
 		return (1);
 	}
-	g_exit_status = ft_atoi(command->argv[1]) % 256;
+	g_exit_status = ft_atoll(command->argv[1]) % 256;
 	exit(g_exit_status);
 }
