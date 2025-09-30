@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 12:31:38 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/20 13:20:00 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 12:37:59 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ int	cmd_unset(t_shell *shell, t_command *command)
 	while (command->argv[i])
 	{
 		unset_env(shell->env_list, command->argv[i]);
+		unset_env(shell->export_list, command->argv[i]);
 		i++;
 	}
+	g_exit_status = 0;
 	return (1);
 }

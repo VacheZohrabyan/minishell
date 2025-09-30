@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_history.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 19:00:48 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/09/28 14:36:31 by zaleksan         ###   ########.fr       */
+/*   Updated: 2025/09/30 12:31:28 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_argument(t_command *command)
 {
 	if (is_non_numeric(command->argv[1]) || !ft_atol(command->argv[1]))
 	{
-		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd("minishell: history: ", STDERR_FILENO);
 		ft_putstr_fd(command->argv[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 		g_exit_status = 2;

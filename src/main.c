@@ -6,7 +6,7 @@
 /*   By: vzohraby <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 18:20:34 by vzohraby          #+#    #+#             */
-/*   Updated: 2025/09/30 10:15:03 by vzohraby         ###   ########.fr       */
+/*   Updated: 2025/09/30 11:45:20 by vzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	init_minishell(t_shell **shell, char **env)
 {
 	*shell = init_shell(env);
 	init_shell_history(*shell);
+	load_history(*shell);
 	shlvl(*shell);
 }
 
